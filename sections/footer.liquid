@@ -124,15 +124,20 @@
     {%- endif -%}
 
     {%- if section.settings.show_payment_icons -%}
-      {%- unless shop.enabled_payment_types == empty -%}
-        <ul class="inline-list payment-icons footer__section">
-          {%- for type in shop.enabled_payment_types -%}
-            <li class="icon--payment">
-              {{ type | payment_type_svg_tag }}
-            </li>
-          {%- endfor -%}
-        </ul>
-      {%- endunless -%}
+    <ul class="inline-list payment-icons footer__section">
+      <li class="icon--payment">
+        {{ "visa" | payment_type_svg_tag }}
+      </li>
+      <li class="icon--payment">
+        {%- render 'mobile-pay-logo-small' -%}
+      </li>
+      <li class="icon--payment">
+        {{ "maestro" | payment_type_svg_tag }}
+      </li>
+      <li class="icon--payment">
+        {{ "master" | payment_type_svg_tag }}
+      </li>
+    </ul>
     {%- endif -%}
 
     {%- if section.settings.show_copyright -%}
