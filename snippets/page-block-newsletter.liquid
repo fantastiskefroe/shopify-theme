@@ -1,0 +1,23 @@
+{%- style -%}
+  .newsletter-{{ block.id }} {
+    background-color: {{ block.settings.color_background }};
+    color: {{ block.settings.color_text }};
+  }
+
+  .newsletter-{{ block.id }} .newsletter__input::-webkit-input-placeholder { color: {{ block.settings.color_text }}; }
+  .newsletter-{{ block.id }} .newsletter__input::-moz-placeholder { color: {{ block.settings.color_text }}; }
+  .newsletter-{{ block.id }} .newsletter__input::-ms-input-placeholder { color: {{ block.settings.color_text }}; }
+{%- endstyle -%}
+
+<div class="newsletter-section newsletter-{{ block.id }}{% if block.settings.color_background == settings.color_body_bg %} newsletter-section--with-divider{% endif %}">
+  <div class="page-width text-center">
+    {%- if block.settings.title != blank -%}
+      <p class="h3">{{ block.settings.title | escape }}</p>
+    {%- endif -%}
+    {%- if block.settings.text != blank -%}
+      <div class="rte">{{ block.settings.text }}</div>
+    {%- endif -%}
+
+    {%- render 'newsletter-form', section_id: block.id, snippet_context: 'page-section' -%}
+  </div>
+</div>

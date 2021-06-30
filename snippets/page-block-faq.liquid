@@ -1,0 +1,11 @@
+<div class="page-width" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+  <button type="button" class="collapsible-trigger collapsible-trigger--inline collapsible--auto-height text-left" aria-controls="FAQ-content-{{ block.id }}">
+    {%- render 'collapsible-icons-alt', no_circle: true -%}
+    <span itemprop="name">{{ block.settings.title }}</span>
+  </button>
+  <div id="FAQ-content-{{ block.id }}" class="collapsible-content collapsible-content--all" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+    <div class="collapsible-content__inner collapsible-content__inner--faq rte" itemprop="text">
+      {{ block.settings.text }}
+    </div>
+  </div>
+</div>
