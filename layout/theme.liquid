@@ -14,6 +14,7 @@
   <link rel="dns-prefetch" href="https://maps.gstatic.com">
   <link rel="shortcut icon" href="//cdn.shopify.com/s/files/1/0276/3902/1652/files/FantastiskeFroe_logo_mini_32x32.png?v=1583103209" type="image/png">
   
+  <link href="https://fonts.googleapis.com/css2?family=Courgette&family=Roboto+Mono&display=swap" rel="stylesheet">
   {%- render 'seo-title' -%}
 
   {%- if page_description -%}
@@ -22,7 +23,10 @@
 
   {%- render 'social-meta-tags' -%}
 
-  {%- render 'font-face' -%}
+  {% comment %}
+    {% include 'font-face' %}
+  {% endcomment %}
+  
   {{ 'theme.css' | asset_url | stylesheet_tag }}
   {%- render 'css-variables' -%}
 
