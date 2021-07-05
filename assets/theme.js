@@ -895,6 +895,7 @@ lazySizesConfig.expFactor = 4;
         this._updatePrice(variant);
         this._updateUnitPrice(variant);
         this._updateSKU(variant);
+        this._updateBundleProductList(variant);
         this.currentVariant = variant;
   
         if (this.enableHistoryState) {
@@ -918,7 +919,9 @@ lazySizesConfig.expFactor = 4;
       },
   
       _updatePrice: function(variant) {
-        if (variant.price === this.currentVariant.price && variant.compare_at_price === this.currentVariant.compare_at_price) {
+        // The different variants of a bundle all have the same price, so we need to skip the following optimization
+        const bundle = this.container.dataset.productType === 'bundle';
+        if (!bundle && variant.price === this.currentVariant.price && variant.compare_at_price === this.currentVariant.compare_at_price) {
           return;
         }
   
@@ -951,6 +954,24 @@ lazySizesConfig.expFactor = 4;
             variant: variant
           }
         }));
+      },
+
+      _updateBundleProductList: function(variant) {
+        const bundleData = window.bundleData;
+        if (!bundleData) {
+          return;
+        }
+     
+        const bundleProductLists = document.getElementsByClassName('bundle-product-list');
+        //console.log(bundleProductList);
+        for (const el of bundleProductLists) {
+          const variantID = parseInt(el.dataset.variant);
+          if (variantID === variant.id) {
+            el.classList.remove('hide');
+          } else {
+            el.classList.add('hide');
+          }
+        }
       },
   
       _updateHistoryState: function(variant) {
@@ -6047,6 +6068,11 @@ lazySizesConfig.expFactor = 4;
         var variant = evt.detail.variant;
   
         if (variant) {
+          const bundleData = window.bundleData;
+          if (bundleData) {
+            variant.price = bundleData[variant.id].price;
+          }
+
           // Regular price
           this.cache.price.innerHTML = theme.Currency.formatMoney(variant.price, theme.settings.moneyFormat);
   
