@@ -9,15 +9,13 @@
       name="{{ option.name }}"
       data-index="option{{ option_index }}"
       id="ProductSelect-{{ section_id }}-option-{{ forloop.index0 }}">
-      {%- for value in option.values -%}
-        {%- liquid
-          if value contains "Lille"
-        assign available = variant1Available
-        endif
-          if value contains "Stor"
-        assign available = variant2Available
-        endif
-        -%}
+        {%- for value in option.values -%}
+          {%- liquid
+            assign bundleVariantAvailable = false
+            if bundleVariantAvailability[forloop.index0] == 'true'
+                assign bundleVariantAvailable = true
+            endif
+          -%}
         <div
           class="variant-input"
           data-index="option{{ option_index }}"
@@ -27,10 +25,10 @@
             value="{{ value | escape }}"
             data-index="option{{ option_index }}"
             name="{{ option.name }}"
-            class="variant__input-{{ section_id }}{% unless available %} disabled{% endunless %}"
+            class="variant__input-{{ section_id }}{% unless bundleVariantAvailable %} disabled{% endunless %}"
             id="ProductSelect-{{ section_id }}-option-{{ option.name | handleize }}-{{ value | url_encode }}">
             <label for="ProductSelect-{{ section_id }}-option-{{ option.name | handleize }}-{{ value | url_encode }}"
-                    class="variant__button-label{% unless available %} disabled{% endunless %}">{{ value | escape }}</label>
+                    class="variant__button-label{% unless bundleVariantAvailable %} disabled{% endunless %}">{{ value | escape }}</label>
         </div>
       {%- endfor -%}
     </fieldset>
