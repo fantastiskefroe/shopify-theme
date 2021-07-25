@@ -12,20 +12,21 @@
   <link rel="dns-prefetch" href="https://ajax.googleapis.com">
   <link rel="dns-prefetch" href="https://maps.googleapis.com">
   <link rel="dns-prefetch" href="https://maps.gstatic.com">
-
-  {%- if settings.favicon != blank -%}
-    <link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png" />
-  {%- endif -%}
+  <link rel="shortcut icon" href="//cdn.shopify.com/s/files/1/0276/3902/1652/files/FantastiskeFroe_logo_mini_32x32.png?v=1583103209" type="image/png">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Courgette&family=Roboto+Mono&display=swap" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
   {%- render 'seo-title' -%}
 
-  {%- if page_description -%}
   <meta name="description" content="{{ page_description | escape }}">
-  {%- endif -%}
 
   {%- render 'social-meta-tags' -%}
 
-  {%- render 'font-face' -%}
+  {% comment %}
+    {% include 'font-face' %}
+  {% endcomment %}
+  
   {{ 'theme.css' | asset_url | stylesheet_tag }}
   {%- render 'css-variables' -%}
 
