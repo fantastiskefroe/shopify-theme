@@ -89,7 +89,7 @@
               test1=agurk-marketmore/31932804071508:majs-golden-bantam/31932826157140:log-stuttgart/31932826026068,test2=agurk-marketmore/31932804104276:majs-golden-bantam/31932826189908:log-stuttgart/31932826058836 
             {% endcomment %}
             {%- liquid
-              paginate collections.facebook_product_feed_v2.products by 1000 
+              paginate collections.all-products.products by 1000
                 assign bundleVariants = product.metafields.bundle.bundleData | split: ','
                 assign bundleVariantCount = bundleVariants.size 
                 assign bvMaxIndex = bundleVariantCount | minus: 1 
@@ -132,6 +132,7 @@
                   endfor
 
                   assign bundleVariantPrice = 0
+                  assign bundleVariantProductIDList = ""
                   assign bundleVariantProductTitleList = ""
                   assign bundleVariantProductPriceList = ""
                   assign bundleVariantProductAvailabilityList = ""
@@ -142,11 +143,12 @@
                   for productIdentifier in productIdentifiers
                     assign productHandle = productIdentifier | split: '/' | first 
                     assign variantID     = productIdentifier | split: '/' | last | plus: 0
-                    for item in collections.facebook_product_feed_v2.products
+                    for item in collections.all-products.products
                       if item.handle == productHandle 
                         for productVariant in item.variants
                           if productVariant.id == variantID
                             assign bundleVariantPrice = bundleVariantPrice | plus: productVariant.price
+                            assign bundleVariantProductIDList = bundleVariantProductIDList | append: productVariant.id | append: '§'
                             assign bundleVariantProductTitleList = bundleVariantProductTitleList | append: item.title | append: " (" | append: productVariant.title | append: ')§'
                             assign bundleVariantProductPriceList = bundleVariantProductPriceList | append: productVariant.price | append: '§'
                             assign bundleVariantProductURLsList   = bundleVariantProductURLsList   | append: productVariant.url | append: '§'
@@ -171,6 +173,7 @@
                   assign bundleVariantPriceSingleton     = bundleVariantPrice | string | split: '¤'
                   assign bundleVariantAvailableSingleton = bundleVariantAvailable      | split: '¤'
 
+                  assign bundleVariantProductIDsSingleton           = bundleVariantProductIDList           | split: '¤'
                   assign bundleVariantProductTitlesSingleton        = bundleVariantProductTitleList        | split: '¤'
                   assign bundleVariantProductPricesSingleton        = bundleVariantProductPriceList        | split: '¤'
                   assign bundleVariantProductAvailabilitysSingleton = bundleVariantProductAvailabilityList | split: '¤'
@@ -179,8 +182,9 @@
                   assign bundleVariantPrices       = bundleVariantPrices       | concat: bundleVariantPriceSingleton 
                   assign bundleVariantAvailability = bundleVariantAvailability | concat: bundleVariantAvailableSingleton
 
-                  assign bundleVariantProductTitles        = bundleVariantProductTitles       | concat: bundleVariantProductTitlesSingleton  
-                  assign bundleVariantProductPrices        = bundleVariantProductPrices       | concat: bundleVariantProductPricesSingleton  
+                  assign bundleVariantProductIDs           = bundleVariantProductIDs          | concat: bundleVariantProductIDsSingleton
+                  assign bundleVariantProductTitles        = bundleVariantProductTitles       | concat: bundleVariantProductTitlesSingleton
+                  assign bundleVariantProductPrices        = bundleVariantProductPrices       | concat: bundleVariantProductPricesSingleton
                   assign bundleVariantProductAvailability  = bundleVariantProductAvailability | concat: bundleVariantProductAvailabilitysSingleton  
                   assign bundleVariantProductURLs          = bundleVariantProductURLs         | concat: bundleVariantProductURLsSingleton  
                 endfor
@@ -233,13 +237,15 @@
                   'id': {{ bundleVariantIDs[forloop.index0] }},
                   'price': {{ bundleVariantPrices[forloop.index0] }},
                   'available': {{ bundleVariantAvailability[forloop.index0] }},
-                  {% assign productTitles = bundleVariantProductTitles[forloop.index0] | split: '§' %}
+                  {% assign productIDs = bundleVariantProductIDs[forloop.index0] | split: '§' %}
+                  {%- assign productTitles = bundleVariantProductTitles[forloop.index0] | split: '§' -%}
                   {%- assign productPrices = bundleVariantProductPrices[forloop.index0] | split: '§' -%}
                   {%- assign productAvailability = bundleVariantProductAvailability[forloop.index0] | split: '§' -%}
                   {%- assign productURLs = bundleVariantProductURLs[forloop.index0] | split: '§' -%}
-                  'products': [ {%- for productTitle in productTitles -%}
+                  'products': [ {%- for productID in productIDs -%}
                     {
-                      'name': '{{ productTitle | escape }}',
+                      'id': {{ productID | plus: 0 }},
+                      'name': '{{ productTitles[forloop.index0] | escape }}',
                       'price': {{ productPrices[forloop.index0] | plus: 0 }},
                       'available': {{ productAvailability[forloop.index0] }}
                     },
