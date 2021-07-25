@@ -10908,7 +10908,15 @@ html[dir=rtl] .product-single__meta .rte{
   }
 }
 
+
+/*========================================== CUSTOM CSS BELOW ==========================================*/
+/* Cart */
+.cart__image {
+    flex: 0 0 108px !important;
+}
+
 /*===================== Bundles =====================*/
+/* Product page */
 .bundle-subproduct {
 	margin-left: 170px;
   	margin-bottom: 10px;
@@ -10917,8 +10925,20 @@ html[dir=rtl] .product-single__meta .rte{
 .bundle-product {
   	margin-bottom: 10px;
 }
-    
 
 .product-single__bundle_product.unavailable {
 	text-decoration: line-through !important;
+}
+
+/* Cart */
+.cart__item.cart__item-bundle {
+    border-bottom: none !important;
+}
+
+.cart__item.cart__item-bundle-product {
+    margin-left: 120px;
+}
+
+.cart__item.cart__item-bundle-product .cart__image {
+    flex: 0 0 84px !important;
 }
