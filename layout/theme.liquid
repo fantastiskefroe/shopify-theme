@@ -83,7 +83,7 @@
     <link rel="stylesheet" href="{{ 'currency-flags.css' | asset_url | split: '?' | first }}">
   {%- endif -%}
 
-  <script src="{{ 'theme.min.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'theme.js' | asset_url | append: '&enable_js_minification=1' }}" defer="defer"></script>
 
   {%- if request.page_type contains 'customers/' -%}
     <script src="{{ 'shopify_common.js' | shopify_asset_url }}" defer="defer"></script>

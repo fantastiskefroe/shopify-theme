@@ -1,0 +1,38 @@
+{%- for option in product.options_with_values -%}
+  <div class="variant-wrapper variant-wrapper--{{ settings.variant_type }} js">
+    <label class="variant__label"
+      for="ProductSelect-{{ section_id }}-option-{{ forloop.index0 }}">
+      {{ option.name }}
+    </label>
+    {%- assign option_index = forloop.index -%}
+    <fieldset class="variant-input-wrap"
+      name="{{ option.name }}"
+      data-index="option{{ option_index }}"
+      id="ProductSelect-{{ section_id }}-option-{{ forloop.index0 }}">
+      {%- for value in option.values -%}
+        {%- liquid
+          if value contains "Lille"
+        assign available = variant1Available
+        endif
+          if value contains "Stor"
+        assign available = variant2Available
+        endif
+        -%}
+        <div
+          class="variant-input"
+          data-index="option{{ option_index }}"
+          data-value="{{ value | escape }}">
+          <input type="radio"
+            {% if option.selected_value == value %} checked="checked"{% endif %}
+            value="{{ value | escape }}"
+            data-index="option{{ option_index }}"
+            name="{{ option.name }}"
+            class="variant__input-{{ section_id }}{% unless available %} disabled{% endunless %}"
+            id="ProductSelect-{{ section_id }}-option-{{ option.name | handleize }}-{{ value | url_encode }}">
+            <label for="ProductSelect-{{ section_id }}-option-{{ option.name | handleize }}-{{ value | url_encode }}"
+                    class="variant__button-label{% unless available %} disabled{% endunless %}">{{ value | escape }}</label>
+        </div>
+      {%- endfor -%}
+    </fieldset>
+  </div>
+{%- endfor -%}
