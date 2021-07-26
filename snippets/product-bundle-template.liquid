@@ -195,38 +195,6 @@
                 if product.variants.size != bundleVariants.size or bundleVariantIDs.size != bundleVariantNames.size
                   echo '<script>alert("Bundle error! Redirecting you to the front page."); document.location.href="/";</script>'
                 endif
-
-                comment 
-                echo "bundleVariantNames:"
-                echo "<pre>"
-                echo bundleVariantNames | json
-                echo "</pre>"
-
-                echo "bundleVariantPrices:"
-                echo "<pre>"
-                echo bundleVariantPrices | json
-                echo "</pre>"
-
-                echo "bundleVariantAvailability:"
-                echo "<pre>"
-                echo bundleVariantAvailability | json
-                echo "</pre>"
-
-                echo "bundleVariantProductTitles:"
-                echo "<pre>"
-                echo bundleVariantProductTitles | json
-                echo "</pre>"
-
-                echo "bundleVariantProductAvailability:"
-                echo "<pre>"
-                echo bundleVariantProductAvailability | json
-                echo "</pre>"
-
-                echo "bundleVariantProductURLs:"
-                echo "<pre>"
-                echo bundleVariantProductURLs | json
-                echo "</pre>"
-                endcomment 
               endpaginate
             -%} 
             <script type="text/javascript">
@@ -253,7 +221,6 @@
                 },
               {%- endfor -%} }
             </script>
-            <!-- : -->
 
             {% comment %} --------------------------------------- {% endcomment %}
 
@@ -327,10 +294,11 @@
             {% comment %} ----------------------------- {% endcomment %}
 
             {%- for name in bundleVariantNames -%}
-              <span id="ProductPrice-{{ section_id }}" data-variant-name="{{name}}"
-                class="{% if current_variant.title != name %} hide{% endif %}">
-                {% echo bundleVariantPrices[forloop.index0] | money %}
-              </span>
+              {% if current_variant.title == name %}
+                <span id="ProductPrice-{{ section_id }}" data-variant-name="{{name}}">
+                  {% echo bundleVariantPrices[forloop.index0] | money %}
+                </span>
+              {%- endif %}
             {%- endfor -%}
 
             {% comment %} ----------------------------- {% endcomment %}
