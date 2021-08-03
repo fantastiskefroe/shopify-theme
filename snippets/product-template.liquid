@@ -101,8 +101,10 @@
                 {{ product.title }}
               </p>
             {%- else -%}
+              {% assign lines = product.title | split: "'" %}
               <h1 class="h2 product-single__title">
-                {{ product.title }}
+                <span class="primary">{{ lines[0] }}</span>
+                <span class="secondary">'{{ lines[1] }}'</span>
               </h1>
             {%- endif -%}
 

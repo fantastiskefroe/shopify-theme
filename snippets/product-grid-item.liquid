@@ -152,9 +152,9 @@
       <div class="grid-product__meta">
         <div class="grid-product__title grid-product__title--{{ settings.type_product_style }}">
           {% assign lines = product.title | split: "'" %}
-          <span style="font-family: Roboto Mono,monospace; text-transform: uppercase; font-size: 13px;">{{ lines[0] }}</span>
+          <span class="primary">{{ lines[0] }}</span>
           <br>
-          <span style="font-family: Courgette, cursive; font-size: 18px; text-transform: none">'{{ lines[1] }}'</span>
+          <span class="secondary">'{{ lines[1] }}'</span>
         </div>
         {%- if settings.vendor_enable -%}
           <div class="grid-product__vendor">{{ product.vendor }}</div>
