@@ -333,17 +333,6 @@
               <span class="product__unit-price--{{ section_id }}">{{ current_variant.unit_price | money }}</span>/{{ unit_price_base_unit }}
             </div>
 
-            {%- if shop.taxes_included or shop.shipping_policy.body != blank -%}
-              <div class="product__policies rte small--text-center">
-                {%- if shop.taxes_included -%}
-                  {{ 'products.product.include_taxes' | t }}
-                {%- endif -%}
-                {%- if shop.shipping_policy.body != blank -%}
-                  {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
-                {%- endif -%}
-              </div>
-            {%- endif -%}
-
             {%- if settings.inventory_enable or settings.inventory_transfers_enable -%}
               {%- assign variants_with_inventory_tracking = product.variants | where: 'inventory_management', 'shopify' -%}
               <script>
