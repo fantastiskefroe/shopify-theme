@@ -29,22 +29,29 @@
 
 <div class="grid__item grid-product {{ grid_item_width }}{% if settings.quick_shop_enable %} grid-product__has-quick-shop{% endif %}" data-aos="row-of-{{ per_row }}" data-product-handle="{{ product.handle }}" data-product-id="{{ product.id }}">
   <div class="grid-product__content">
-    {%- if has_custom_label -%}
-      <div class="grid-product__tag grid-product__tag--custom">
-        {{ custom_label }}
-      </div>
-    {%- else -%}
-      {%- unless product.available -%}
+    {%- if sold_out -%}
+      {%- if has_custom_label and custom_label == "Kommer_snart" -%}
+        <div class="grid-product__tag grid-product__tag--custom">
+          Kommer snart
+        </div>
+      {%- else -%}
         <div class="grid-product__tag grid-product__tag--sold-out">
           {{ 'products.product.sold_out' | t }}
         </div>
-      {%- endunless -%}
-      {%- if on_sale and product.available -%}
+      {%- endif -%}
+    {%- else -%}
+      {%- if has_custom_label -%}
+        <div class="grid-product__tag grid-product__tag--custom">
+          {{ custom_label }}
+        </div>
+      {%- endif -%}
+      {%- if on_sale and sold_out == false -%}
         <div class="grid-product__tag grid-product__tag--sale">
           {{ 'products.general.sale' | t }}
         </div>
       {%- endif -%}
     {%- endif -%}
+
 
     {%- liquid
       assign fixed_aspect_ratio = false
@@ -143,7 +150,12 @@
       </div>
 
       <div class="grid-product__meta">
-        <div class="grid-product__title grid-product__title--{{ settings.type_product_style }}">{{ product.title }}</div>
+        <div class="grid-product__title grid-product__title--{{ settings.type_product_style }}">
+          {% assign lines = product.title | split: "'" %}
+          <span style="font-family: Roboto Mono,monospace; text-transform: uppercase; font-size: 13px;">{{ lines[0] }}</span>
+          <br>
+          <span style="font-family: Courgette, cursive; font-size: 18px; text-transform: none">'{{ lines[1] }}'</span>
+        </div>
         {%- if settings.vendor_enable -%}
           <div class="grid-product__vendor">{{ product.vendor }}</div>
         {%- endif -%}
@@ -153,12 +165,7 @@
             <span class="grid-product__price--original">{{ product.compare_at_price | money }}</span>
             <span class="visually-hidden">{{ 'products.general.sale_price' | t }}</span>
           {%- endif -%}
-          {%- if product.price_varies -%}
-            {%- assign price = product.price_min | money -%}
-            {{ 'products.general.from_text_html' | t: price: price }}
-          {%- else -%}
-            {{ product.price  | money }}
-          {%- endif -%}
+          {{ product.price_min | money }}
           {%- if on_sale -%}
             {%- if settings.product_save_amount -%}
               {%- if settings.product_save_type == 'dollar' -%}
