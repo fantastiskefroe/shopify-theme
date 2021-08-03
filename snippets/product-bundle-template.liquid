@@ -431,6 +431,26 @@
 
             {%- unless description_style == 'full' -%}
               <div class="product-single__description rte">
+                {%- liquid
+                  assign firstTag = true
+                  assign relevantTags = 'friland, drivhus, fuld sol, halvskygge, vindueskarm, altan/terasse' | split: ', '
+                  assign relevantTagsStr = ''
+
+                  for tag in product.tags
+                    for relevantTag in relevantTags
+                      if tag == relevantTag
+                        if firstTag == false
+                          assign relevantTagsStr = relevantTagsStr | append: ' / '
+                        endif
+                        assign relevantTagsStr = relevantTagsStr | append: tag
+                        assign firstTag = false
+                      endif
+                    endfor
+                  endfor
+                -%}
+                <span class="product-single__relevant-tags" >
+                  {{ relevantTagsStr }}
+                </span>
                 {{ product.description }}
 
                 <p>
