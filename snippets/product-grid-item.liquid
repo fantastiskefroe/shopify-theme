@@ -27,6 +27,39 @@
   endif
 -%}
 
+{%- liquid
+  paginate collections.all-products.products by 1000
+    assign bundleVariants = product.metafields.bundle.bundleData | split: ','
+    assign cheapestBundleVariant = 99999999
+
+    for bundleVariant in bundleVariants
+      assign bundleVariantParts = bundleVariant | split:'='
+      assign productIdentifiers = bundleVariantParts | last | split: ':'
+
+      assign bundleVariantPrice = 0
+      for productIdentifier in productIdentifiers
+        assign productHandle = productIdentifier | split: '/' | first
+        assign variantID     = productIdentifier | split: '/' | last | plus: 0
+        for item in collections.all-products.products
+          if item.handle == productHandle
+            for productVariant in item.variants
+              if productVariant.id == variantID
+                assign bundleVariantPrice = bundleVariantPrice | plus: productVariant.price
+                break
+              endif
+            endfor
+            break
+          endif
+        endfor
+      endfor
+
+      if bundleVariantPrice < cheapestBundleVariant
+        assign cheapestBundleVariant = bundleVariantPrice
+      endif
+    endfor
+  endpaginate
+-%}
+
 <div class="grid__item grid-product {{ grid_item_width }}{% if settings.quick_shop_enable %} grid-product__has-quick-shop{% endif %}" data-aos="row-of-{{ per_row }}" data-product-handle="{{ product.handle }}" data-product-id="{{ product.id }}">
   <div class="grid-product__content">
     {%- if sold_out -%}
@@ -165,7 +198,11 @@
             <span class="grid-product__price--original">{{ product.compare_at_price | money }}</span>
             <span class="visually-hidden">{{ 'products.general.sale_price' | t }}</span>
           {%- endif -%}
-          {{ product.price_min | money }}
+          {% if cheapestBundleVariant == 99999999 %}
+            {{ product.price_min | money }}
+          {% else %}
+            {{ cheapestBundleVariant | money }}
+          {% endif %}
           {%- if on_sale -%}
             {%- if settings.product_save_amount -%}
               {%- if settings.product_save_type == 'dollar' -%}
