@@ -24,11 +24,11 @@
         {%- assign include_page_handle = tag | split: '_' -%}
         {%- assign include_page = pages[include_page_handle.last] -%}
         {%- if include_page.title != blank -%}
-          <button type="button" class="label collapsible-trigger collapsible-trigger-btn collapsible-trigger-btn--borders collapsible--auto-height" aria-controls="Product-content-{{ include_page_handle.last }}-{{ section_id }}">
+          <button type="button" class="label collapsible-trigger collapsible-trigger-btn collapsible-trigger-btn--borders collapsible--auto-height is-open" aria-controls="Product-content-{{ include_page_handle.last }}-{{ section_id }}">
             {{ include_page.title }}
             {%- render 'collapsible-icons' -%}
           </button>
-          <div id="Product-content-{{ include_page_handle.last }}-{{ section_id }}" class="collapsible-content collapsible-content--all">
+          <div id="Product-content-{{ include_page_handle.last }}-{{ section_id }}" class="collapsible-content collapsible-content--all is-open" style="height: auto;">
             <div class="collapsible-content__inner rte">
               {{ include_page.content }}
             </div>
