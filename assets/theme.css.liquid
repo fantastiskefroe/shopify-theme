@@ -11434,3 +11434,49 @@ html[dir=rtl] .product-single__meta .rte {
 .cart__item.cart__item-bundle-product .cart__image {
     flex: 0 0 84px !important;
 }
+
+/*===================== Instagram feed =====================*/
+.insta-feed-container {
+    position: relative;
+    margin-bottom: 32px;
+}
+
+.insta-feed-link {
+    display: inline-block !important;
+    position: absolute !important;
+    top: calc(50% + 1.2rem);
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999999999;
+
+    background-color: white;
+    font-size: 1.2rem;
+    padding: 16px 24px;
+}
+
+.instafeed-overlay {
+    display: none !important;
+}
+
+@media only screen and (max-width: 768px) {
+    .instafeed-container {
+        width: 33.333% !important;
+        padding-top: 33.333% !important;
+    }
+
+    #insta-feed a:nth-of-type(4),
+    #insta-feed a:nth-of-type(5) {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 560px) {
+    .instafeed-container {
+        width: 50% !important;
+        padding-top: 50% !important;
+    }
+
+    #insta-feed a:nth-of-type(3) {
+        display: none;
+    }
+}
