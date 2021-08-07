@@ -1,7 +1,7 @@
 {%- layout none -%}
 {%- paginate collection.products by 1000 -%}
 {%- assign types = "" | split: '' -%}
-{%- assign tags =  "" | split: '' -%}
+{%- assign allTags =  "" | split: '' -%}
 { 
   "products": { {% for product in collection.products %} 
     {%- liquid
@@ -10,7 +10,7 @@
       endif
       assign typeSingleton = product.type | split: '¤'
       assign types = types | concat: typeSingleton
-      assign tags = types | concat: product.tags
+      assign allTags = concat: product.tags
     %}
     "{{ product.id }}": {
       "id":      {{ product.id }},
@@ -27,7 +27,7 @@
       }
     }{%- if forloop.last == false -%},{% endif %} {%- endfor %} 
   },
-  "tags":  {{ tags | uniq | sort | json }},
+  "tags":  {{ allTags | uniq | sort | json }},
   "types": {{ types | uniq | sort | json }}
 }
 {% endpaginate -%}
