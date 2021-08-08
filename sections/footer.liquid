@@ -19,10 +19,17 @@
 {%- if settings.color_footer == settings.color_body_bg -%}
   {%- style -%}
     .site-footer {
-      border-top: 1px solid {{ settings.color_borders }};
+    border-top: 1px solid {{ settings.color_borders }};
     }
   {%- endstyle -%}
 {%- endif -%}
+
+<div class="page-width insta-feed-container">
+  <span class="insta-feed-link">
+      @fantastiskefroe.dk
+  </span>
+  <div id="insta-feed"></div>
+</div>
 
 <footer class="site-footer" data-section-id="{{ section.id }}" data-section-type="footer-section">
   <div class="page-width">
@@ -36,21 +43,22 @@
           {%- assign row_width = row_width | minus: 100 -%}
         {%- endif -%}
 
-        <div {{ block.shopify_attributes }} class="grid__item footer__item--{{ block.id }}" data-type="{{ block.type }}">
+        <div {{ block.shopify_attributes }} class="grid__item footer__item--{{ block.id }}"
+                                            data-type="{{ block.type }}">
           {%- style -%}
             @media only screen and (min-width: 769px) and (max-width: 959px) {
-              .footer__item--{{ block.id }} {
-                width: 50%;
-                padding-top: 40px;
-              }
-              .footer__item--{{ block.id }}:nth-child(2n + 1) {
-                clear: left;
-              }
+            .footer__item--{{ block.id }} {
+            width: 50%;
+            padding-top: 40px;
+            }
+            .footer__item--{{ block.id }}:nth-child(2n + 1) {
+            clear: left;
+            }
             }
             @media only screen and (min-width: 960px) {
-              .footer__item--{{ block.id }} {
-                width: {{ block.settings.container_width }}%;
-              }
+            .footer__item--{{ block.id }} {
+            width: {{ block.settings.container_width }}%;
+            }
 
             }
           {%- endstyle -%}
@@ -78,66 +86,66 @@
       {%- endfor -%}
     </div>
 
-    <div style="width: 100%; display: block; float: left">
-      <a style="float:left;" 
-         href="https://miljoevenlig-pakning.dk/" 
-         target="_blank"
-         title="Miljøvenlig pakning"  
-         rel="noopener">
-        <img style="height:110px;padding:0px;margin:10px;" 
-             alt="Miljøvenlig pakning logo" 
-             src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/Miljovenling-pakning.png?v=1578570479">
-      <a>
-      
-      <a style="float:left;" 
-         href="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/fantastiskefroe_autorisationsbevis_1106984_gjern_2021.pdf" 
-         target="_blank" 
-         rel="noopener" 
-         title="Autorisationsbevis" 
-         rel="noopener noreferrer">
-      <img style="height:110px;padding:0px;margin:10px;" 
-           alt="Ø-mærket" 
-           src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/DK-Oko-uden_tekst.png?v=1578570873">
-      </a>
-        
-      <a style="float:left;" 
-         href="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/Demetercertifikat_2021.pdf" 
-         target="_blank" 
-         rel="noopener" 
-         title="Demetergodkendelse" 
-         rel="noopener noreferrer">
-        <img style="height:110px;padding:0px;margin:10px;margin-left:0px;" 
-             alt="Demeter logo" 
-             src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/Demeter.png?v=1591110274">
-      </a>
+    <div class="footer-icons">
+      <ul class="inline-list footer__section">
+        <li class="footer-icon">
+          <a href="https://miljoevenlig-pakning.dk/"
+             target="_blank"
+             title="Miljøvenlig pakning"
+             rel="noopener">
+            <img alt="Miljøvenlig pakning logo"
+                 src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/Miljovenling-pakning.png?v=1578570479">
+          </a>
+        </li>
+        <li class="footer-icon">
+          <a href="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/fantastiskefroe_autorisationsbevis_1106984_gjern_2021.pdf"
+             target="_blank"
+             title="Autorisationsbevis"
+             rel="noopener noreferrer">
+            <img alt="Ø-mærket"
+                 src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/DK-Oko-uden_tekst.png?v=1578570873">
+          </a>
+        </li>
+
+        <li class="footer-icon">
+          <a href="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/Demetercertifikat_2021.pdf"
+             target="_blank"
+             title="Demetergodkendelse"
+             rel="noopener noreferrer">
+            <img style="height:110px;padding:0;margin:10px;margin-left:0;"
+                 alt="Demeter logo"
+                 src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/Demeter.png?v=1591110274">
+          </a>
+        </li>
+      </ul>
     </div>
 
     {%- if show_selectors -%}
       <div class="footer__section">
         {%- render 'multi-selectors',
-          locale_selector: locale_selector,
-          currency_selector: currency_selector,
-          show_currency_flags: section.settings.show_currency_flags
-          location: 'footer'
+            locale_selector: locale_selector,
+            currency_selector: currency_selector,
+            show_currency_flags: section.settings.show_currency_flags,
+            location: 'footer'
         -%}
       </div>
     {%- endif -%}
 
     {%- if section.settings.show_payment_icons -%}
-    <ul class="inline-list payment-icons footer__section">
-      <li class="icon--payment">
-        {{ "visa" | payment_type_svg_tag }}
-      </li>
-      <!--<li class="icon--payment">
-        {%- render 'mobile-pay-logo-small' -%}
-      </li>-->
-      <li class="icon--payment">
-        {{ "maestro" | payment_type_svg_tag }}
-      </li>
-      <li class="icon--payment">
-        {{ "master" | payment_type_svg_tag }}
-      </li>
-    </ul>
+      <ul class="inline-list payment-icons footer__section">
+        <li class="icon--payment">
+          {{ "visa" | payment_type_svg_tag }}
+        </li>
+        <li class="icon--payment">
+          {%- render 'mobile-pay-logo-small' -%}
+        </li>
+        <li class="icon--payment">
+          {{ "maestro" | payment_type_svg_tag }}
+        </li>
+        <li class="icon--payment">
+          {{ "master" | payment_type_svg_tag }}
+        </li>
+      </ul>
     {%- endif -%}
 
     {%- if section.settings.show_copyright -%}
@@ -153,207 +161,207 @@
 </footer>
 
 {% schema %}
-  {
-    "name": "Footer",
-    "max_blocks": 12,
-    "settings": [
-      {
-        "type": "header",
-        "content": "Language selector",
-        "info": "To add a language, go to your [language settings.](/admin/settings/languages)"
-      },
-      {
-        "type": "checkbox",
-        "id": "show_locale_selector",
-        "label": "Show language selector",
-        "default": true
-      },
-      {
-        "type": "header",
-        "content": "Currency selector",
-        "info": "To add a currency, go to your [currency settings.](/admin/settings/payments)"
-      },
-      {
-        "type": "checkbox",
-        "id": "show_currency_selector",
-        "label": "Show currency selector",
-        "default": true
-      },
-      {
-        "type": "checkbox",
-        "id": "show_currency_flags",
-        "label": "Show currency flags",
-        "default": true
-      },
-      {
-        "type": "header",
-        "content": "Additional footer content"
-      },
-      {
-        "type": "checkbox",
-        "id": "show_payment_icons",
-        "label": "Show payment icons",
-        "default": false
-      },
-      {
-        "type": "checkbox",
-        "id": "show_copyright",
-        "label": "Show copyright"
-      },
-      {
-        "type": "text",
-        "id": "copyright_text",
-        "label": "Additional copyright text"
-      }
-    ],
-    "blocks": [
-      {
-        "type": "logo_social",
-        "name": "Logo",
-        "limit": 1,
-        "settings": [
-          {
-            "type": "image_picker",
-            "id": "logo",
-            "label": "Logo image"
-          },
-          {
-            "type": "range",
-            "id": "desktop_logo_height",
-            "label": "Logo height",
-            "default": 50,
-            "min": 20,
-            "max": 120,
-            "unit": "px"
-          },
-          {
-            "type": "range",
-            "id": "container_width",
-            "label": "Column width",
-            "default": 25,
-            "min": 15,
-            "max": 95,
-            "unit": "%"
-          }
-        ]
-      },
-      {
-        "type": "menu",
-        "name": "Navigation",
-        "settings": [
-          {
-            "type": "checkbox",
-            "id": "show_footer_title",
-            "label": "Show heading"
-          },
-          {
-            "type": "link_list",
-            "id": "menu",
-            "label": "Choose a menu",
-            "default": "footer",
-            "info": "This menu won't show dropdown items"
-          },
-          {
-            "type": "range",
-            "id": "container_width",
-            "label": "Column width",
-            "default": 25,
-            "min": 15,
-            "max": 95,
-            "unit": "%"
-          }
-        ]
-      },
-      {
-        "type": "newsletter",
-        "name": "Newsletter and social",
-        "limit": 1,
-        "settings": [
-          {
-            "type": "checkbox",
-            "id": "show_footer_title",
-            "label": "Show heading",
-            "default": true
-          },
-          {
-            "type": "paragraph",
-            "content": "Any customers who sign up will have an account created for them in Shopify. [View customers](/admin/customers)."
-          },
-          {
-            "type": "text",
-            "id": "title",
-            "label": "Heading",
-            "default": "Sign up and save"
-          },
-          {
-            "type": "richtext",
-            "id": "text",
-            "label": "Text",
-            "info": "Optional",
-            "default": "<p>Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.</p>"
-          },
-          {
-            "type": "range",
-            "id": "container_width",
-            "label": "Column width",
-            "default": 25,
-            "min": 15,
-            "max": 95,
-            "unit": "%"
-          }
-        ]
-      },
-      {
-        "type": "custom",
-        "name": "Custom text",
-        "settings": [
-          {
-            "type": "checkbox",
-            "id": "show_footer_title",
-            "label": "Show heading",
-            "default": true
-          },
-          {
-            "type": "text",
-            "id": "title",
-            "label": "Heading",
-            "default": "Custom text"
-          },
-          {
-            "type": "image_picker",
-            "id": "image",
-            "label": "Image"
-          },
-          {
-            "type": "richtext",
-            "id": "text",
-            "label": "Text",
-            "default": "<p>Add your own custom text here.</p>"
-          },
-          {
-            "type": "range",
-            "id": "container_width",
-            "label": "Column width",
-            "default": 25,
-            "min": 15,
-            "max": 95,
-            "unit": "%"
-          }
-        ]
-      }
-    ],
-    "default": {
-      "settings": {},
-      "blocks": [
-        {
-          "type": "menu",
-          "settings": {}
-        },
-        {
-          "type": "logo_social",
-          "settings": {}
-        }
-      ]
-    }
-  }
+{
+"name": "Footer",
+"max_blocks": 12,
+"settings": [
+{
+"type": "header",
+"content": "Language selector",
+"info": "To add a language, go to your [language settings.](/admin/settings/languages)"
+},
+{
+"type": "checkbox",
+"id": "show_locale_selector",
+"label": "Show language selector",
+"default": true
+},
+{
+"type": "header",
+"content": "Currency selector",
+"info": "To add a currency, go to your [currency settings.](/admin/settings/payments)"
+},
+{
+"type": "checkbox",
+"id": "show_currency_selector",
+"label": "Show currency selector",
+"default": true
+},
+{
+"type": "checkbox",
+"id": "show_currency_flags",
+"label": "Show currency flags",
+"default": true
+},
+{
+"type": "header",
+"content": "Additional footer content"
+},
+{
+"type": "checkbox",
+"id": "show_payment_icons",
+"label": "Show payment icons",
+"default": false
+},
+{
+"type": "checkbox",
+"id": "show_copyright",
+"label": "Show copyright"
+},
+{
+"type": "text",
+"id": "copyright_text",
+"label": "Additional copyright text"
+}
+],
+"blocks": [
+{
+"type": "logo_social",
+"name": "Logo",
+"limit": 1,
+"settings": [
+{
+"type": "image_picker",
+"id": "logo",
+"label": "Logo image"
+},
+{
+"type": "range",
+"id": "desktop_logo_height",
+"label": "Logo height",
+"default": 50,
+"min": 20,
+"max": 120,
+"unit": "px"
+},
+{
+"type": "range",
+"id": "container_width",
+"label": "Column width",
+"default": 25,
+"min": 15,
+"max": 95,
+"unit": "%"
+}
+]
+},
+{
+"type": "menu",
+"name": "Navigation",
+"settings": [
+{
+"type": "checkbox",
+"id": "show_footer_title",
+"label": "Show heading"
+},
+{
+"type": "link_list",
+"id": "menu",
+"label": "Choose a menu",
+"default": "footer",
+"info": "This menu won't show dropdown items"
+},
+{
+"type": "range",
+"id": "container_width",
+"label": "Column width",
+"default": 25,
+"min": 15,
+"max": 95,
+"unit": "%"
+}
+]
+},
+{
+"type": "newsletter",
+"name": "Newsletter and social",
+"limit": 1,
+"settings": [
+{
+"type": "checkbox",
+"id": "show_footer_title",
+"label": "Show heading",
+"default": true
+},
+{
+"type": "paragraph",
+"content": "Any customers who sign up will have an account created for them in Shopify. [View customers](/admin/customers)."
+},
+{
+"type": "text",
+"id": "title",
+"label": "Heading",
+"default": "Sign up and save"
+},
+{
+"type": "richtext",
+"id": "text",
+"label": "Text",
+"info": "Optional",
+"default": "<p>Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.</p>"
+},
+{
+"type": "range",
+"id": "container_width",
+"label": "Column width",
+"default": 25,
+"min": 15,
+"max": 95,
+"unit": "%"
+}
+]
+},
+{
+"type": "custom",
+"name": "Custom text",
+"settings": [
+{
+"type": "checkbox",
+"id": "show_footer_title",
+"label": "Show heading",
+"default": true
+},
+{
+"type": "text",
+"id": "title",
+"label": "Heading",
+"default": "Custom text"
+},
+{
+"type": "image_picker",
+"id": "image",
+"label": "Image"
+},
+{
+"type": "richtext",
+"id": "text",
+"label": "Text",
+"default": "<p>Add your own custom text here.</p>"
+},
+{
+"type": "range",
+"id": "container_width",
+"label": "Column width",
+"default": 25,
+"min": 15,
+"max": 95,
+"unit": "%"
+}
+]
+}
+],
+"default": {
+"settings": {},
+"blocks": [
+{
+"type": "menu",
+"settings": {}
+},
+{
+"type": "logo_social",
+"settings": {}
+}
+]
+}
+}
 {% endschema %}

@@ -89,7 +89,7 @@
               test1=agurk-marketmore/31932804071508:majs-golden-bantam/31932826157140:log-stuttgart/31932826026068,test2=agurk-marketmore/31932804104276:majs-golden-bantam/31932826189908:log-stuttgart/31932826058836 
             {% endcomment %}
             {%- liquid
-              paginate collections.facebook_product_feed_v2.products by 1000 
+              paginate collections.all-products.products by 1000
                 assign bundleVariants = product.metafields.bundle.bundleData | split: ','
                 assign bundleVariantCount = bundleVariants.size 
                 assign bvMaxIndex = bundleVariantCount | minus: 1 
@@ -132,6 +132,7 @@
                   endfor
 
                   assign bundleVariantPrice = 0
+                  assign bundleVariantProductIDList = ""
                   assign bundleVariantProductTitleList = ""
                   assign bundleVariantProductPriceList = ""
                   assign bundleVariantProductAvailabilityList = ""
@@ -142,11 +143,12 @@
                   for productIdentifier in productIdentifiers
                     assign productHandle = productIdentifier | split: '/' | first 
                     assign variantID     = productIdentifier | split: '/' | last | plus: 0
-                    for item in collections.facebook_product_feed_v2.products
+                    for item in collections.all-products.products
                       if item.handle == productHandle 
                         for productVariant in item.variants
                           if productVariant.id == variantID
                             assign bundleVariantPrice = bundleVariantPrice | plus: productVariant.price
+                            assign bundleVariantProductIDList = bundleVariantProductIDList | append: productVariant.id | append: '§'
                             assign bundleVariantProductTitleList = bundleVariantProductTitleList | append: item.title | append: " (" | append: productVariant.title | append: ')§'
                             assign bundleVariantProductPriceList = bundleVariantProductPriceList | append: productVariant.price | append: '§'
                             assign bundleVariantProductURLsList   = bundleVariantProductURLsList   | append: productVariant.url | append: '§'
@@ -171,6 +173,7 @@
                   assign bundleVariantPriceSingleton     = bundleVariantPrice | string | split: '¤'
                   assign bundleVariantAvailableSingleton = bundleVariantAvailable      | split: '¤'
 
+                  assign bundleVariantProductIDsSingleton           = bundleVariantProductIDList           | split: '¤'
                   assign bundleVariantProductTitlesSingleton        = bundleVariantProductTitleList        | split: '¤'
                   assign bundleVariantProductPricesSingleton        = bundleVariantProductPriceList        | split: '¤'
                   assign bundleVariantProductAvailabilitysSingleton = bundleVariantProductAvailabilityList | split: '¤'
@@ -179,8 +182,9 @@
                   assign bundleVariantPrices       = bundleVariantPrices       | concat: bundleVariantPriceSingleton 
                   assign bundleVariantAvailability = bundleVariantAvailability | concat: bundleVariantAvailableSingleton
 
-                  assign bundleVariantProductTitles        = bundleVariantProductTitles       | concat: bundleVariantProductTitlesSingleton  
-                  assign bundleVariantProductPrices        = bundleVariantProductPrices       | concat: bundleVariantProductPricesSingleton  
+                  assign bundleVariantProductIDs           = bundleVariantProductIDs          | concat: bundleVariantProductIDsSingleton
+                  assign bundleVariantProductTitles        = bundleVariantProductTitles       | concat: bundleVariantProductTitlesSingleton
+                  assign bundleVariantProductPrices        = bundleVariantProductPrices       | concat: bundleVariantProductPricesSingleton
                   assign bundleVariantProductAvailability  = bundleVariantProductAvailability | concat: bundleVariantProductAvailabilitysSingleton  
                   assign bundleVariantProductURLs          = bundleVariantProductURLs         | concat: bundleVariantProductURLsSingleton  
                 endfor
@@ -191,38 +195,6 @@
                 if product.variants.size != bundleVariants.size or bundleVariantIDs.size != bundleVariantNames.size
                   echo '<script>alert("Bundle error! Redirecting you to the front page."); document.location.href="/";</script>'
                 endif
-
-                comment 
-                echo "bundleVariantNames:"
-                echo "<pre>"
-                echo bundleVariantNames | json
-                echo "</pre>"
-
-                echo "bundleVariantPrices:"
-                echo "<pre>"
-                echo bundleVariantPrices | json
-                echo "</pre>"
-
-                echo "bundleVariantAvailability:"
-                echo "<pre>"
-                echo bundleVariantAvailability | json
-                echo "</pre>"
-
-                echo "bundleVariantProductTitles:"
-                echo "<pre>"
-                echo bundleVariantProductTitles | json
-                echo "</pre>"
-
-                echo "bundleVariantProductAvailability:"
-                echo "<pre>"
-                echo bundleVariantProductAvailability | json
-                echo "</pre>"
-
-                echo "bundleVariantProductURLs:"
-                echo "<pre>"
-                echo bundleVariantProductURLs | json
-                echo "</pre>"
-                endcomment 
               endpaginate
             -%} 
             <script type="text/javascript">
@@ -233,13 +205,15 @@
                   'id': {{ bundleVariantIDs[forloop.index0] }},
                   'price': {{ bundleVariantPrices[forloop.index0] }},
                   'available': {{ bundleVariantAvailability[forloop.index0] }},
-                  {% assign productTitles = bundleVariantProductTitles[forloop.index0] | split: '§' %}
+                  {% assign productIDs = bundleVariantProductIDs[forloop.index0] | split: '§' %}
+                  {%- assign productTitles = bundleVariantProductTitles[forloop.index0] | split: '§' -%}
                   {%- assign productPrices = bundleVariantProductPrices[forloop.index0] | split: '§' -%}
                   {%- assign productAvailability = bundleVariantProductAvailability[forloop.index0] | split: '§' -%}
                   {%- assign productURLs = bundleVariantProductURLs[forloop.index0] | split: '§' -%}
-                  'products': [ {%- for productTitle in productTitles -%}
+                  'products': [ {%- for productID in productIDs -%}
                     {
-                      'name': '{{ productTitle | escape }}',
+                      'id': {{ productID | plus: 0 }},
+                      'name': '{{ productTitles[forloop.index0] | escape }}',
                       'price': {{ productPrices[forloop.index0] | plus: 0 }},
                       'available': {{ productAvailability[forloop.index0] }}
                     },
@@ -247,7 +221,6 @@
                 },
               {%- endfor -%} }
             </script>
-            <!-- : -->
 
             {% comment %} --------------------------------------- {% endcomment %}
 
@@ -269,8 +242,10 @@
                 {{ product.title }}
               </p>
             {%- else -%}
+              {% assign lines = product.title | split: "'" %}
               <h1 class="h2 product-single__title">
-                {{ product.title }}
+                <span class="primary">{{ lines[0] }}</span>
+                <span class="secondary">'{{ lines[1] }}'</span>
               </h1>
             {%- endif -%}
 
@@ -321,10 +296,11 @@
             {% comment %} ----------------------------- {% endcomment %}
 
             {%- for name in bundleVariantNames -%}
-              <span id="ProductPrice-{{ section_id }}" data-variant-name="{{name}}"
-                class="{% if current_variant.title != name %} hide{% endif %}">
-                {% echo bundleVariantPrices[forloop.index0] | money %}
-              </span>
+              {% if current_variant.title == name %}
+                <span id="ProductPrice-{{ section_id }}" data-variant-name="{{name}}">
+                  {% echo bundleVariantPrices[forloop.index0] | money %}
+                </span>
+              {%- endif %}
             {%- endfor -%}
 
             {% comment %} ----------------------------- {% endcomment %}
@@ -356,17 +332,6 @@
 
               <span class="product__unit-price--{{ section_id }}">{{ current_variant.unit_price | money }}</span>/{{ unit_price_base_unit }}
             </div>
-
-            {%- if shop.taxes_included or shop.shipping_policy.body != blank -%}
-              <div class="product__policies rte small--text-center">
-                {%- if shop.taxes_included -%}
-                  {{ 'products.product.include_taxes' | t }}
-                {%- endif -%}
-                {%- if shop.shipping_policy.body != blank -%}
-                  {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
-                {%- endif -%}
-              </div>
-            {%- endif -%}
 
             {%- if settings.inventory_enable or settings.inventory_transfers_enable -%}
               {%- assign variants_with_inventory_tracking = product.variants | where: 'inventory_management', 'shopify' -%}
@@ -466,6 +431,26 @@
 
             {%- unless description_style == 'full' -%}
               <div class="product-single__description rte">
+                {%- liquid
+                  assign firstTag = true
+                  assign relevantTags = 'friland, drivhus, fuld sol, halvskygge, vindueskarm, altan/terasse' | split: ', '
+                  assign relevantTagsStr = ''
+
+                  for tag in product.tags
+                    for relevantTag in relevantTags
+                      if tag == relevantTag
+                        if firstTag == false
+                          assign relevantTagsStr = relevantTagsStr | append: ' / '
+                        endif
+                        assign relevantTagsStr = relevantTagsStr | append: tag
+                        assign firstTag = false
+                      endif
+                    endfor
+                  endfor
+                -%}
+                <span class="product-single__relevant-tags" >
+                  {{ relevantTagsStr }}
+                </span>
                 {{ product.description }}
 
                 <p>

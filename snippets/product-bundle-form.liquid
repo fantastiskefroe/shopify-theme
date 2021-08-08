@@ -19,19 +19,20 @@
 
       {%- if settings.variant_type == 'button' -%}
         {%- render 'variant-bundle-button',
-          product: product,
-          section_id: section_id,
-          option: option,
-          forloop: forloop,
-          is_color: is_color,
-          color_option_index: color_option_index
+            product: product,
+            section_id: section_id,
+            option: option,
+            forloop: forloop,
+            is_color: is_color,
+            color_option_index: color_option_index,
+            bundleVariantAvailability: bundleVariantAvailability
         -%}
       {%- else -%}
         {%- render 'variant-dropdown',
-          product: product,
-          section_id: section_id,
-          option: option,
-          forloop: forloop
+            product: product,
+            section_id: section_id,
+            option: option,
+            forloop: forloop
         -%}
       {%- endif -%}
     {%- endfor -%}
@@ -42,7 +43,7 @@
       {%- if variant.available -%}
         <option {% if variant == product.selected_or_first_available_variant %}
           selected="selected"{% endif %}
-          value="{{ variant.id }}">
+            value="{{ variant.id }}">
           {{ variant.title }} - {{ variant.price | money_with_currency }}
         </option>
       {%- else -%}
@@ -60,102 +61,35 @@
     </div>
   {%- endif -%}
 
-  {%- assign inventory_visible = false -%}
-  {%- if settings.inventory_enable and current_variant.inventory_management == 'shopify' -%}
-    {%- if current_variant.inventory_quantity <= settings.inventory_threshold and current_variant.inventory_quantity >= 0 -%}
-      {%- assign inventory_visible = true -%}
-    {%- endif -%}
-  {%- endif -%}
-
   {%- liquid
-    if current_variant.inventory_quantity == 0 or current_variant.inventory_policy == 'continue'
-      assign inventory_visible = false
+    assign default_text = 'products.product.add_to_cart' | t
+    assign button_text = 'products.product.add_to_cart' | t
+    if template == 'product.preorder'
+      assign default_text = 'products.product.preorder' | t
+      assign button_text = 'products.product.preorder' | t
     endif
+    unless current_variant.available
+      assign button_text = 'products.product.sold_out' | t
+    endunless
 
-    assign show_incoming = false
-    if current_variant.incoming and inventory_visible == false and current_variant.inventory_quantity <= settings.inventory_threshold
-      assign show_incoming = true
-    endif
-  -%}
-
-  {%- if settings.inventory_enable -%}
-    <div
-      id="ProductInventory-{{ section_id }}"
-      class="product__inventory{% unless inventory_visible %} hide{% endunless %}"
-      >
-      {%- if current_variant.available -%}
-        {{ 'products.product.stock_label' | t: count: current_variant.inventory_quantity }}
-      {%- endif -%}
-    </div>
-  {%- endif -%}
-
-  {%- if settings.inventory_transfers_enable -%}
-    <div
-      id="ProductIncomingInventory-{{ section_id }}"
-      class="product__inventory{% if inventory_visible %} hide{% endif %}">
-      {%- if show_incoming == true -%}
-        {%- if current_variant.next_incoming_date -%}
-          {%- assign date = current_variant.next_incoming_date | date: format: 'date' -%}
-          {%- if current_variant.available -%}
-            {{ 'products.product.will_not_ship_until' | t: date: date }}
-          {%- else -%}
-            {{ 'products.product.will_be_in_stock_after' | t: date: date }}
-          {%- endif -%}
-        {%- else -%}
-          {{ 'products.product.waiting_for_stock' | t }}
-        {%- endif -%}
-      {%- endif -%}
-    </div>
-  {%- endif -%}
-
-  {%- liquid
-    assign enable_dynamic_buttons = false
-    if settings.enable_payment_button and template != 'product.preorder'
-      assign enable_dynamic_buttons = true
-    endif
-  -%}
-
-  {%- if enable_dynamic_buttons -%}
-    <div class="payment-buttons">
-  {%- endif -%}
-
-    {%- liquid
-      assign default_text = 'products.product.add_to_cart' | t
-      assign button_text = 'products.product.add_to_cart' | t
-      if template == 'product.preorder'
-        assign default_text = 'products.product.preorder' | t
-        assign button_text = 'products.product.preorder' | t
+    for bundleVariantID in bundleVariantIDs
+      assign bundleVariantIDInt = bundleVariantID | plus: 0
+      if bundleVariantIDInt == current_variant.id
+        assign bundleVariantAvailable = bundleVariantAvailability[forloop.index0]
       endif
-      unless current_variant.available
-        assign button_text = 'products.product.sold_out' | t
-      endunless
+    endfor
+  -%}
 
-      for bundleVariantID in bundleVariantIDs
-        assign bundleVariantIDInt = bundleVariantID | plus: 0
-        if bundleVariantIDInt == current_variant.id
-          assign bundleVariantAvailable = bundleVariantAvailability[forloop.index0]
-        endif
-      endfor
-    -%}
-
-    <button
-      {% if product.empty? %}type="button"{% else %}type="submit"{% endif %}
+  <button
+      {% if product.empty? %}type="button" {% else %}type="submit"{% endif %}
       name="add"
       id="AddToCart-{{ section_id }}"
       class="btn btn--full add-to-cart{% if enable_dynamic_buttons and product.selling_plan_groups == empty %} btn--secondary{% endif %}"
-      {% if bundleVariantAvailable == "false" %} disabled="disabled"{% endif %}>
+  {% if bundleVariantAvailable == "false" %} disabled="disabled"{% endif %}>
       <span id="AddToCartText-{{ section_id }}" data-default-text="{{ default_text }}">
         {{ button_text }}
       </span>
-    </button>
-
-    {%- if enable_dynamic_buttons -%}
-      {{ form | payment_button }}
-    {%- endif -%}
-
-  {%- if enable_dynamic_buttons -%}
-    </div>
-  {%- endif -%}
+  </button>
 
   <div class="shopify-payment-terms product__policies">{{ form | payment_terms }}</div>
 

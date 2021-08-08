@@ -2624,16 +2624,20 @@ lazySizesConfig.expFactor = 4;
   
     QtySelector.prototype = Object.assign({}, QtySelector.prototype, {
       init: function() {
-        this.plus.addEventListener('click', function() {
-          var qty = this._getQty();
-          this._change(qty + 1);
-        }.bind(this));
-  
-        this.minus.addEventListener('click', function() {
-          var qty = this._getQty();
-          this._change(qty - 1);
-        }.bind(this));
-  
+        if (this.plus) {
+          this.plus.addEventListener('click', function() {
+            var qty = this._getQty();
+            this._change(qty + 1);
+          }.bind(this));
+        }
+
+        if (this.minus) {
+          this.minus.addEventListener('click', function() {
+            var qty = this._getQty();
+            this._change(qty - 1);
+          }.bind(this));
+        }
+
         this.input.addEventListener('change', function(evt) {
           this._change(this._getQty());
         }.bind(this));

@@ -17,6 +17,40 @@
       <div class="cart__page">
         <div data-products class="cart__page-col">
           {% for item in cart.items %}
+            {%- assign isBundle = false -%}
+            {%- assign isBundleProduct = false -%}
+            {%- assign isLimitedProduct = false -%}
+
+            {% for p in item.properties %}
+              {% if p.first == "_bundle" %}
+                {%- assign isBundle = true -%}
+                {% break %}
+              {% endif %}
+              {% if p.first == "_partOf" %}
+                {%- assign isBundleProduct = true -%}
+                {% break %}
+              {% endif %}
+            {% endfor %}
+
+            {% if item.id == 37789873078464 %}
+              {%- assign isLimitedProduct = true -%}
+            {% endif %}
+
+            {% if isBundle %}
+              {%- render 'cart-item-bundle', product: item -%}
+              {%- continue -%}
+            {% endif %}
+
+            {% if isBundleProduct %}
+              {%- render 'cart-item-bundle-product', product: item -%}
+              {%- continue -%}
+            {% endif %}
+
+            {% if isLimitedProduct %}
+              {%- render 'cart-item-limited', product: item -%}
+              {%- continue -%}
+            {% endif %}
+
             {%- render 'cart-item', product: item -%}
           {%- endfor -%}
         </div>

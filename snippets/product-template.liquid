@@ -101,8 +101,10 @@
                 {{ product.title }}
               </p>
             {%- else -%}
+              {% assign lines = product.title | split: "'" %}
               <h1 class="h2 product-single__title">
-                {{ product.title }}
+                <span class="primary">{{ lines[0] }}</span>
+                <span class="secondary">'{{ lines[1] }}'</span>
               </h1>
             {%- endif -%}
 
@@ -182,17 +184,6 @@
 
               <span class="product__unit-price--{{ section_id }}">{{ current_variant.unit_price | money }}</span>/{{ unit_price_base_unit }}
             </div>
-
-            {%- if shop.taxes_included or shop.shipping_policy.body != blank -%}
-              <div class="product__policies rte small--text-center">
-                {%- if shop.taxes_included -%}
-                  {{ 'products.product.include_taxes' | t }}
-                {%- endif -%}
-                {%- if shop.shipping_policy.body != blank -%}
-                  {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
-                {%- endif -%}
-              </div>
-            {%- endif -%}
 
             {%- if settings.inventory_enable or settings.inventory_transfers_enable -%}
               {%- assign variants_with_inventory_tracking = product.variants | where: 'inventory_management', 'shopify' -%}
@@ -290,6 +281,26 @@
 
             {%- unless description_style == 'full' -%}
               <div class="product-single__description rte">
+                {%- liquid
+                  assign firstTag = true
+                  assign relevantTags = 'friland, drivhus, fuld sol, halvskygge, vindueskarm, altan/terasse' | split: ', '
+                  assign relevantTagsStr = ''
+
+                  for tag in product.tags
+                    for relevantTag in relevantTags
+                      if tag == relevantTag
+                        if firstTag == false
+                          assign relevantTagsStr = relevantTagsStr | append: ' / '
+                        endif
+                        assign relevantTagsStr = relevantTagsStr | append: tag
+                        assign firstTag = false
+                      endif
+                    endfor
+                  endfor
+                -%}
+                <span class="product-single__relevant-tags" >
+                  {{ relevantTagsStr }}
+                </span>
                 {{ product.description }}
               </div>
 
