@@ -201,7 +201,7 @@
               window.bundleData = 
               { {%- for name in bundleVariantNames -%}
                 '{{ bundleVariantIDs[forloop.index0] }}':{
-                  'name': '{{ name }}',
+                  'name': "{{ name }}",
                   'id': {{ bundleVariantIDs[forloop.index0] }},
                   'price': {{ bundleVariantPrices[forloop.index0] }},
                   'available': {{ bundleVariantAvailability[forloop.index0] }},
@@ -213,7 +213,7 @@
                   'products': [ {%- for productID in productIDs -%}
                     {
                       'id': {{ productID | plus: 0 }},
-                      'name': '{{ productTitles[forloop.index0] | escape }}',
+                      'name': "{{ productTitles[forloop.index0] | escape }}",
                       'price': {{ productPrices[forloop.index0] | plus: 0 }},
                       'available': {{ productAvailability[forloop.index0] }}
                     },
