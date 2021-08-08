@@ -57,9 +57,6 @@
       padding-left: 1rem;
     }
     
-
-
-
     .filter, 
     .bundle-variants {
       position: fixed;
@@ -121,6 +118,13 @@
       box-sizing: border-box;
     }
 
+    tr td:nth-child(3) {
+      width: 14rem;
+    }
+    .product .image, .variant .checkbox {
+      width: 6rem;
+      text-align: center;
+    }
     .product .image img {
       height: 4rem;
     }
@@ -135,10 +139,6 @@
     table td {
       border: 1px solid #ddd;
       padding: 0.2rem;
-    }
-
-    td.image {
-      text-align: center;
     }
 
     table tr.product { background-color: white; }
@@ -175,7 +175,7 @@
             <td><span class="sku">{{ product.sku }}</span></td>
           </tr>
           <tr class="variant" v-for="variant in product.variants" >
-            <td>
+            <td class="checkbox">
               <label :for="variant.id">
                 <input 
                   type="checkbox"
@@ -270,7 +270,8 @@
               name: this.variant,
               items: []
             });
-            this.selectedVariantIndex = this.bundle.length-1;
+            this.variant = "";
+            // this.selectedVariantIndex = this.bundle.length-1;
           },
           selectBundleVariant: function(i) {
             if(this.selectedVariantIndex == i) {
@@ -303,6 +304,7 @@
                 name: parts[0],
                 items: parts[1].split(":").filter((idStr) => {
                   let parts = idStr.split("/");
+                  console.log(parts);
                   if(parts.length != 2)
                     return false;
                   productHandle = parts[0];
@@ -310,7 +312,7 @@
                   let product = self.products.filter((p) => p.handle == productHandle);
                   if(product.length != 1)
                     return false;
-                  let variant = Object.keys(product[0].variants).filter((id) => id == variantId);
+                  let variant = product[0].variants.filter((v) => v.id == variantId);
                   if(variant.length != 1)
                     return false;
                   return true;
@@ -342,7 +344,6 @@
 
                 let resultString = localStorage.getItem("result");
 
-                
                 if(resultString) this.setState(resultString);
                 this.hasLoaded = true;
               });
