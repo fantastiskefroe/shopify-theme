@@ -5987,6 +5987,7 @@ lazySizesConfig.expFactor = 4;
         }
   
         this.container.on('variantChange' + this.settings.namespace, this.updateCartButton.bind(this));
+        this.container.on('variantChange' + this.settings.namespace, this.updateQualityLogos.bind(this));
         this.container.on('variantImageChange' + this.settings.namespace, this.updateVariantImage.bind(this));
         this.container.on('variantPriceChange' + this.settings.namespace, this.updatePrice.bind(this));
         this.container.on('variantUnitPriceChange' + this.settings.namespace, this.updateUnitPrice.bind(this));
@@ -6042,7 +6043,7 @@ lazySizesConfig.expFactor = 4;
         // Updates on radio button change, not variant.js
         this.container.querySelector('#VariantColorLabel-' + this.sectionId + '-' + index).textContent = color;
       },
-  
+
       updateCartButton: function(evt) {
         var variant = evt.detail.variant;
         var cartBtn = document.getElementById(this.selectors.addToCart);
@@ -6068,7 +6069,25 @@ lazySizesConfig.expFactor = 4;
           cartBtnText.textContent = theme.strings.unavailable;
         }
       },
-  
+
+      updateQualityLogos: function(evt) {
+        const variant = evt.detail.variant;
+        const organicLogo = document.querySelector(".quality-logos .logo-organic");
+        const demeterLogo = document.querySelector(".quality-logos .logo-demeter");
+
+        if (variant.sku.indexOf('-Ø-') >= 0) {
+          demeterLogo.classList.remove(classes.hidden);
+          organicLogo.classList.remove(classes.hidden);
+        } else if (variant.sku.indexOf('-D-') >= 0) {
+          demeterLogo.classList.remove(classes.hidden);
+          organicLogo.classList.add(classes.hidden);
+        } else {
+          demeterLogo.classList.add(classes.hidden);
+          organicLogo.classList.add(classes.hidden);
+        }
+
+      },
+
       updatePrice: function(evt) {
         var variant = evt.detail.variant;
   
