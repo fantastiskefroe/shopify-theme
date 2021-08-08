@@ -18,7 +18,7 @@
       {%- unless product.product.has_only_default_variant -%}
         <div class="cart__item--variants">
           {%- for option in product.options_with_values -%}
-            <div>{{ option.value }}</div>
+            <div>{{ option.value }} | {{ product.quantity }} stk.</div>
           {%- endfor -%}
         </div>
       {%- endunless -%}
