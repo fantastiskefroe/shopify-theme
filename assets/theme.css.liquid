@@ -11363,6 +11363,11 @@ html[dir=rtl] .product-single__meta .rte {
 
 
 /*========================================== CUSTOM CSS BELOW ==========================================*/
+/* General */
+.rte p {
+    font-family: 'Futura', sans-serif;
+}
+
 /* Header */
 .header-item.header-item--logo {
     flex: 0 0 130px !important;
@@ -11401,6 +11406,21 @@ html[dir=rtl] .product-single__meta .rte {
 }
 
 /* Product page */
+.product-single__meta {
+    position: relative;
+}
+
+.quality-logos {
+    position: absolute;
+    top: calc(1em + 10px);
+    right: 0;
+}
+
+.quality-logos .logo-organic,
+.quality-logos .logo-demeter {
+    width: 64px;
+}
+
 .product-single__title .primary {
     font-family: Roboto Mono, monospace;
     text-transform: uppercase;
@@ -11415,6 +11435,8 @@ html[dir=rtl] .product-single__meta .rte {
     text-transform: none;
     font-size: 2.3rem;
 }
+
+
 
 .product-single__relevant-tags {
     font-family: Roboto Mono, monospace;
