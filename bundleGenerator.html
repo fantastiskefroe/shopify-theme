@@ -1,0 +1,354 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bundle Configurator</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="shortcut icon" href="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/FantastiskeFroe_logo_mini_32x32.png?v=1583103209" type="image/png">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Courgette&family=Roboto+Mono&display=swap" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.min.js" integrity="sha512-BKbSR+cfyxLdMAsE0naLReFSLg8/pjbgfxHh/k/kUC82Hy7r6HtR5hLhobaln2gcTvzkyyehrdREdjpsQwy2Jw==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous"></script>
+  <script type="module" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule="" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.js"></script>
+  
+  <style>
+    body, html, #app {
+      padding: 0;
+      margin:  0;
+      border:  0;
+      width:  100%;
+      height: 100%;
+
+      font-family: 'Roboto Mono', monospace;
+    }
+
+    h1,h2,h3,h4,h5,h6 {
+      font-family: 'Courgette', cursive;
+      margin:0;
+      font-size: 1rem;
+      
+      text-align: left;
+    }
+
+    label {
+      cursor: pointer;
+    }
+
+    input[type=checkbox] {
+      width: 1.25rem;
+      height: 1.25rem;
+      margin: 0;
+    }
+
+    h2.title {
+      font-size: 1.25rem;
+    }
+
+    h3.title {
+      font-size: 1rem;
+      font-family: 'Roboto Mono';
+    }
+
+    .title,.sku {
+      padding-left: 1rem;
+    }
+    
+
+
+
+    .filter, 
+    .bundle-variants {
+      position: fixed;
+      background: #314536;
+      color: white;
+      z-index: 1;
+      width: 100%;
+      height: 2rem;
+      padding: 1rem;
+      font-size: 1rem;
+    }
+
+    .filter {top: 0;}
+    
+    .bundle-variants {bottom: 0;}
+
+    .filter input[type="text"],
+    .bundle-variants input[type="text"] {
+      font-size: 1rem;
+      font-family: 'Roboto Mono', monospace;
+    }
+
+    .filter select,
+    .bundle-variants select {
+      font-size: 1.1rem;
+      width: 10rem;
+      font-family: 'Roboto Mono', monospace;
+    }
+
+    .filter ion-icon,
+    .bundle-variants ion-icon {
+      font-size: 1rem;
+      margin-left:   0.5rem;
+      margin-right: -0.5rem;
+    }
+
+    .bundle-variant {
+      border: 1px solid white;
+      padding: 0.2rem;
+      padding-bottom: 0.3rem;
+      border-radius: 0.2rem;
+      margin-right: 0.5rem;
+    }
+
+    .bundle-variant.selected {
+      background: white;
+      color: #314536;
+    }
+
+    .bundle-variant:hover {
+      border-width: 2px;
+    }
+
+    .products {    
+      background: #e8e8e1;
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+      min-height: 100%;
+      box-sizing: border-box;
+    }
+
+    .product .image img {
+      height: 4rem;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      max-width: 60rem;
+      margin: auto;
+    }
+
+    table td {
+      border: 1px solid #ddd;
+      padding: 0.2rem;
+    }
+
+    td.image {
+      text-align: center;
+    }
+
+    table tr.product { background-color: white; }
+    table tr.variant { background-color: #f2f2f2; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="filter">
+      <ion-icon name="search-outline"></ion-icon>
+      <input type="text" v-model:value="filter" placeholder="Filter">
+      <select v-model="filterType">
+        <option value="" selected>Types</option>
+        <option v-for="type in types" v-bind:value="type">{{ type }}</option>
+      </select>
+      <select v-model="filterTag">
+        <option value="" selected>Tags</option>
+        <option v-for="tag in tags" v-bind:value="tag">{{ tag }}</option>
+      </select>
+      <label for="inBundleFilter">In bundle variant:</label>
+      <input type="checkbox" name="inBundleFilter" v-model:value="filterOnlyInSelected">
+    </div>
+
+    <div class="products">
+      <table>
+        <template  v-for="product in filteredProducts">
+          <tr class="product">
+            <td class="image">
+              <img v-bind:src="'https:' + product.image"
+                   crossorigin="anonymous"
+                   referrerpolicy="no-referrer">
+            </td>
+            <td><h2 class="title">{{ decode(product.title) }}</h2></td>
+            <td><span class="sku">{{ product.sku }}</span></td>
+          </tr>
+          <tr class="variant" v-for="variant in product.variants" >
+            <td>
+              <label :for="variant.id">
+                <input 
+                  type="checkbox"
+                  v-if="selectedVariantIndex >= 0"
+                  v-bind:value="product.handle + '/' + variant.id"
+                  v-model="bundle[selectedVariantIndex].items"
+                  :id="variant.id"/>
+              </label>
+            </td>
+            <td><label :for="variant.id"><h3 class="title">{{ decode(variant.title) }}</span></label></td>
+            <td><label :for="variant.id"><!--<span class="sku">{{ variant.sku }}</span>--></label></td>
+          </tr>
+        </template>
+      </table>
+    </div>
+
+    <div class="bundle-variants">
+      <ion-icon name="add-outline" @click="addVariant"></ion-icon>
+      <input v-if="selectedVariantIndex == -1" v-on:keyup.enter="addVariant"  v-model:value="variant" placeholder="VariantName" type="text" >
+      <input v-else v-model:value="bundle[selectedVariantIndex].name" placeholder="VariantName" type="text" >
+
+      <span v-for="(v,i) in bundle" class="bundle-variant" v-bind:class="{ selected: selectedVariantIndex == i}" @click="selectBundleVariant(i)">{{v.name}} ({{v.items.length}})</span>
+
+      <ion-icon name="copy-outline" @click="copyResult($event)"></ion-icon>
+      <input id="result" type="text" v-bind:value="result" @input="setState($event.target.value)" />
+      <button @click="setState('')">clear</button>
+    </div>
+    
+  </div>
+
+  <script>
+      var app = new Vue({
+        el: '#app',
+        data: {
+            hasLoaded: false,
+            products: [],
+            tags: [],
+            types: [],
+            filter: "",
+            filterTag: "",
+            filterType: "",
+            filterOnlyInSelected: false,
+            variant: "",
+            selectedVariantIndex: -1,
+            bundle: []
+        },
+        computed: {
+          result: function() {
+            if(!this.hasLoaded) {
+              return;
+            }
+
+            let value = this.bundle.map((b) => b.name + "=" + b.items.join(":")).join(",");
+            localStorage.setItem("result", value);
+            return value;
+          },
+          filteredProducts: function() {
+            var self = this;
+            var filtered = this.products.filter((product) => 
+              (self.filterType.length == 0 || self.filterType == product.type)
+                &&
+              (self.filterTag.length == 0  || product.tags.includes(self.filterTag))
+            );
+
+            if(this.filter.length) {
+              filtered = filtered.filter((product) => 
+                product.title.toLowerCase().indexOf(self.filter.toLowerCase()) >= 0
+              );
+            }
+            
+            if(this.filterOnlyInSelected && this.selectedVariantIndex >= 0) {
+              filtered = filtered.filter((product) => 
+                self.bundle[self.selectedVariantIndex].items.map( item => item.split('/')[0]).includes(product.handle)
+              );
+            }
+            
+            return filtered;
+          }
+        },
+        methods: {
+          decode : function(str) {
+            var doc = new DOMParser().parseFromString(str, "text/html");
+            return doc.documentElement.textContent;
+          },
+          isChecked: function(itemIdentifier) {
+            if(this.selectedVariantIndex < 0)
+              return false;
+            return itemIdentifier in this.bundle[this.selectedVariantIndex].items;
+          },
+          addVariant: function() {
+            this.bundle.push({
+              name: this.variant,
+              items: []
+            });
+            this.selectedVariantIndex = this.bundle.length-1;
+          },
+          selectBundleVariant: function(i) {
+            if(this.selectedVariantIndex == i) {
+              this.selectedVariantIndex = -1;
+              this.variant = "";
+            }
+            else 
+              this.selectedVariantIndex = i;
+          },
+          copyResult: function(e) {
+            var field = document.getElementById('result');
+            field.select();
+            field.setSelectionRange(0, 99999);
+            document.execCommand("copy");
+            // alert("Copied the text");
+          },
+          setState(formattedStr) {
+            var self = this;
+
+            let isNotEmpty = (s) => s.length > 0;
+
+            if(formattedStr.length == 0) {
+              this.bundle = [];
+              return;
+            }
+
+            this.bundle = formattedStr.split(",").filter(isNotEmpty).map((bundleVariantStr) => {
+              let parts = bundleVariantStr.split("=");
+              return {
+                name: parts[0],
+                items: parts[1].split(":").filter((idStr) => {
+                  let parts = idStr.split("/");
+                  if(parts.length != 2)
+                    return false;
+                  productHandle = parts[0];
+                  variantId = parts[1];
+                  let product = self.products.filter((p) => p.handle == productHandle);
+                  if(product.length != 1)
+                    return false;
+                  let variant = Object.keys(product[0].variants).filter((id) => id == variantId);
+                  if(variant.length != 1)
+                    return false;
+                  return true;
+                })
+              }
+            });
+          }
+        },
+        mounted: function () {
+          this.$nextTick(function () {
+            axios
+              .get('data.json')
+              .then(response => {
+                let storeData = (response.data);
+
+                this.products = Object.values(storeData.products);
+                this.products.map(p => {
+                  
+                  p.variants = Object.values(p.variants).map(v => {
+                    v.sku = v.sku.replace(/-\d{4}/, "");
+                    return v;
+                  });
+                  p.sku = p.variants[0].sku.replace(/-.$/, "")
+                  return p;
+                });
+                this.products.sort((a,b) => a.sku.localeCompare(b.sku));
+                this.tags = storeData.tags.filter(t => !t.startsWith("_"));
+                this.types = storeData.types;
+
+                let resultString = localStorage.getItem("result");
+
+                
+                if(resultString) this.setState(resultString);
+                this.hasLoaded = true;
+              });
+          })
+        }
+      });
+  </script>
+</body>
+</html>
