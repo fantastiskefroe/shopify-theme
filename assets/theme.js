@@ -6200,10 +6200,10 @@ lazySizesConfig.expFactor = 4;
           var showInventory = true;
           var showIncomingInventory = false;
   
-          if (quantity <= 0 || quantity > theme.settings.inventoryThreshold) {
+          if (quantity <= 0) {
             showInventory = false;
           }
-  
+          
           this.toggleInventoryQuantity(showInventory, quantity);
   
           // Only show incoming inventory when:
@@ -6233,6 +6233,8 @@ lazySizesConfig.expFactor = 4;
         }
   
         var el = document.getElementById(this.selectors.inventory);
+        if(!el)
+          return;
   
         if (show) {
           el.classList.remove(classes.hidden);
