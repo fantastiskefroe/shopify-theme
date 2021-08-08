@@ -18,7 +18,7 @@
       {%- unless product.product.has_only_default_variant -%}
         <div class="cart__item--variants">
           {%- for option in product.options_with_values -%}
-            <div><span>{{ option.name }}:</span> {{ option.value }}</div>
+            <div>{{ option.value }} | {{ product.quantity }} stk.</div>
           {%- endfor -%}
         </div>
       {%- endunless -%}
@@ -44,29 +44,19 @@
         {% endfor %}
       {% endif %}
 
-    </div>
-    <div class="cart__item-sub">
-      <div>
-        <div class="js-qty__wrapper">
-          <span class="js-qty__num" data-id="{{ product.key }}">
-            {{ product.quantity }}
-          </span>
-        </div>
-      </div>
-
       <div class="cart__item-price-col text-right">
         {% if product.original_price != product.final_price %}
           <span class="visually-hidden">{{ 'products.general.regular_price' | t }}</span>
           <small class="cart__price cart__price--strikethrough">
-            {{ product.original_price | money }}
+            {{ product.original_price | times: product.quantity | money }}
           </small>
           <span class="visually-hidden">{{ 'products.general.sale_price' | t }}</span>
           <span class="cart__price cart__discount">
-            {{ product.final_price | money }}
+            {{ product.final_price | times: product.quantity | money }}
           </span>
         {% else %}
           <span class="cart__price">
-            {{ product.original_price | money }}
+            {{ product.original_price | times: product.quantity | money }}
           </span>
         {% endif %}
 

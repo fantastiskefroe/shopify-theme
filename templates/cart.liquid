@@ -55,10 +55,16 @@
           {%- endfor -%}
         </div>
         <div class="cart__page-col">
+          <div class="cart__item-row text-center">
+            <span>
+              Tilføj rabatkoder ved betaling
+            </span>
+          </div>
           {% if settings.cart_notes_enable %}
             <div>
               <label for="CartNote">{{ 'cart.general.note' | t }}</label>
-              <textarea name="note" class="input-full cart-notes" id="CartNote">{{ cart.note }}</textarea>
+              <textarea name="note" class="input-full cart-notes" id="CartNote"
+                        placeholder="Tilføj en kommentar til ordren.">{{ cart.note }}</textarea>
             </div>
           {% endif %}
 
@@ -83,32 +89,27 @@
           </div>
 
           {% if settings.cart_terms_conditions_enable %}
-            <div class="cart__item-row cart__terms">
+            <div class="cart__item-row cart__terms rte">
               <input type="checkbox" id="CartTerms" class="cart__terms-checkbox">
               <label for="CartTerms">
-                {% if settings.cart_terms_conditions_link != blank %}
-                  {{ 'cart.general.terms_html' | t: url: settings.cart_terms_conditions_link }}
-                {% else %}
-                  {{ 'cart.general.terms' | t }}
-                {% endif %}
+                Jeg accepterer <a href="/policies/terms-of-service" target="_blank">handelsbetingelserne</a>
               </label>
+              <br>
             </div>
+            <span class="cart__checkout-not-accepted hide">
+              Du skal acceptere handelsbetingelserne for at kunne gå til kassen
+            </span>
           {% endif %}
 
           <div class="cart__item-row cart__checkout-wrapper">
-            <button type="submit" name="checkout" data-terms-required="{{ settings.cart_terms_conditions_enable }}" class="btn cart__checkout">
+            <button type="submit" name="checkout" data-terms-required="{{ settings.cart_terms_conditions_enable }}"
+                    class="btn cart__checkout">
               {{ 'cart.general.checkout' | t }}
             </button>
 
             {% if additional_checkout_buttons and settings.cart_additional_buttons %}
               <div class="additional-checkout-buttons">{{ content_for_additional_checkout_buttons }}</div>
             {% endif %}
-          </div>
-
-          <div class="cart__item-row text-center">
-            <small>
-              {{ 'cart.general.shipping_at_checkout' | t }}<br />
-            </small>
           </div>
         </div>
       </div>

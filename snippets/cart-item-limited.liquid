@@ -1,4 +1,4 @@
-<div class="cart__item" data-key="{{ product.key }}">
+<div class="cart__item cart__item-limited" data-key="{{ product.key }}">
   {%- assign img_url = product | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
   <div class="cart__image">
     <a href="{{ product.url }}" style="height: 0; padding-bottom: {{ 100 | divided_by: product.image.aspect_ratio }}%;">
@@ -18,7 +18,7 @@
       {%- unless product.product.has_only_default_variant -%}
         <div class="cart__item--variants">
           {%- for option in product.options_with_values -%}
-            <div><span>{{ option.name }}:</span> {{ option.value }}</div>
+            <div>{{ option.value }} | {{ product.quantity }} stk.</div>
           {%- endfor -%}
         </div>
       {%- endunless -%}
@@ -47,15 +47,10 @@
     </div>
     <div class="cart__item-sub">
       <div>
-        <div class="js-qty__wrapper">
-          <span class="js-qty__num" data-id="{{ product.key }}">
-            {{ product.quantity }}
-          </span>
-        </div>
 
         <div class="cart__remove">
-          <a href="{{ routes.cart_change_url }}?id={{ product.key }}&amp;quantity=0" class="text-link">
-            {{ 'cart.general.remove' | t }}
+          <a href="{{ routes.cart_change_url }}?id={{ product.key }}&amp;quantity=0" class="btn btn--secondary btn--small small--hide">
+            <span class="cross">✕</span> {{ 'cart.general.remove' | t }}
           </a>
         </div>
       </div>

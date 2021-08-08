@@ -1472,7 +1472,8 @@ lazySizesConfig.expFactor = 4;
           if (this.termsCheckbox.checked) {
             // continue to checkout
           } else {
-            alert(theme.strings.cartTermsConfirmation);
+            document.getElementsByClassName('cart__checkout-not-accepted')[0].classList.remove('hide');
+            // alert(theme.strings.cartTermsConfirmation);
             this.submitBtn.classList.remove(classes.btnLoading)
             evt.preventDefault();
             return false;
