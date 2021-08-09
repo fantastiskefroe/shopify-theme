@@ -6072,18 +6072,31 @@ lazySizesConfig.expFactor = 4;
 
       updateQualityLogos: function(evt) {
         const variant = evt.detail.variant;
-        const organicLogo = document.querySelector(".quality-logos .logo-organic");
-        const demeterLogo = document.querySelector(".quality-logos .logo-demeter");
+        const bundleData = window.bundleData;
 
-        if (variant.sku.indexOf('-Ø-') >= 0) {
-          demeterLogo.classList.remove(classes.hidden);
+        let showOrganic;
+        let showDemeter;
+        if (bundleData) {
+          const qualities = bundleData[variant.id].quality;
+          showOrganic = qualities.organic;
+          showDemeter = qualities.demeter;
+        } else {
+          showOrganic = variant.sku.indexOf('-Ø-') >= 0 || variant.sku.indexOf('-D-') >= 0;
+          showDemeter = variant.sku.indexOf('-D-') >= 0;
+        }
+
+        const organicLogo = document.querySelector(".quality-logos .logo-organic");
+        if (showOrganic) {
           organicLogo.classList.remove(classes.hidden);
-        } else if (variant.sku.indexOf('-D-') >= 0) {
-          demeterLogo.classList.remove(classes.hidden);
+        } else {
           organicLogo.classList.add(classes.hidden);
+        }
+
+        const demeterLogo = document.querySelector(".quality-logos .logo-demeter");
+        if (showDemeter) {
+          demeterLogo.classList.remove(classes.hidden);
         } else {
           demeterLogo.classList.add(classes.hidden);
-          organicLogo.classList.add(classes.hidden);
         }
 
       },
@@ -6099,6 +6112,10 @@ lazySizesConfig.expFactor = 4;
 
           // Regular price
           this.cache.price.innerHTML = theme.Currency.formatMoney(variant.price, theme.settings.moneyFormat);
+
+          if (bundleData) {
+            return;
+          }
   
           // Sale price, if necessary
           if (variant.compare_at_price > variant.price) {

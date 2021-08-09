@@ -53,7 +53,7 @@
     data-history="true"
   {% endunless %}
   data-modal="{{ isModal }}">
-  
+
   {%- render 'product-template-variables', product: product, current_variant: current_variant -%}
 
   <div class="page-content page-content--product">
@@ -91,8 +91,8 @@
             {%- liquid
               paginate collections.all-products.products by 1000
                 assign bundleVariants = product.metafields.bundle.bundleData | split: ','
-                assign bundleVariantCount = bundleVariants.size 
-                assign bvMaxIndex = bundleVariantCount | minus: 1 
+                assign bundleVariantCount = bundleVariants.size
+                assign bvMaxIndex = bundleVariantCount | minus: 1
 
                 comment
                  create empty arrays 
@@ -104,6 +104,8 @@
                 endcomment 
                 assign bundleVariantPrices = "" | split: '¤'
                 assign bundleVariantAvailability = "" | split: '¤'
+                assign bundleVariantHideOrganicLogo = "" | split: '¤'
+                assign bundleVariantHideDemeterLogo = "" | split: '¤'
                 comment
                  list of lists (list of strings seperated by '§') that contain the data for each child 
                 endcomment 
@@ -112,7 +114,7 @@
                 assign bundleVariantProductAvailability  = "" | split: '¤'
                 assign bundleVariantProductURLs  = "" | split: '¤'
 
-                for bundleVariant in bundleVariants 
+                for bundleVariant in bundleVariants
                   assign bundleVariantParts = bundleVariant | split:'='
                   comment
                    preserve name as array of one element so it can be concatenated to bundleVariantNames 
@@ -126,9 +128,9 @@
                   for v in product.variants
                     if v.title == name[0]
                       assign id = v.id | string | split: '¤'
-                      assign bundleVariantIDs = bundleVariantIDs | concat: id 
+                      assign bundleVariantIDs = bundleVariantIDs | concat: id
                       break
-                    endif  
+                    endif
                   endfor
 
                   assign bundleVariantPrice = 0
@@ -137,14 +139,16 @@
                   assign bundleVariantProductPriceList = ""
                   assign bundleVariantProductAvailabilityList = ""
                   assign bundleVariantProductURLsList = ""
-                  
+
 
                   assign bundleVariantAvailable = "true"
+                  assign bundleVariantOrganicLogoSingleton = "false"
+                  assign bundleVariantDemeterLogoSingleton = "true"
                   for productIdentifier in productIdentifiers
-                    assign productHandle = productIdentifier | split: '/' | first 
+                    assign productHandle = productIdentifier | split: '/' | first
                     assign variantID     = productIdentifier | split: '/' | last | plus: 0
                     for item in collections.all-products.products
-                      if item.handle == productHandle 
+                      if item.handle == productHandle
                         for productVariant in item.variants
                           if productVariant.id == variantID
                             assign bundleVariantPrice = bundleVariantPrice | plus: productVariant.price
@@ -160,6 +164,23 @@
                               assign bundleVariantProductAvailabilityList = bundleVariantProductAvailabilityList | append: 'true§'
                             endif
 
+                            comment
+                              If any product in the variant is Ø or D, show the Ø logo
+                            endcomment
+                            if productVariant.sku contains '-Ø-'
+                              assign bundleVariantOrganicLogoSingleton = "true"
+                            endif
+                            if productVariant.sku contains '-D-'
+                              assign bundleVariantOrganicLogoSingleton = "true"
+                            endif
+
+                            comment
+                              If any product in the variant is NOT D, hide the D logo
+                            endcomment
+                            unless productVariant.sku contains '-D-'
+                              assign bundleVariantDemeterLogoSingleton = "false"
+                            endunless
+
                             break
                           endif
                         endfor
@@ -170,8 +191,10 @@
                   comment
                    turn variables into arrays of length 1 to be able to concat to other array 
                   endcomment 
-                  assign bundleVariantPriceSingleton     = bundleVariantPrice | string | split: '¤'
-                  assign bundleVariantAvailableSingleton = bundleVariantAvailable      | split: '¤'
+                  assign bundleVariantPriceSingleton     = bundleVariantPrice                     | string | split: '¤'
+                  assign bundleVariantAvailableSingleton = bundleVariantAvailable                          | split: '¤'
+                  assign bundleVariantOrganicLogoSingleton = bundleVariantOrganicLogoSingleton     | split: '¤'
+                  assign bundleVariantDemeterLogoSingleton = bundleVariantDemeterLogoSingleton     | split: '¤'
 
                   assign bundleVariantProductIDsSingleton           = bundleVariantProductIDList           | split: '¤'
                   assign bundleVariantProductTitlesSingleton        = bundleVariantProductTitleList        | split: '¤'
@@ -179,14 +202,16 @@
                   assign bundleVariantProductAvailabilitysSingleton = bundleVariantProductAvailabilityList | split: '¤'
                   assign bundleVariantProductURLsSingleton          = bundleVariantProductURLsList         | split: '¤'
 
-                  assign bundleVariantPrices       = bundleVariantPrices       | concat: bundleVariantPriceSingleton 
-                  assign bundleVariantAvailability = bundleVariantAvailability | concat: bundleVariantAvailableSingleton
+                  assign bundleVariantPrices       = bundleVariantPrices             | concat: bundleVariantPriceSingleton
+                  assign bundleVariantAvailability = bundleVariantAvailability       | concat: bundleVariantAvailableSingleton
+                  assign bundleVariantOrganicLogo = bundleVariantOrganicLogo | concat: bundleVariantOrganicLogoSingleton
+                  assign bundleVariantDemeterLogo = bundleVariantDemeterLogo | concat: bundleVariantDemeterLogoSingleton
 
                   assign bundleVariantProductIDs           = bundleVariantProductIDs          | concat: bundleVariantProductIDsSingleton
                   assign bundleVariantProductTitles        = bundleVariantProductTitles       | concat: bundleVariantProductTitlesSingleton
                   assign bundleVariantProductPrices        = bundleVariantProductPrices       | concat: bundleVariantProductPricesSingleton
-                  assign bundleVariantProductAvailability  = bundleVariantProductAvailability | concat: bundleVariantProductAvailabilitysSingleton  
-                  assign bundleVariantProductURLs          = bundleVariantProductURLs         | concat: bundleVariantProductURLsSingleton  
+                  assign bundleVariantProductAvailability  = bundleVariantProductAvailability | concat: bundleVariantProductAvailabilitysSingleton
+                  assign bundleVariantProductURLs          = bundleVariantProductURLs         | concat: bundleVariantProductURLsSingleton
                 endfor
 
                 comment
@@ -196,15 +221,19 @@
                   echo '<script>alert("Bundle error! Redirecting you to the front page."); document.location.href="/";</script>'
                 endif
               endpaginate
-            -%} 
+            -%}
             <script type="text/javascript">
-              window.bundleData = 
+              window.bundleData =
               { {%- for name in bundleVariantNames -%}
-                '{{ bundleVariantIDs[forloop.index0] }}':{
+                '{{ bundleVariantIDs[forloop.index0] }}': {
                   'name': "{{ name }}",
                   'id': {{ bundleVariantIDs[forloop.index0] }},
                   'price': {{ bundleVariantPrices[forloop.index0] }},
                   'available': {{ bundleVariantAvailability[forloop.index0] }},
+                  'quality': {
+                      'organic': {{ bundleVariantOrganicLogo[forloop.index0] }},
+                      'demeter': {{ bundleVariantDemeterLogo[forloop.index0] }}
+                  },
                   {% assign productIDs = bundleVariantProductIDs[forloop.index0] | split: '§' %}
                   {%- assign productTitles = bundleVariantProductTitles[forloop.index0] | split: '§' -%}
                   {%- assign productPrices = bundleVariantProductPrices[forloop.index0] | split: '§' -%}
@@ -222,14 +251,26 @@
               {%- endfor -%} }
             </script>
 
-            {% comment %} --------------------------------------- {% endcomment %}
+            {%- for name in bundleVariantNames -%}
+              {% if current_variant.title == name %}
+                <div class="quality-logos">
+                  <img src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/Demeter_480x480.png?v=1591110274"
+                       alt="Demeter - biodynamisk certificeret"
+                       class="logo-demeter{% if bundleVariantDemeterLogo[forloop.index0] != 'true' %} hide{% endif %}">
+                  <img
+                      src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/DK-Oko-uden_tekst_200x200.png?v=1578570873"
+                      alt="Statskontrolleret økologiske frø"
+                      class="logo-organic {% if bundleVariantOrganicLogo[forloop.index0] != 'true' %} hide{% endif %}">
+                </div>
+              {%- endif %}
+            {%- endfor -%}
 
             {%- if settings.vendor_enable -%}
               <div class="product-single__vendor">
                 {%- assign vendor_handle = product.vendor | handleize -%}
                 {%- if collections[vendor_handle] != empty -%}
                   <a href="{{ routes.collections_url }}/{{ collections[vendor_handle].handle }}">
-                    {{ collections[vendor_handle].title }} 
+                    {{ collections[vendor_handle].title }}
                   </a>
                 {%- else -%}
                   {{ product.vendor | link_to_vendor }}
@@ -270,30 +311,7 @@
               </p>
             {%- endif -%}
 
-            {%- assign hide_sale_price = true -%}
-            {%- if product.compare_at_price_max > product.price -%}
-              {%- if current_variant.compare_at_price > current_variant.price -%}
-                {%- assign hide_sale_price = false -%}
-              {%- endif -%}
-              <span
-                id="PriceA11y-{{ section_id }}"
-                class="visually-hidden"
-                aria-hidden="{{ hide_sale_price }}">
-                  {{ 'products.general.regular_price' | t }}
-              </span>
-              <span class="product__price-wrap-{{ section_id }}{% if hide_sale_price %} hide{% endif %}">
-                <span id="ComparePrice-{{ section_id }}" class="product__price product__price--compare">
-                  {%- if current_variant.compare_at_price > current_variant.price -%}
-                    {{ current_variant.compare_at_price | money }}
-                  {%- endif -%}
-                </span>
-              </span>
-              <span id="ComparePriceA11y-{{ section_id }}" class="visually-hidden">{{ 'products.general.sale_price' | t }}</span>
-            {%- else -%}
-              <span id="PriceA11y-{{ section_id }}" class="visually-hidden">{{ 'products.general.regular_price' | t }}</span>
-            {%- endif -%}
-
-            {% comment %} ----------------------------- {% endcomment %}
+            <span id="PriceA11y-{{ section_id }}" class="visually-hidden">{{ 'products.general.regular_price' | t }}</span>
 
             {%- for name in bundleVariantNames -%}
               {% if current_variant.title == name %}
@@ -302,21 +320,6 @@
                 </span>
               {%- endif %}
             {%- endfor -%}
-
-            {% comment %} ----------------------------- {% endcomment %}
-
-            {%- if settings.product_save_amount -%}
-              {%- if settings.product_save_type == 'dollar' -%}
-                {%- capture saved_amount -%}{{ current_variant.compare_at_price | minus: current_variant.price | money }}{%- endcapture -%}
-              {%- else -%}
-                {%- capture saved_amount -%}{{ current_variant.compare_at_price | minus: current_variant.price | times: 100.0 | divided_by: current_variant.compare_at_price | round }}%{%- endcapture -%}
-              {%- endif -%}
-              <span id="SavePrice-{{ section_id }}" class="product__price-savings{% if hide_sale_price %} hide{% endif %}">
-                {%- unless hide_sale_price -%}
-                  {{ 'products.general.save_html' | t: saved_amount: saved_amount }}
-                {%- endunless -%}
-              </span>
-            {%- endif -%}
 
             <div class="product__unit-price product__unit-price--spacing product__unit-price-wrapper--{{ section_id }}{% unless current_variant.unit_price_measurement %} hide{% endunless %}">
               {%- capture unit_price_base_unit -%}
@@ -456,9 +459,9 @@
                 <p class="bundle-product-container-header">
                   <strong>{{ product.title }} indeholder følgende produkter:</strong>
                 </p>
-                
+
                 <div class="product-single__bundle_product__container_product hide"></div>
-                
+
                 {%- for name in bundleVariantNames -%}
                   <ol data-variant="{{bundleVariantIDs[forloop.index0]}}" class="bundle-product-list {% if current_variant.title != name %}hide{% endif %}">
                   {%- assign productTitles = bundleVariantProductTitles[forloop.index0] | split: '§' -%}
@@ -467,8 +470,8 @@
                   {%- for productTitle in productTitles -%}
                     <li>
                       <a class="product-single__bundle_product {% if productAvailability[forloop.index0] != 'true' %}unavailable{% endif %}"
-                        href="https://fantastiskefroe.dk{{ productURLs[forloop.index0] }}" 
-                        title="{{ productTitle }}" 
+                        href="https://fantastiskefroe.dk{{ productURLs[forloop.index0] }}"
+                        title="{{ productTitle }}"
                         target="_blank">
                         {{ productTitle }}
                       </a>
