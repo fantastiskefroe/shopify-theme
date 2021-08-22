@@ -153,7 +153,11 @@
                           if productVariant.id == variantID
                             assign bundleVariantPrice = bundleVariantPrice | plus: productVariant.price
                             assign bundleVariantProductIDList = bundleVariantProductIDList | append: productVariant.id | append: '§'
-                            assign bundleVariantProductTitleList = bundleVariantProductTitleList | append: item.title | append: " (" | append: productVariant.title | append: ')§'
+                            if productVariant.title == 'Default Title'
+                              assign bundleVariantProductTitleList = bundleVariantProductTitleList | append: item.title | append: '§'
+                            else
+                              assign bundleVariantProductTitleList = bundleVariantProductTitleList | append: item.title | append: " (" | append: productVariant.title | append: ')§'
+                            endif
                             assign bundleVariantProductPriceList = bundleVariantProductPriceList | append: productVariant.price | append: '§'
                             assign bundleVariantProductURLsList   = bundleVariantProductURLsList   | append: productVariant.url | append: '§'
 
