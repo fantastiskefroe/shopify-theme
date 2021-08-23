@@ -12,6 +12,10 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.min.js" integrity="sha512-BKbSR+cfyxLdMAsE0naLReFSLg8/pjbgfxHh/k/kUC82Hy7r6HtR5hLhobaln2gcTvzkyyehrdREdjpsQwy2Jw==" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous"></script>
+
+  <script src="//cdn.jsdelivr.net/npm/sortablejs@1.8.4/Sortable.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.20.0/vuedraggable.umd.min.js"></script>
+
   <script type="module" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule="" src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.js"></script>
   
@@ -57,6 +61,13 @@
       padding-left: 1rem;
     }
     
+    .left {
+      float: left;
+    }
+    .right {
+      float: right;
+    }
+
     .filter, 
     .bundle-variants {
       position: fixed;
@@ -110,11 +121,28 @@
       border-width: 2px;
     }
 
-    .products {    
+    .mainWindow {
       background: #e8e8e1;
-      padding-top: 4rem;
-      padding-bottom: 4rem;
-      min-height: 100%;
+      position: relative;
+      top: 4rem;
+      margin: 0;
+      border: 0;
+      height: calc(100% - 8rem);
+      width: 100%;
+      box-sizing: border-box;
+
+      /* overflow: hidden; */
+
+      display: grid;
+      grid-template-columns: 55% 40%;
+      grid-column-gap: 2%;
+      justify-content: center;
+   }
+
+    .products {
+      justify-self: right;
+      height: 100%;
+      overflow-y: auto;
       box-sizing: border-box;
     }
 
@@ -143,6 +171,81 @@
 
     table tr.product { background-color: white; }
     table tr.variant { background-color: #f2f2f2; }
+
+    .bundle-variant-cart {
+      transition: max-height 0.5s ease-in;
+      max-height: calc(100vh - 8rem);
+      overflow: hidden;
+
+    }
+    .bundle-variant-cart.hidden {
+      transition: max-height 0.5s ease-out;
+      max-height: 0px;
+    }
+
+    .foldHandle {
+      display: block;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      border-bottom: 1px solid #314536;
+      border-top: 1px solid #314536;
+      margin: 0.5rem 0;
+      font-weight: bold;
+    }
+
+
+    .bundlecart {
+      overflow: hidden;
+      height: 100%;
+      width: 100%;
+      overflow-y: auto;
+      justify-self: left;
+    }
+
+    .cart-product {
+      display: grid;
+      grid-template-columns: min-content min-content auto min-content
+    }
+
+    .cart-product .dragHandle, .cart-product .remove-button {
+      padding: 0.5rem;
+      place-self: center;
+      cursor: grab;
+    }
+    
+    .cart-product .image {
+      padding: 0 0.5rem;
+    }
+
+    .cart-product .titles > * {
+      margin: 0;
+      padding: 0;
+    }
+
+    .cart-product .titles .title {
+      font-weight: bold;
+    }
+    .cart-product .titles .subtitle {
+      font-size: 0.8rem;
+    }
+    .cart-product .titles .price {
+      font-size: 0.8rem;
+    }
+
+    .cart-product .titles .price .discount {
+      margin-left: 2rem;
+    }
+    .cart-product .titles .price input {
+      width: 2rem;
+      text-align: right;
+    }
+
+
+    .cart-product .remove-button {
+      cursor: pointer;
+    }
+
+
   </style>
 </head>
 <body>
@@ -162,40 +265,75 @@
       <input type="checkbox" name="inBundleFilter" v-model:value="filterOnlyInSelected">
     </div>
 
-    <div class="products">
-      <table>
-        <template  v-for="product in filteredProducts">
-          <tr class="product">
-            <td class="image">
-              <img v-bind:src="'https:' + product.image"
-                   crossorigin="anonymous"
-                   referrerpolicy="no-referrer">
-            </td>
-            <td><h2 class="title">{{ decode(product.title) }}</h2></td>
-            <td><span class="sku">{{ product.sku }}</span></td>
-          </tr>
-          <tr class="variant" v-for="variant in product.variants" >
-            <td class="checkbox">
-              <label :for="variant.id">
-                <input 
-                  type="checkbox"
-                  v-if="selectedVariantIndex >= 0"
-                  v-bind:value="product.handle + '/' + variant.id"
-                  v-model="bundle[selectedVariantIndex].items"
-                  :id="variant.id"/>
-              </label>
-            </td>
-            <td><label :for="variant.id"><h3 class="title">{{ decode(variant.title) }}</span></label></td>
-            <td><label :for="variant.id"><!--<span class="sku">{{ variant.sku }}</span>--></label></td>
-          </tr>
-        </template>
-      </table>
+    <div class="mainWindow">
+      <div class="products">
+        <table>
+          <template  v-for="product in filteredProducts">
+            <tr class="product">
+              <td class="image">
+                <img v-bind:src="'https:' + product.image"
+                    crossorigin="anonymous"
+                    referrerpolicy="no-referrer">
+              </td>
+              <td><h2 class="title">{{ decode(product.title) }}</h2></td>
+              <td><span class="sku">{{ product.sku }}</span></td>
+            </tr>
+            <tr class="variant" v-for="variant in product.variants" >
+              <td class="checkbox">
+                <label :for="variant.id">
+                  <input 
+                    type="checkbox"
+                    v-if="selectedVariantIndex >= 0 && isChecked(product.handle + '/' + variant.id)"
+                    @input="toggleItem(product.handle + '/' + variant.id)"
+                    checked
+                    :id="variant.id"/>
+                  <input 
+                    type="checkbox"
+                    v-if="selectedVariantIndex >= 0 && !isChecked(product.handle + '/' + variant.id)"
+                    @input="toggleItem(product.handle + '/' + variant.id)"
+                    :id="variant.id"/>
+                </label>
+              </td>
+              <td><label :for="variant.id"><h3 class="title">{{ decode(variant.title) }}</span></label></td>
+              <td><label :for="variant.id"><!--<span class="sku">{{ variant.sku }}</span>--></label></td>
+            </tr>
+          </template>
+        </table>
+      </div>
+
+      <div class="bundlecart">
+        <div class="foldable" v-for="(bundleVariant, index) in bundle">
+          <span class="foldHandle" @click="fold(index)">{{ bundleVariant.name }}</span>
+
+          <draggable class="bundle-variant-cart" v-bind:class="{hidden: selectedVariantIndex != index}" v-model="bundle[index].items" group="cart" @start="drag=true" @end="drag=false" handle=".dragHandle">
+            <div class="cart-product" v-for="(item, itemIndex) in bundle[index].items.map(productFromVariant)" :key="item.id">
+              <span class="dragHandle">⠿</span>
+              <div class="image">
+                <img v-bind:src="'https:' + item.image"
+                  crossorigin="anonymous"
+                  referrerpolicy="no-referrer">
+              </div>
+              <div class="titles">
+                <p class="title">{{ decode(item.title) }}</p>
+                <p class="subtitle">{{ decode(item.subtitle) }}</p>
+                <div class="price">
+                  <span>{{ priceFormat(item.price) }}</span>
+                  <span class="discount"> - <input v-model="bundle[index].items[itemIndex].discount" type="text" placeholder="0">%</span>
+                  <span> = {{ priceFormat(item.price * (100-bundle[index].items[itemIndex].discount) * 0.01)}}</span>
+                </div>
+              </div>
+              <span class="remove-button" @click="removeItemFromBundleVariant(item.id, index)">⨯</span>
+            </div>
+          </draggable>
+        </div>
+      </div>
     </div>
+
 
     <div class="bundle-variants">
       <ion-icon name="add-outline" @click="addVariant"></ion-icon>
       <input v-if="selectedVariantIndex == -1" v-on:keyup.enter="addVariant"  v-model:value="variant" placeholder="VariantName" type="text" >
-      <input v-else v-model:value="bundle[selectedVariantIndex].name" placeholder="VariantName" type="text" >
+      <input v-else v-model:value="bundle[selectedVariantIndex].name" placeholder="VariantName" type="text">
 
       <span v-for="(v,i) in bundle" class="bundle-variant" v-bind:class="{ selected: selectedVariantIndex == i}" @click="selectBundleVariant(i)">{{v.name}} ({{v.items.length}})</span>
 
@@ -222,13 +360,20 @@
             selectedVariantIndex: -1,
             bundle: []
         },
+        components: {
+          'draggable': vuedraggable
+        },
         computed: {
           result: function() {
             if(!this.hasLoaded) {
               return;
             }
 
-            let value = this.bundle.map((b) => b.name + "=" + b.items.join(":")).join(",");
+            let itemToString = function(item) {
+              return item.id + (item.discount > 0 ? "/" + item.discount : "");
+            } 
+
+            let value = this.bundle.map((b) => b.name + "=" + b.items.map(itemToString).join(":")).join(",");
             localStorage.setItem("result", value);
             return value;
           },
@@ -248,7 +393,7 @@
             
             if(this.filterOnlyInSelected && this.selectedVariantIndex >= 0) {
               filtered = filtered.filter((product) => 
-                self.bundle[self.selectedVariantIndex].items.map( item => item.split('/')[0]).includes(product.handle)
+                self.bundle[self.selectedVariantIndex].items.map( item => item.id.split('/')[0]).includes(product.handle)
               );
             }
             
@@ -256,14 +401,36 @@
           }
         },
         methods: {
+          isChecked: function(identifier) {
+            if(this.selectedVariantIndex < 0)
+              return false;
+            return this.bundle[this.selectedVariantIndex].items.filter(i => i.id == identifier).length > 0;
+          },
+          toggleItem: function(id) {
+            if(this.isChecked(id)) {
+              this.bundle[this.selectedVariantIndex].items = this.bundle[this.selectedVariantIndex].items.filter(i => i.id != id);
+            }
+            else {
+              this.bundle[this.selectedVariantIndex].items.push({id: id, discount: 0});
+            }
+          },
+          removeItemFromBundleVariant: function(item, index) {
+            this.bundle[index].items = this.bundle[index].items.filter(x => x.id != item);
+          },
+          fold: function(index) {
+            this.selectedVariantIndex = this.selectedVariantIndex == index ? -1 : index;
+            // $('.bundle-variant-cart.hidden').style()
+          },
+          priceFormat: function(ears) {
+            if (ears == undefined) {
+                return 0;
+            }
+            return "" + (ears/100).toFixed(2) + " DKK";
+            
+          },
           decode : function(str) {
             var doc = new DOMParser().parseFromString(str, "text/html");
             return doc.documentElement.textContent;
-          },
-          isChecked: function(itemIdentifier) {
-            if(this.selectedVariantIndex < 0)
-              return false;
-            return itemIdentifier in this.bundle[this.selectedVariantIndex].items;
           },
           addVariant: function() {
             this.bundle.push({
@@ -288,6 +455,25 @@
             document.execCommand("copy");
             // alert("Copied the text");
           },
+          productFromVariant: function(item) {
+            handle = item.id.split('/')[0];
+            variantID = item.id.split('/')[1];
+            let products = this.products.filter(p => p.handle == handle);
+            if(products.length != 1)
+              return null;
+            let variants = products[0].variants.filter(v => v.id+"" == variantID);
+            if(variants.length != 1)
+              return null;
+            return {
+              id: item.id,
+              title: products[0].title,
+              subtitle: variants[0].title,
+              image: products[0].image,
+              type:  products[0].type,
+              tags:  products[0].tags,
+              price: variants[0].price
+            }
+          },
           setState(formattedStr) {
             var self = this;
 
@@ -302,21 +488,24 @@
               let parts = bundleVariantStr.split("=");
               return {
                 name: parts[0],
-                items: parts[1].split(":").filter((idStr) => {
+                items: parts[1].split(":").map((idStr) => {
                   let parts = idStr.split("/");
-                  console.log(parts);
-                  if(parts.length != 2)
+                  if(parts.length < 2 || parts.length > 3)
                     return false;
-                  productHandle = parts[0];
-                  variantId = parts[1];
+                  let productHandle = parts[0];
+                  let variantId = parts[1];
+                  let discount = parts.length >= 3 ? parseInt(parts[2]) : 0
                   let product = self.products.filter((p) => p.handle == productHandle);
                   if(product.length != 1)
                     return false;
                   let variant = product[0].variants.filter((v) => v.id == variantId);
                   if(variant.length != 1)
                     return false;
-                  return true;
-                })
+                  return {
+                    id: `${productHandle}/${variantId}`,
+                    discount: discount
+                  };
+                }).filter(x => x !== false)
               }
             });
           }
@@ -324,7 +513,7 @@
         mounted: function () {
           this.$nextTick(function () {
             axios
-              .get('data.json')
+              .get('data.json?'+new Date().toLocaleString("da-dk", {dateStyle: "short", timeStyle: "short"}))
               .then(response => {
                 let storeData = (response.data);
 
