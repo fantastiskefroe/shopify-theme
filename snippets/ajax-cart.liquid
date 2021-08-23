@@ -118,7 +118,7 @@
                             items: []
                         };
 
-                        for (const bundleProduct of bundleProducts) {
+                        for (const bundleProduct of bundleProducts.reverse()) {
                             cartData.items.push({
                                 id: bundleProduct.id,
                                 quantity: quantity,

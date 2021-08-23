@@ -23,8 +23,9 @@
         "{{ variant.id }}": { 
           "id":      {{ variant.id }},
           "title":  "{{ variant.title   | escape }}",
-          "sku":    "{{ variant.sku }}"
-        }{%- if forloop.last == false -%},{% endif %} {%- endfor %} 
+          "sku":    "{{ variant.sku }}",
+          "price":   {{ variant.price }}
+        }{%- if forloop.last == false -%},{% endif %} {%- endfor %}
       }
     }{%- if forloop.last == false -%},{% endif %} {%- endfor %} 
   },

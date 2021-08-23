@@ -24,10 +24,8 @@
 
   {%- render 'social-meta-tags' -%}
 
-  {% comment %}
-    {% include 'font-face' %}
-  {% endcomment %}
-  
+  {% include 'font-face' %}
+
   {{ 'theme.css' | asset_url | stylesheet_tag }}
   {%- render 'css-variables' -%}
 
