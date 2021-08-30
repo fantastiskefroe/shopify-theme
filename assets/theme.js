@@ -6107,16 +6107,13 @@ lazySizesConfig.expFactor = 4;
         if (variant) {
           const bundleData = window.bundleData;
           if (bundleData) {
-            variant.price = bundleData[variant.id].price;
+            variant.price = bundleData[variant.id].discountedPrice;
+            variant.compare_at_price = bundleData[variant.id].price;
           }
 
           // Regular price
           this.cache.price.innerHTML = theme.Currency.formatMoney(variant.price, theme.settings.moneyFormat);
 
-          if (bundleData) {
-            return;
-          }
-  
           // Sale price, if necessary
           if (variant.compare_at_price > variant.price) {
             this.cache.comparePrice.innerHTML = theme.Currency.formatMoney(variant.compare_at_price, theme.settings.moneyFormat);
@@ -6128,7 +6125,7 @@ lazySizesConfig.expFactor = 4;
             var savings = variant.compare_at_price - variant.price;
   
             if (theme.settings.saveType == 'percent') {
-              savings = Math.round(((savings) * 100) / variant.compare_at_price) + '%';
+              savings = Math.floor(((savings) * 100) / variant.compare_at_price) + '%';
             } else {
               savings = theme.Currency.formatMoney(savings, theme.settings.moneyFormat);
             }

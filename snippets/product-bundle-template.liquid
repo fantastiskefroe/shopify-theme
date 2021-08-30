@@ -86,7 +86,7 @@
 
             {% comment %} --------------------------------------- {% endcomment %}
             {% comment %} 
-              test1=agurk-marketmore/31932804071508:majs-golden-bantam/31932826157140:log-stuttgart/31932826026068,test2=agurk-marketmore/31932804104276:majs-golden-bantam/31932826189908:log-stuttgart/31932826058836 
+              test1=agurk-marketmore/31932804071508/25:majs-golden-bantam/31932826157140:log-stuttgart/31932826026068,test2=agurk-marketmore/31932804104276:majs-golden-bantam/31932826189908:log-stuttgart/31932826058836
             {% endcomment %}
             {%- liquid
               paginate collections.all-products.products by 1000
@@ -98,21 +98,22 @@
                  create empty arrays 
                 endcomment 
                 assign bundleVariantNames = "" | split: '¤'
-                assign bundleVariantIDs = "" | split: '¤'
+                assign bundleVariantIDs   = "" | split: '¤'
                 comment
                  properties that are a sum of the childrens property 
                 endcomment 
-                assign bundleVariantPrices = "" | split: '¤'
-                assign bundleVariantAvailability = "" | split: '¤'
+                assign bundleVariantPrices          = "" | split: '¤'
+                assign bundleVariantAvailability    = "" | split: '¤'
                 assign bundleVariantHideOrganicLogo = "" | split: '¤'
                 assign bundleVariantHideDemeterLogo = "" | split: '¤'
                 comment
                  list of lists (list of strings seperated by '§') that contain the data for each child 
                 endcomment 
-                assign bundleVariantProductTitles  = "" | split: '¤'
-                assign bundleVariantProductPrices  = "" | split: '¤'
-                assign bundleVariantProductAvailability  = "" | split: '¤'
-                assign bundleVariantProductURLs  = "" | split: '¤'
+                assign bundleVariantProductTitles           = "" | split: '¤'
+                assign bundleVariantProductPrices           = "" | split: '¤'
+                assign bundleVariantProductDiscountedPrices = "" | split: '¤'
+                assign bundleVariantProductAvailability     = "" | split: '¤'
+                assign bundleVariantProductURLs             = "" | split: '¤'
 
                 for bundleVariant in bundleVariants
                   assign bundleVariantParts = bundleVariant | split:'='
@@ -134,9 +135,11 @@
                   endfor
 
                   assign bundleVariantPrice = 0
+                  assign bundleVariantDiscountedPrice = 0
                   assign bundleVariantProductIDList = ""
                   assign bundleVariantProductTitleList = ""
                   assign bundleVariantProductPriceList = ""
+                  assign bundleVariantProductDiscountedPriceList = ""
                   assign bundleVariantProductAvailabilityList = ""
                   assign bundleVariantProductURLsList = ""
 
@@ -145,13 +148,20 @@
                   assign bundleVariantOrganicLogoSingleton = "false"
                   assign bundleVariantDemeterLogoSingleton = "true"
                   for productIdentifier in productIdentifiers
-                    assign productHandle = productIdentifier | split: '/' | first
-                    assign variantID     = productIdentifier | split: '/' | last | plus: 0
+                    assign productVariantList = productIdentifier | split: '/'
+                    assign productHandle = productVariantList[0]
+                    assign productVariantID = productVariantList[1] | plus: 0
+                    assign productVariantPrice = productVariantList[2] | plus: 0
+                    assign productVariantPriceCoefficient = 100.0 | minus: productVariantPrice | divided_by: 100.0
+
                     for item in collections.all-products.products
                       if item.handle == productHandle
                         for productVariant in item.variants
-                          if productVariant.id == variantID
+                          if productVariant.id == productVariantID
+                            assign bundleVariantProductDiscountedPrice = productVariant.price | times: productVariantPriceCoefficient
+
                             assign bundleVariantPrice = bundleVariantPrice | plus: productVariant.price
+                            assign bundleVariantDiscountedPrice = bundleVariantDiscountedPrice | plus: bundleVariantProductDiscountedPrice
                             assign bundleVariantProductIDList = bundleVariantProductIDList | append: productVariant.id | append: '§'
                             if productVariant.title == 'Default Title'
                               assign bundleVariantProductTitleList = bundleVariantProductTitleList | append: item.title | append: '§'
@@ -159,7 +169,8 @@
                               assign bundleVariantProductTitleList = bundleVariantProductTitleList | append: item.title | append: " (" | append: productVariant.title | append: ')§'
                             endif
                             assign bundleVariantProductPriceList = bundleVariantProductPriceList | append: productVariant.price | append: '§'
-                            assign bundleVariantProductURLsList   = bundleVariantProductURLsList   | append: productVariant.url | append: '§'
+                            assign bundleVariantProductDiscountedPriceList = bundleVariantProductDiscountedPriceList | append: bundleVariantProductDiscountedPrice | append: '§'
+                            assign bundleVariantProductURLsList = bundleVariantProductURLsList   | append: productVariant.url | append: '§'
 
                             if productVariant.available == false
                               assign bundleVariantAvailable = "false"
@@ -195,27 +206,31 @@
                   comment
                    turn variables into arrays of length 1 to be able to concat to other array 
                   endcomment 
-                  assign bundleVariantPriceSingleton     = bundleVariantPrice                     | string | split: '¤'
-                  assign bundleVariantAvailableSingleton = bundleVariantAvailable                          | split: '¤'
-                  assign bundleVariantOrganicLogoSingleton = bundleVariantOrganicLogoSingleton     | split: '¤'
-                  assign bundleVariantDemeterLogoSingleton = bundleVariantDemeterLogoSingleton     | split: '¤'
+                  assign bundleVariantPriceSingleton           = bundleVariantPrice           | string | split: '¤'
+                  assign bundleVariantDiscountedPriceSingleton = bundleVariantDiscountedPrice | string | split: '¤'
+                  assign bundleVariantAvailableSingleton       = bundleVariantAvailable                | split: '¤'
+                  assign bundleVariantOrganicLogoSingleton     = bundleVariantOrganicLogoSingleton     | split: '¤'
+                  assign bundleVariantDemeterLogoSingleton     = bundleVariantDemeterLogoSingleton     | split: '¤'
 
-                  assign bundleVariantProductIDsSingleton           = bundleVariantProductIDList           | split: '¤'
-                  assign bundleVariantProductTitlesSingleton        = bundleVariantProductTitleList        | split: '¤'
-                  assign bundleVariantProductPricesSingleton        = bundleVariantProductPriceList        | split: '¤'
-                  assign bundleVariantProductAvailabilitysSingleton = bundleVariantProductAvailabilityList | split: '¤'
-                  assign bundleVariantProductURLsSingleton          = bundleVariantProductURLsList         | split: '¤'
+                  assign bundleVariantProductIDsSingleton              = bundleVariantProductIDList              | split: '¤'
+                  assign bundleVariantProductTitlesSingleton           = bundleVariantProductTitleList           | split: '¤'
+                  assign bundleVariantProductPricesSingleton           = bundleVariantProductPriceList           | split: '¤'
+                  assign bundleVariantProductDiscountedPricesSingleton = bundleVariantProductDiscountedPriceList | split: '¤'
+                  assign bundleVariantProductAvailabilitysSingleton    = bundleVariantProductAvailabilityList    | split: '¤'
+                  assign bundleVariantProductURLsSingleton             = bundleVariantProductURLsList            | split: '¤'
 
-                  assign bundleVariantPrices       = bundleVariantPrices             | concat: bundleVariantPriceSingleton
-                  assign bundleVariantAvailability = bundleVariantAvailability       | concat: bundleVariantAvailableSingleton
-                  assign bundleVariantOrganicLogo = bundleVariantOrganicLogo | concat: bundleVariantOrganicLogoSingleton
-                  assign bundleVariantDemeterLogo = bundleVariantDemeterLogo | concat: bundleVariantDemeterLogoSingleton
+                  assign bundleVariantPrices           = bundleVariantPrices           | concat: bundleVariantPriceSingleton
+                  assign bundleVariantDiscountedPrices = bundleVariantDiscountedPrices | concat: bundleVariantDiscountedPriceSingleton
+                  assign bundleVariantAvailability     = bundleVariantAvailability     | concat: bundleVariantAvailableSingleton
+                  assign bundleVariantOrganicLogo      = bundleVariantOrganicLogo      | concat: bundleVariantOrganicLogoSingleton
+                  assign bundleVariantDemeterLogo      = bundleVariantDemeterLogo      | concat: bundleVariantDemeterLogoSingleton
 
-                  assign bundleVariantProductIDs           = bundleVariantProductIDs          | concat: bundleVariantProductIDsSingleton
-                  assign bundleVariantProductTitles        = bundleVariantProductTitles       | concat: bundleVariantProductTitlesSingleton
-                  assign bundleVariantProductPrices        = bundleVariantProductPrices       | concat: bundleVariantProductPricesSingleton
-                  assign bundleVariantProductAvailability  = bundleVariantProductAvailability | concat: bundleVariantProductAvailabilitysSingleton
-                  assign bundleVariantProductURLs          = bundleVariantProductURLs         | concat: bundleVariantProductURLsSingleton
+                  assign bundleVariantProductIDs              = bundleVariantProductIDs              | concat: bundleVariantProductIDsSingleton
+                  assign bundleVariantProductTitles           = bundleVariantProductTitles           | concat: bundleVariantProductTitlesSingleton
+                  assign bundleVariantProductPrices           = bundleVariantProductPrices           | concat: bundleVariantProductPricesSingleton
+                  assign bundleVariantProductDiscountedPrices = bundleVariantProductDiscountedPrices | concat: bundleVariantProductDiscountedPricesSingleton
+                  assign bundleVariantProductAvailability     = bundleVariantProductAvailability     | concat: bundleVariantProductAvailabilitysSingleton
+                  assign bundleVariantProductURLs             = bundleVariantProductURLs             | concat: bundleVariantProductURLsSingleton
                 endfor
 
                 comment
@@ -233,6 +248,7 @@
                   'name': "{{ name }}",
                   'id': {{ bundleVariantIDs[forloop.index0] }},
                   'price': {{ bundleVariantPrices[forloop.index0] }},
+                  'discountedPrice': {{ bundleVariantDiscountedPrices[forloop.index0] }},
                   'available': {{ bundleVariantAvailability[forloop.index0] }},
                   'quality': {
                       'organic': {{ bundleVariantOrganicLogo[forloop.index0] }},
@@ -241,6 +257,7 @@
                   {% assign productIDs = bundleVariantProductIDs[forloop.index0] | split: '§' %}
                   {%- assign productTitles = bundleVariantProductTitles[forloop.index0] | split: '§' -%}
                   {%- assign productPrices = bundleVariantProductPrices[forloop.index0] | split: '§' -%}
+                  {%- assign productDiscountedPrices = bundleVariantProductDiscountedPrices[forloop.index0] | split: '§' -%}
                   {%- assign productAvailability = bundleVariantProductAvailability[forloop.index0] | split: '§' -%}
                   {%- assign productURLs = bundleVariantProductURLs[forloop.index0] | split: '§' -%}
                   'products': [ {%- for productID in productIDs -%}
@@ -248,6 +265,7 @@
                       'id': {{ productID | plus: 0 }},
                       'name': "{{ productTitles[forloop.index0] | escape }}",
                       'price': {{ productPrices[forloop.index0] | plus: 0 }},
+                      'discountedPrice': {{ productDiscountedPrices[forloop.index0] | plus: 0 }},
                       'available': {{ productAvailability[forloop.index0] }}
                     },
                   {%- endfor -%} ]
@@ -316,11 +334,27 @@
             {%- endif -%}
 
             <span id="PriceA11y-{{ section_id }}" class="visually-hidden">{{ 'products.general.regular_price' | t }}</span>
+            <span id="ComparePriceA11y-{{ section_id }}" class="visually-hidden">{{ 'products.general.sale_price' | t }}</span>
 
             {%- for name in bundleVariantNames -%}
               {% if current_variant.title == name %}
-                <span id="ProductPrice-{{ section_id }}" data-variant-name="{{name}}">
-                  {% echo bundleVariantPrices[forloop.index0] | money %}
+                {%- assign isDiscounted = false -%}
+                {%- if bundleVariantPrices[forloop.index0] > bundleVariantDiscountedPrices[forloop.index0] -%}
+                  {%- assign isDiscounted = true -%}
+                {%- endif -%}
+                <span class="product__price-wrap-{{ section_id }}{% unless isDiscounted %} hide{% endunless %}">
+                  <span id="ComparePrice-{{ section_id }}" class="product__price product__price--compare">
+                    {{- bundleVariantPrices[forloop.index0] | money -}}
+                  </span>
+                </span>
+
+                <span id="ProductPrice-{{ section_id }}"
+                      class="product__price{% if bundleVariantPrices[forloop.index0] > bundleVariantDiscountedPrices[forloop.index0] %} on-sale{% endif %}"
+                      data-variant-name="{{name}}">
+                  {{- bundleVariantDiscountedPrices[forloop.index0] | money -}}
+                </span>
+                <span id="SavePrice-{{ section_id }}" class="product__price-savings {% unless isDiscounted %} hide{% endunless %}">
+                  Spar {{ bundleVariantPrices[forloop.index0] | minus: bundleVariantDiscountedPrices[forloop.index0] | times: 100.0 | divided_by: bundleVariantPrices[forloop.index0] | floor -}}%
                 </span>
               {%- endif %}
             {%- endfor -%}

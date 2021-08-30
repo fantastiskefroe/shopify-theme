@@ -83,6 +83,9 @@
             {% endif %}
           </div>
 
+          {% comment %}<div class="cart__item-sub cart__item-row cart__subtotal">{% endcomment %}
+          {% comment %}</div>{% endcomment %}
+
           <div class="cart__item-sub cart__item-row">
             <div>{{ 'cart.general.subtotal' | t }}</div>
             <div data-subtotal>{{ cart.total_price | money }}</div>
