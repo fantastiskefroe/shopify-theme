@@ -273,20 +273,6 @@
               {%- endfor -%} }
             </script>
 
-            {%- for name in bundleVariantNames -%}
-              {% if current_variant.title == name %}
-                <div class="quality-logos">
-                  <img src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/Demeter_480x480.png?v=1591110274"
-                       alt="Demeter - biodynamisk certificeret"
-                       class="logo-demeter{% if bundleVariantDemeterLogo[forloop.index0] != 'true' %} hide{% endif %}">
-                  <img
-                      src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/DK-Oko-uden_tekst_200x200.png?v=1578570873"
-                      alt="Statskontrolleret økologiske frø"
-                      class="logo-organic {% if bundleVariantOrganicLogo[forloop.index0] != 'true' %} hide{% endif %}">
-                </div>
-              {%- endif %}
-            {%- endfor -%}
-
             {%- if settings.vendor_enable -%}
               <div class="product-single__vendor">
                 {%- assign vendor_handle = product.vendor | handleize -%}
@@ -413,6 +399,20 @@
                 </div>
               {%- endif -%}
             {%- endif -%}
+
+            {%- for name in bundleVariantNames -%}
+              {% if current_variant.title == name %}
+                <div class="quality-logos">
+                  <img src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/Demeter_480x480.png?v=1591110274"
+                       alt="Demeter - biodynamisk certificeret"
+                       class="logo-demeter{% if bundleVariantDemeterLogo[forloop.index0] != 'true' %} hide{% endif %}">
+                  <img
+                      src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/DK-Oko-uden_tekst_200x200.png?v=1578570873"
+                      alt="Statskontrolleret økologiske frø"
+                      class="logo-organic {% if bundleVariantOrganicLogo[forloop.index0] != 'true' %} hide{% endif %}">
+                </div>
+              {%- endif %}
+            {%- endfor -%}
 
             <hr class="hr--medium">
 

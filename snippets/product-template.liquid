@@ -84,28 +84,6 @@
               {%- render 'breadcrumbs' -%}
             {%- endif -%}
 
-            <div class="quality-logos">
-              {%- liquid
-                assign hideOrganic = true
-                assign hideDemeter = true
-
-                if current_variant.sku contains '-Ø-'
-                  assign hideOrganic = false
-                endif
-                if current_variant.sku contains '-D-'
-                  assign hideOrganic = false
-                  assign hideDemeter = false
-                endif
-              -%}
-              <img src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/Demeter_480x480.png?v=1591110274"
-                   alt="Demeter - biodynamisk certificeret"
-                   class="logo-demeter{% if hideDemeter %} hide{% endif %}">
-              <img
-                  src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/DK-Oko-uden_tekst_200x200.png?v=1578570873"
-                  alt="Statskontrolleret økologiske frø"
-                  class="logo-organic {% if hideOrganic %} hide{% endif %}">
-            </div>
-
             {%- if settings.vendor_enable -%}
               <div class="product-single__vendor">
                 {%- assign vendor_handle = product.vendor | handleize -%}
@@ -252,6 +230,28 @@
               </div>
             {%- endif -%}
             {%- endif -%}
+
+            <div class="quality-logos">
+              {%- liquid
+                assign hideOrganic = true
+                assign hideDemeter = true
+
+                if current_variant.sku contains '-Ø-'
+                  assign hideOrganic = false
+                endif
+                if current_variant.sku contains '-D-'
+                  assign hideOrganic = false
+                  assign hideDemeter = false
+                endif
+              -%}
+              <img src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/Demeter_480x480.png?v=1591110274"
+                   alt="Demeter - biodynamisk certificeret"
+                   class="logo-demeter{% if hideDemeter %} hide{% endif %}">
+              <img
+                  src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/DK-Oko-uden_tekst_200x200.png?v=1578570873"
+                  alt="Statskontrolleret økologiske frø"
+                  class="logo-organic {% if hideOrganic %} hide{% endif %}">
+            </div>
 
             <hr class="hr--medium">
 

@@ -11406,21 +11406,6 @@ html[dir=rtl] .product-single__meta .rte {
 }
 
 /* Product page */
-.product-single__meta {
-    position: relative;
-}
-
-.quality-logos {
-    position: absolute;
-    top: calc(1em + 10px);
-    right: 0;
-}
-
-.quality-logos .logo-organic,
-.quality-logos .logo-demeter {
-    width: 64px;
-}
-
 .product-single__title .primary {
     font-family: Roboto Mono, monospace;
     text-transform: uppercase;
@@ -11436,6 +11421,31 @@ html[dir=rtl] .product-single__meta .rte {
     font-size: 2.3rem;
 }
 
+.quality-logos {
+    margin-top: 1em;
+}
+
+.quality-logos .logo-organic,
+.quality-logos .logo-demeter {
+    width: 64px;
+}
+
+@media only screen and (min-width: 1200px) {
+    .product-single__meta {
+        position: relative;
+    }
+
+    .quality-logos {
+        position: absolute;
+        top: calc(1em + 10px);
+        right: 0;
+        margin-top: 0;
+    }
+}
+
+.hr--medium {
+    margin: 15px auto 25px auto;
+}
 
 
 .product-single__relevant-tags {
@@ -11563,6 +11573,28 @@ html[dir=rtl] .product-single__meta .rte {
 
 .cart__item.cart__item-bundle-product .cart__image {
     flex: 0 0 84px !important;
+}
+
+.stkbl-code-tags-container {
+    display: none !important;
+}
+
+.cart__item-sub>div:first-child {
+    margin-right: 0 !important;
+}
+
+@media only screen and (min-width: 769px) {
+    .stkbl-cart-container-outer {
+        justify-content: center !important;
+    }
+
+    .stkbl-cart-container-inner {
+        max-width: unset !important;
+    }
+}
+
+.stkbl-tags-header {
+    margin-top: 1em;
 }
 
 /*===================== Instagram feed =====================*/
