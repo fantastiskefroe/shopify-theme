@@ -9,7 +9,12 @@
 
   assign price_min = product.price_min
   assign compare_at_price = product.compare_at_price
+  assign isBundle = false
   
+  assign sold_out = false
+  unless product.available
+    assign sold_out = true
+  endunless
 
   assign on_sale = false
   if compare_at_price > price_min
@@ -31,17 +36,22 @@
   endif
 -%}
 
+
+
 {% comment %} foo=grontgodning-blodklover/40406779068608/10,bar=grontgodning-kaellingetand/39763291373760 {% endcomment %}
 {%- liquid
   if product.metafields.bundle.bundleData
+    assign isBundle = true
     paginate collections.all-products.products by 1000
       assign bundleVariants = product.metafields.bundle.bundleData | split: ','
       assign price_min = 99999999
+      assign sold_out = true
+
 
       for bundleVariant in bundleVariants
         assign bundleVariantParts = bundleVariant | split:'='
         assign productIdentifiers = bundleVariantParts | last | split: ':'
-
+        assign bundleVariantSoldOut = false
         assign bundleVariantPrice = 0
         assign bundleVariantPriceWithDiscount = 0
         for productIdentifier in productIdentifiers
@@ -61,6 +71,9 @@
                   assign productVariantDiscountedPrice = productVariant.price | times: productVariantPriceCoefficient
                   assign bundleVariantPrice             = bundleVariantPrice             | plus: productVariant.price
                   assign bundleVariantPriceWithDiscount = bundleVariantPriceWithDiscount | plus: productVariantDiscountedPrice
+                  if productVariant.available == false
+                    assign bundleVariantSoldOut = true
+                  endif
                   break
                 endif
               endfor
@@ -69,6 +82,9 @@
           endfor
         endfor
 
+        if bundleVariantSoldOut == false
+          assign sold_out = false
+        endif
         if bundleVariantPriceWithDiscount < price_min
           assign price_min = bundleVariantPriceWithDiscount
           assign compare_at_price = bundleVariantPrice
@@ -101,10 +117,12 @@
           {{ custom_label }}
         </div>
       {%- endif -%}
-      {%- if on_sale and sold_out == false -%}
+      {%- if on_sale -%}
+        {%- if isBundle == false -%}
         <div class="grid-product__tag grid-product__tag--sale">
           {{ 'products.general.sale' | t }}
         </div>
+        {%- endif -%}
       {%- endif -%}
     {%- endif -%}
 
