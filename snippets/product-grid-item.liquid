@@ -7,8 +7,12 @@
     assign per_row = '4'
   endunless
 
+  assign price_min = product.price_min
+  assign compare_at_price = product.compare_at_price
+  
+
   assign on_sale = false
-  if product.compare_at_price > product.price
+  if compare_at_price > price_min
     assign on_sale = true
   endif
 
@@ -27,37 +31,56 @@
   endif
 -%}
 
+{% comment %} foo=grontgodning-blodklover/40406779068608/10,bar=grontgodning-kaellingetand/39763291373760 {% endcomment %}
 {%- liquid
-  paginate collections.all-products.products by 1000
-    assign bundleVariants = product.metafields.bundle.bundleData | split: ','
-    assign cheapestBundleVariant = 99999999
+  if product.metafields.bundle.bundleData
+    paginate collections.all-products.products by 1000
+      assign bundleVariants = product.metafields.bundle.bundleData | split: ','
+      assign price_min = 99999999
 
-    for bundleVariant in bundleVariants
-      assign bundleVariantParts = bundleVariant | split:'='
-      assign productIdentifiers = bundleVariantParts | last | split: ':'
+      for bundleVariant in bundleVariants
+        assign bundleVariantParts = bundleVariant | split:'='
+        assign productIdentifiers = bundleVariantParts | last | split: ':'
 
-      assign bundleVariantPrice = 0
-      for productIdentifier in productIdentifiers
-        assign productHandle = productIdentifier | split: '/' | first
-        assign variantID     = productIdentifier | split: '/' | last | plus: 0
-        for item in collections.all-products.products
-          if item.handle == productHandle
-            for productVariant in item.variants
-              if productVariant.id == variantID
-                assign bundleVariantPrice = bundleVariantPrice | plus: productVariant.price
-                break
-              endif
-            endfor
-            break
-          endif
+        assign bundleVariantPrice = 0
+        assign bundleVariantPriceWithDiscount = 0
+        for productIdentifier in productIdentifiers
+          assign productVariantList = productIdentifier | split: '/'
+          assign productHandle = productVariantList[0]
+          assign productVariantID = productVariantList[1] | plus: 0
+          assign productVariantDiscount = productVariantList[2] | plus: 0
+          assign productVariantPriceCoefficient = 100.0 | minus: productVariantDiscount | divided_by: 100.0
+
+
+
+
+          for item in collections.all-products.products
+            if item.handle == productHandle
+              for productVariant in item.variants
+                if productVariant.id == productVariantID
+                  assign productVariantDiscountedPrice = productVariant.price | times: productVariantPriceCoefficient
+                  assign bundleVariantPrice             = bundleVariantPrice             | plus: productVariant.price
+                  assign bundleVariantPriceWithDiscount = bundleVariantPriceWithDiscount | plus: productVariantDiscountedPrice
+                  break
+                endif
+              endfor
+              break
+            endif
+          endfor
         endfor
-      endfor
 
-      if bundleVariantPrice < cheapestBundleVariant
-        assign cheapestBundleVariant = bundleVariantPrice
-      endif
-    endfor
-  endpaginate
+        if bundleVariantPriceWithDiscount < price_min
+          assign price_min = bundleVariantPriceWithDiscount
+          assign compare_at_price = bundleVariantPrice
+          if price_min < compare_at_price
+            assign on_sale = true
+          else
+            assign on_sale = false
+          endif
+        endif
+      endfor
+    endpaginate
+  endif
 -%}
 
 <div class="grid__item grid-product {{ grid_item_width }}{% if settings.quick_shop_enable %} grid-product__has-quick-shop{% endif %}" data-aos="row-of-{{ per_row }}" data-product-handle="{{ product.handle }}" data-product-id="{{ product.id }}">
@@ -195,20 +218,16 @@
         <div class="grid-product__price">
           {%- if on_sale -%}
             <span class="visually-hidden">{{ 'products.general.regular_price' | t }}</span>
-            <span class="grid-product__price--original">{{ product.compare_at_price | money }}</span>
+            <span class="grid-product__price--original">{{ compare_at_price | money }}</span>
             <span class="visually-hidden">{{ 'products.general.sale_price' | t }}</span>
           {%- endif -%}
-          {% if cheapestBundleVariant == 99999999 %}
-            {{ product.price_min | money }}
-          {% else %}
-            {{ cheapestBundleVariant | money }}
-          {% endif %}
+          {{ price_min | money }}
           {%- if on_sale -%}
             {%- if settings.product_save_amount -%}
               {%- if settings.product_save_type == 'dollar' -%}
-                {%- capture saved_amount -%}{{ product.compare_at_price | minus: product.price | money }}{%- endcapture -%}
+                {%- capture saved_amount -%}{{ compare_at_price | minus: price_min | money }}{%- endcapture -%}
               {%- else -%}
-                {%- capture saved_amount -%}{{ product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round }}%{%- endcapture -%}
+                {%- capture saved_amount -%}{{ compare_at_price | minus: price_min | times: 100.0 | divided_by: compare_at_price | floor }}%{%- endcapture -%}
               {%- endif -%}
               <span class="grid-product__price--savings">
                 {{ 'products.general.save_html' | t: saved_amount: saved_amount }}

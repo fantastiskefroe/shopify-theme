@@ -151,8 +151,8 @@
                     assign productVariantList = productIdentifier | split: '/'
                     assign productHandle = productVariantList[0]
                     assign productVariantID = productVariantList[1] | plus: 0
-                    assign productVariantPrice = productVariantList[2] | plus: 0
-                    assign productVariantPriceCoefficient = 100.0 | minus: productVariantPrice | divided_by: 100.0
+                    assign productVariantDiscount = productVariantList[2] | plus: 0
+                    assign productVariantPriceCoefficient = 100.0 | minus: productVariantDiscount | divided_by: 100.0
 
                     for item in collections.all-products.products
                       if item.handle == productHandle
