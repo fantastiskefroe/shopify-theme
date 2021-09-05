@@ -81,11 +81,13 @@
           {%- endfor -%}
         </div>
         <div class="cart__page-col">
+          {% comment %} 
           <div class="cart__item-row text-center">
             <span>
               Tilføj rabatkoder ved betaling
             </span>
-          </div>
+          </div> 
+          {% endcomment %}
           {% if settings.cart_notes_enable %}
             <div>
               <label for="CartNote">{{ 'cart.general.note' | t }}</label>
@@ -109,8 +111,8 @@
             {% endif %}
           </div>
 
-          {% comment %}<div class="cart__item-sub cart__item-row cart__subtotal">{% endcomment %}
-          {% comment %}</div>{% endcomment %}
+          <div class="cart__item-sub cart__item-row cart__subtotal">
+          </div>
 
           <div class="cart__item-sub cart__item-row">
             <div>{{ 'cart.general.subtotal' | t }}</div>
