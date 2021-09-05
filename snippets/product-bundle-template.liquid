@@ -91,8 +91,6 @@
             {%- liquid
               paginate collections.all-products.products by 1000
                 assign bundleVariants = product.metafields.bundle.bundleData | split: ','
-                assign bundleVariantCount = bundleVariants.size
-                assign bvMaxIndex = bundleVariantCount | minus: 1
 
                 comment
                  create empty arrays 
@@ -102,10 +100,11 @@
                 comment
                  properties that are a sum of the childrens property 
                 endcomment 
-                assign bundleVariantPrices          = "" | split: '¤'
-                assign bundleVariantAvailability    = "" | split: '¤'
-                assign bundleVariantHideOrganicLogo = "" | split: '¤'
-                assign bundleVariantHideDemeterLogo = "" | split: '¤'
+                assign bundleVariantPrices           = "" | split: '¤'
+                assign bundleVariantDiscountedPrices = "" | split: '¤'
+                assign bundleVariantAvailability     = "" | split: '¤'
+                assign bundleVariantHideOrganicLogo  = "" | split: '¤'
+                assign bundleVariantHideDemeterLogo  = "" | split: '¤'
                 comment
                  list of lists (list of strings seperated by '§') that contain the data for each child 
                 endcomment 
@@ -158,9 +157,8 @@
                       if item.handle == productHandle
                         for productVariant in item.variants
                           if productVariant.id == productVariantID
-                            assign bundleVariantProductDiscountedPrice = productVariant.price | times: productVariantPriceCoefficient
-
                             assign bundleVariantPrice = bundleVariantPrice | plus: productVariant.price
+                            assign bundleVariantProductDiscountedPrice = productVariant.price | times: productVariantPriceCoefficient
                             assign bundleVariantDiscountedPrice = bundleVariantDiscountedPrice | plus: bundleVariantProductDiscountedPrice
                             assign bundleVariantProductIDList = bundleVariantProductIDList | append: productVariant.id | append: '§'
                             if productVariant.title == 'Default Title'
