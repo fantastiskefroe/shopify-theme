@@ -45,14 +45,16 @@
       {% endif %}
 
       <div class="cart__item-price-col text-right">
-        {% if product.original_price != product.final_price %}
+      
+        {%- assign discountedPrice = discountCoef | times: product.original_price -%}
+        {% if product.original_price != discountedPrice %}
           <span class="visually-hidden">{{ 'products.general.regular_price' | t }}</span>
-          <small class="cart__price cart__price--strikethrough">
+          <small class="cart__price cart__price--strikethrough cart__price-bundle-product-original">
             {{ product.original_price | times: product.quantity | money }}
           </small>
           <span class="visually-hidden">{{ 'products.general.sale_price' | t }}</span>
-          <span class="cart__price cart__discount">
-            {{ product.final_price | times: product.quantity | money }}
+          <span class="cart__price">
+            {{ discountedPrice | times: product.quantity | money }}
           </span>
         {% else %}
           <span class="cart__price">
