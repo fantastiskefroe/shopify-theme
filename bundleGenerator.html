@@ -30,6 +30,9 @@
       font-family: 'Roboto Mono', monospace;
     }
 
+    .fr {float: right;}
+    .fl {float: left;}
+
     h1,h2,h3,h4,h5,h6 {
       font-family: 'Courgette', cursive;
       margin:0;
@@ -68,14 +71,25 @@
       float: right;
     }
 
+    .text-small {
+      font-size: 0.8rem;
+    }
+    .text-green {
+      color: green;
+    }
+    .strikethrough {
+      text-decoration: line-through;
+    }
+
     .filter, 
     .bundle-variants {
+      box-sizing: border-box;
       position: fixed;
       background: #314536;
       color: white;
       z-index: 1;
       width: 100%;
-      height: 2rem;
+      height: 4rem;
       padding: 1rem;
       font-size: 1rem;
     }
@@ -102,6 +116,10 @@
       font-size: 1rem;
       margin-left:   0.5rem;
       margin-right: -0.5rem;
+    }
+
+    .bundle-variants ion-icon {
+      cursor: pointer;
     }
 
     .bundle-variant {
@@ -282,12 +300,14 @@
               <td class="checkbox">
                 <label :for="variant.id">
                   <input 
+                    :key="variant.id"
                     type="checkbox"
                     v-if="selectedVariantIndex >= 0 && isChecked(product.handle + '/' + variant.id)"
                     @input="toggleItem(product.handle + '/' + variant.id)"
                     checked
                     :id="variant.id"/>
                   <input 
+                    :key="variant.id"
                     type="checkbox"
                     v-if="selectedVariantIndex >= 0 && !isChecked(product.handle + '/' + variant.id)"
                     @input="toggleItem(product.handle + '/' + variant.id)"
@@ -303,7 +323,7 @@
 
       <div class="bundlecart">
         <div class="foldable" v-for="(bundleVariant, index) in bundle">
-          <span class="foldHandle" @click="fold(index)">{{ bundleVariant.name }}</span>
+          <span class="foldHandle" @click="fold(index)">{{ bundleVariant.name }} <span class="fr text-small"><span class="strikethrough">{{ priceFormat(bundleVariantPrice(bundleVariant)) }}</span> - <span class="text-green">{{ priceFormat(discountedBundleVariantPrice(bundleVariant)) }} - {{ percentageDiff(bundleVariantPrice(bundleVariant), discountedBundleVariantPrice(bundleVariant)) }}%</span></span></span>
 
           <draggable class="bundle-variant-cart" v-bind:class="{hidden: selectedVariantIndex != index}" v-model="bundle[index].items" group="cart" @start="drag=true" @end="drag=false" handle=".dragHandle">
             <div class="cart-product" v-for="(item, itemIndex) in bundle[index].items.map(productFromVariant)" :key="item.id">
@@ -319,7 +339,7 @@
                 <div class="price">
                   <span>{{ priceFormat(item.price) }}</span>
                   <span class="discount"> - <input v-model="bundle[index].items[itemIndex].discount" type="text" placeholder="0">%</span>
-                  <span> = {{ priceFormat(item.price * (100-bundle[index].items[itemIndex].discount) * 0.01)}}</span>
+                  <span> = {{ priceFormat(item.price * (100-item.discount) * 0.01)}}</span>
                 </div>
               </div>
               <span class="remove-button" @click="removeItemFromBundleVariant(item.id, index)">⨯</span>
@@ -339,7 +359,7 @@
 
       <ion-icon name="copy-outline" @click="copyResult($event)"></ion-icon>
       <input id="result" type="text" v-bind:value="result" @input="setState($event.target.value)" />
-      <button @click="setState('')">clear</button>
+      <span class="fr" @click="setState('')"><ion-icon  name="trash-outline"></ion-icon></span>
     </div>
     
   </div>
@@ -401,6 +421,17 @@
           }
         },
         methods: {
+          bundleVariantPrice: function(bundleVariant) {
+            products = bundleVariant.items.map(this.productFromVariant);
+            return products.reduce((sum,item) => sum+(item.price), 0)
+          },
+          discountedBundleVariantPrice: function(bundleVariant) {
+            products = bundleVariant.items.map(this.productFromVariant);
+            return products.reduce((sum,item) => sum+(item.price * (100-item.discount) * 0.01), 0)
+          },
+          percentageDiff: function(a,b) {
+            return (100* (a-b)/a).toFixed(2);
+          },
           isChecked: function(identifier) {
             if(this.selectedVariantIndex < 0)
               return false;
@@ -471,7 +502,8 @@
               image: products[0].image,
               type:  products[0].type,
               tags:  products[0].tags,
-              price: variants[0].price
+              price: variants[0].price,
+              discount: item.discount
             }
           },
           setState(formattedStr) {
@@ -480,11 +512,12 @@
             let isNotEmpty = (s) => s.length > 0;
 
             if(formattedStr.length == 0) {
+              this.selectedVariantIndex = -1;
               this.bundle = [];
               return;
             }
 
-            this.bundle = formattedStr.split(",").filter(isNotEmpty).map((bundleVariantStr) => {
+            const newBundle = formattedStr.split(",").filter(isNotEmpty).map((bundleVariantStr) => {
               let parts = bundleVariantStr.split("=");
               return {
                 name: parts[0],
@@ -508,6 +541,9 @@
                 }).filter(x => x !== false)
               }
             });
+            if(this.selectedVariantIndex >= newBundle.length)
+              this.selectedVariantIndex = -1;
+            this.bundle = newBundle;
           }
         },
         mounted: function () {
