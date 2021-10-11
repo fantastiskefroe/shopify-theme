@@ -113,6 +113,7 @@
                         const bundleID = parseInt(formData.get('id'));
                         const quantity = formData.get('quantity');
                         const bundleProducts = window.bundleData[bundleID].products;
+                        const bundleTitle = window.bundleData[bundleID].title;
 
                         cartData = {
                             items: []
@@ -123,7 +124,8 @@
                                 id: bundleProduct.id,
                                 quantity: quantity,
                                 properties: {
-                                    _partOf: bundleID
+                                    _partOf: bundleID,
+                                    _bundleTitle: bundleTitle
                                 }
                             })
                         }

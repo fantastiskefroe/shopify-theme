@@ -243,6 +243,7 @@
               window.bundleData =
               { {%- for name in bundleVariantNames -%}
                 '{{ bundleVariantIDs[forloop.index0] }}': {
+                  'title': "{{ product.title }}",
                   'name': "{{ name }}",
                   'id': {{ bundleVariantIDs[forloop.index0] }},
                   'price': {{ bundleVariantPrices[forloop.index0] }},
