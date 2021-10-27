@@ -81,16 +81,30 @@
     endunless
   -%}
 
-  <button
-      {% if product.empty? %}type="button" {% else %}type="submit"{% endif %}
-      name="add"
-      id="AddToCart-{{ section_id }}"
-      class="btn btn--full add-to-cart{% if enable_dynamic_buttons and product.selling_plan_groups == empty %} btn--secondary{% endif %}"
-  {% unless current_variant.available %} disabled="disabled"{% endunless %}>
+  {%- if product.id == 6127097151680 -%}
+    <button
+        type="submit"
+        name="add"
+        id="AddToCart-{{ section_id }}"
+        class="btn btn--full add-to-cart{% if enable_dynamic_buttons and product.selling_plan_groups == empty %} btn--secondary{% endif %}"
+        formaction="/cart/update?updates[{{ current_variant.id }}]=1"
+    {% unless current_variant.available %} disabled="disabled"{% endunless %}>
       <span id="AddToCartText-{{ section_id }}" data-default-text="{{ default_text }}">
         {{ button_text }}
       </span>
-  </button>
+    </button>
+  {% else %}
+    <button
+        {% if product.empty? %}type="button" {% else %}type="submit"{% endif %}
+        name="add"
+        id="AddToCart-{{ section_id }}"
+        class="btn btn--full add-to-cart{% if enable_dynamic_buttons and product.selling_plan_groups == empty %} btn--secondary{% endif %}"
+    {% unless current_variant.available %} disabled="disabled"{% endunless %}>
+      <span id="AddToCartText-{{ section_id }}" data-default-text="{{ default_text }}">
+        {{ button_text }}
+      </span>
+    </button>
+  {% endif %}
 
   <div class="shopify-payment-terms product__policies">{{ form | payment_terms }}</div>
 

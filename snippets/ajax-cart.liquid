@@ -31,6 +31,7 @@
             addToCartBtnSelector: '[type="submit"]',
             addToCartFormSelector: 'form[action="/cart/add"]',
             shopifyAjaxAddURL: '/cart/add.js',
+            shopifyAjaxUpdateURL: '/cart/update.js',
             shopifyAjaxCartURL: '/cart.js'
         };
 
@@ -68,44 +69,20 @@
                     _setText($addToCartBtn, _config.addingToCartBtnLabel);
                     $addToCartBtn.addClass('disabled').prop('disabled', true);
 
+                    let postURL = _config.shopifyAjaxAddURL;
                     let cartData = $addToCartForm.serialize();
 
-                    // Only ever allow adding a single free bee buffet to cart
-                    if (cartData.includes('37789873078464')) {
-                        $.ajax({
-                            url: '/cart/update.js',
-                            dataType: 'json',
-                            type: 'post',
-                            data: {
-                                updates: {
-                                    37789873078464: 1
-                                }
-                            },
-                            success: function (itemData) {
-                                // Re-enable add to cart button.
-                                $addToCartBtn.addClass('inverted');
-                                _setText($addToCartBtn, _config.addedToCartBtnLabel);
-                                _showFeedback('success', '<b>✓</b> Tilføjet til din <a href="/cart">kurv</a>!', $addToCartForm);
-                                // Update cart count and show cart link.
-                                $('.cart-link__bubble').addClass('cart-link__bubble--visible');
-                            },
-                            error: function (XMLHttpRequest) {
-                                var response = eval('(' + XMLHttpRequest.responseText + ')');
-                                response = response.description;
-                                if (response.slice(0, 4) === 'All ') {
-                                    _showFeedback('error', response.replace('All 1 ', 'All '), $addToCartForm);
-                                    $addToCartBtn.prop('disabled', false);
-                                    _setText($addToCartBtn, _config.soldOutBtnLabel);
-                                    $addToCartBtn.prop('disabled', true);
-                                } else {
-                                    _showFeedback('error', '<b>✕</b> ' + response, $addToCartForm);
-                                    $addToCartBtn.prop('disabled', false).removeClass('disabled');
-                                    _setText($addToCartBtn, _config.addToCartBtnLabel);
-                                }
-                            }
-                        });
+                    const limitedVariantIDs = ['37789873078464'];
+                    for (const limitedVariantID of limitedVariantIDs) {
+                        if (cartData.includes(limitedVariantID)) {
+                            const updates = {};
+                            updates[limitedVariantID] = 1;
 
-                        return false;
+                            postURL = _config.shopifyAjaxUpdateURL;
+                            cartData = {updates};
+
+                            break;
+                        }
                     }
 
                     const productType = document.getElementsByClassName('product-section')[0].dataset.productType;
@@ -141,21 +118,26 @@
 
                     // Add to cart.
                     $.ajax({
-                        url: _config.shopifyAjaxAddURL,
+                        url: postURL,
                         dataType: 'json',
                         type: 'post',
                         data: cartData,
                         success: function (itemData) {
-                            // Re-enable add to cart button.
+                            // Update add to cart button
                             $addToCartBtn.addClass('inverted');
                             _setText($addToCartBtn, _config.addedToCartBtnLabel);
                             _showFeedback('success', '<b>✓</b> Tilføjet til din <a href="/cart">kurv</a>!', $addToCartForm);
-                            window.setTimeout(function () {
-                                $addToCartBtn.prop('disabled', false).removeClass('disabled').removeClass('inverted');
-                                _setText($addToCartBtn, _config.addToCartBtnLabel);
-                            }, _config.howLongTillBtnReturnsToNormal);
+
                             // Update cart count and show cart link.
                             $('.cart-link__bubble').addClass('cart-link__bubble--visible');
+
+                            // Only re-enable add to cart button for non-limited products
+                            if (postURL === _config.shopifyAjaxAddURL) {
+                                window.setTimeout(function () {
+                                    $addToCartBtn.prop('disabled', false).removeClass('disabled').removeClass('inverted');
+                                    _setText($addToCartBtn, _config.addToCartBtnLabel);
+                                }, _config.howLongTillBtnReturnsToNormal);
+                            }
                         },
                         error: function (XMLHttpRequest) {
                             var response = eval('(' + XMLHttpRequest.responseText + ')');
