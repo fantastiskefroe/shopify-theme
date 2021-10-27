@@ -54,12 +54,12 @@
   </select>
 
   {%- if settings.quantity_enable -%}
-    {%- if product.id == 37789873078464 -%}
-    <div class="product__quantity product__quantity--{{ settings.variant_type }}">
-      <label for="Quantity-{{ section_id }}">{{ 'products.product.quantity' | t }}</label>
-      {%- render 'quantity-input', id: section_id, qty: 1, min: 1 -%}
-    </div>
-    {%- endif -%}
+    {%- unless product.id == 6127097151680 -%}
+      <div class="product__quantity product__quantity--{{ settings.variant_type }}">
+        <label for="Quantity-{{ section_id }}">{{ 'products.product.quantity' | t }}</label>
+        {%- render 'quantity-input', id: section_id, qty: 1, min: 1 -%}
+      </div>
+    {%- endunless -%}
   {%- endif -%}
 
   {%- if current_variant.available -%}
