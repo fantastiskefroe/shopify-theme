@@ -13,7 +13,7 @@
   <link rel="dns-prefetch" href="https://maps.googleapis.com">
   <link rel="dns-prefetch" href="https://maps.gstatic.com">
   <link rel="shortcut icon" href="//cdn.shopify.com/s/files/1/0276/3902/1652/files/FantastiskeFroe_logo_mini_32x32.png?v=1583103209" type="image/png">
-  
+
   <link href="https://fonts.googleapis.com/css2?family=Courgette&family=Roboto+Mono&display=swap" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -87,6 +87,20 @@
   {%- if request.page_type contains 'customers/' -%}
     <script src="{{ 'shopify_common.js' | shopify_asset_url }}" defer="defer"></script>
   {%- endif -%}
+
+  <script
+      src="https://browser.sentry-cdn.com/6.16.1/bundle.tracing.min.js"
+      integrity="sha384-hySah00SvKME+98UjlzyfP852AXjPPTh2vgJu26gFcwTlZ02/zm82SINaKTKwIX2"
+      crossorigin="anonymous"
+  ></script>
+
+  <script>
+      Sentry.init({
+          dsn: "http://99ad89977742494d8e1ff10951e8f30c@sentry.fantastiskefroe.dk/2",
+          integrations: [new Sentry.Integrations.BrowserTracing()],
+          tracesSampleRate: 1.0,
+      });
+  </script>
 </head>
 
 {% include 'ajax-cart' %}
