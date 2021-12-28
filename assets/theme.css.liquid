@@ -11505,7 +11505,7 @@ html[dir=rtl] .product-single__meta .rte {
 
 .cart__remove a {
     padding-left: 8px;
-    margin-top: 0;
+    margin-top: 4px
 }
 
 .cart__remove .cross {
@@ -11515,8 +11515,10 @@ html[dir=rtl] .product-single__meta .rte {
     line-height: 0.5;
 }
 
-.js-qty__wrapper {
-    margin-right: 16px;
+@media only screen and (max-width: 768px) {
+    .js-qty__wrapper {
+        min-width: 105px;
+    }
 }
 
 .cart__terms label {

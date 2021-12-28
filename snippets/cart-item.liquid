@@ -48,15 +48,6 @@
     </div>
     <div class="cart__item-sub">
       <div>
-        <div class="cart__remove">
-          <a href="{{ routes.cart_change_url }}?id={{ product.key }}&amp;quantity=0"
-             class="btn btn--secondary btn--small small--hide">
-            <span class="cross">✕</span> {{ 'cart.general.remove' | t }}
-          </a>
-        </div>
-      </div>
-
-      <div class="cart__item-price-col text-right">
         <div class="js-qty__wrapper">
           <label for="cart_updates_{{ product.key }}" class="hidden-label">{{ 'cart.label.quantity' | t }}</label>
           <input type="text"
@@ -87,6 +78,15 @@
           </button>
         </div>
 
+        <div class="cart__remove">
+          <a href="{{ routes.cart_change_url }}?id={{ product.key }}&amp;quantity=0"
+             class="btn btn--secondary btn--small">
+            <span class="cross">✕</span> {{ 'cart.general.remove' | t }}
+          </a>
+        </div>
+      </div>
+
+      <div class="cart__item-price-col text-right">
         {% if product.original_price != product.final_price %}
           <span class="visually-hidden">{{ 'products.general.regular_price' | t }}</span>
           <small class="cart__price cart__price--strikethrough">
