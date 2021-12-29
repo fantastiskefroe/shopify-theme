@@ -205,13 +205,11 @@
       box-sizing: border-box;
     }
 
-    tr td:nth-child(3) {
-      width: 14rem;
-    }
-    .product .image, .variant .checkbox {
+    .product .image {
       width: 6rem;
       text-align: center;
     }
+    
     .product .image img {
       height: 4rem;
     }
@@ -229,7 +227,12 @@
     }
 
     table tr.product { background-color: white; }
-    table tr.variant { background-color: #f2f2f2; }
+    table tr.variant, .variant-cell { background-color: #f2f2f2; }
+    
+    .variant .checkbox, .variant-checkbox {
+      width: 3rem;
+      text-align: center;
+    }
 
     .bundle-variant-cart {
       transition: max-height 0.5s ease-in;
@@ -335,15 +338,32 @@
         <table>
           <template  v-for="product in filteredProducts">
             <tr class="product">
-              <td class="image">
+              <td class="image" :rowspan="product.variants.length">
                 <img v-bind:src="'https:' + product.image"
                     crossorigin="anonymous"
                     referrerpolicy="no-referrer">
               </td>
-              <td><h2 class="title">{{ decode(product.title) }}</h2></td>
-              <td><span class="sku">{{ product.sku }}</span></td>
+              <td :rowspan="product.variants.length" ><h2 class="title">{{ decode(product.title) }}</h2></td>
+              <td class="checkbox variant-cell variant-checkbox" >
+                <label :for="product.variants[0].id">
+                  <input 
+                    :key="product.variants[0].id"
+                    type="checkbox"
+                    v-if="selectedVariantIndex >= 0 && isChecked(product.handle + '/' + product.variants[0].id)"
+                    @input="toggleItem(product.handle + '/' + product.variants[0].id)"
+                    checked
+                    :id="product.variants[0].id"/>
+                  <input 
+                    :key="product.variants[0].id"
+                    type="checkbox"
+                    v-if="selectedVariantIndex >= 0 && !isChecked(product.handle + '/' + product.variants[0].id)"
+                    @input="toggleItem(product.handle + '/' + product.variants[0].id)"
+                    :id="product.variants[0].id"/>
+                </label>
+              </td>
+              <td class="variant-cell"><label :for="product.variants[0].id"><h3 class="title">{{ decode(product.variants[0].title) }}</span></label></td>
             </tr>
-            <tr class="variant" v-for="variant in product.variants" >
+            <tr class="variant" v-for="variant in product.variants.slice(1)" >
               <td class="checkbox">
                 <label :for="variant.id">
                   <input 
@@ -362,7 +382,6 @@
                 </label>
               </td>
               <td><label :for="variant.id"><h3 class="title">{{ decode(variant.title) }}</span></label></td>
-              <td><label :for="variant.id"><!--<span class="sku">{{ variant.sku }}</span>--></label></td>
             </tr>
           </template>
         </table>
@@ -613,7 +632,18 @@
 
                 this.products.sort((a,b) => a.sku.localeCompare(b.sku, 'da'));
                 this.tags = storeData.tags.filter(t => !t.startsWith("_"));
-                this.types = storeData.types;
+                this.types = storeData.types.sort((a,b) => {
+                  preferedOrder = ["Blomsterfrø","Urtefrø","Grøntsagsfrø","Mikrogrønt","Tilbehør"];
+                  if(!preferedOrder.includes(a) && !preferedOrder.includes(b))
+                    return a.localeCompare(b, 'da');
+                  if(preferedOrder.includes(a) && !preferedOrder.includes(b))
+                    return -1;
+                  if(!preferedOrder.includes(a) && preferedOrder.includes(b))
+                    return 1;
+                  if(preferedOrder.includes(a) && preferedOrder.includes(b))
+                    return preferedOrder.indexOf(a) - preferedOrder.indexOf(b);
+                });
+                
 
                 let resultString = localStorage.getItem("result");
 
