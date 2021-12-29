@@ -32,14 +32,14 @@
     }
 
     function _setText(text, btnEl) {
-        if (btnEl.children.length === 0) {
-            btnEl.textContent = text;
-        } else {
+        if (btnEl.children) {
             btnEl.children.forEach((el) => {
                 if (el.textContent.trim() !== '') {
                     el.textContent = text;
                 }
             });
+        } else {
+            btnEl.textContent = text;
         }
     }
 
