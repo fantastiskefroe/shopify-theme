@@ -6072,6 +6072,10 @@ lazySizesConfig.expFactor = 4;
 
       updateQualityLogos: function(evt) {
         const variant = evt.detail.variant;
+        if (!variant) {
+          return;
+        }
+
         const bundleData = window.bundleData;
 
         let showOrganic;
