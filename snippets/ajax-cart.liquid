@@ -134,8 +134,7 @@
                 //     _setText($addToCartBtn, _config.addToCartBtnLabel);
                 // }
             })
-            .then((data) => {
-                console.log(data);
+            .then(() => {
                 formBtnEl.classList.add('inverted');
                 _setText(_config.addedToCartBtnLabel, formBtnEl);
                 _showFeedback(true, '<b>✓</b> Tilføjet til din <a href="/cart">kurv</a>!', formEl);
