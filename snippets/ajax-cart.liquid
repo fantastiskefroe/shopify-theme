@@ -119,7 +119,7 @@
 
         fetch(postURL, request)
             .catch((error) => {
-                console.log(error);
+                Sentry.captureMessage("Add to cart gave an error: " + JSON.stringify(error));
 
                 // var response = eval('(' + XMLHttpRequest.responseText + ')');
                 // response = response.description;
