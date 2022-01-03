@@ -11413,6 +11413,40 @@ html[dir=rtl] .product-single__meta .rte {
     top: 15% !important;
 }
 
+
+.shopify-section:first-of-type .promo-grid__content {
+    padding: 2em 4em;
+}
+
+.shopify-section:first-of-type .promo-grid__content .rte--block:nth-of-type(2) {
+    font-family: Courgette, cursive;
+    font-size: 3.5rem;
+    text-transform: none;
+}
+
+.shopify-section:first-of-type .promo-grid__content .rte--block:nth-of-type(3) {
+    font-size: 1rem;
+}
+
+@media only screen and (max-width: 768px) {
+    .shopify-section:first-of-type .promo-grid__content {
+        padding: 2em;
+    }
+
+    .shopify-section:first-of-type .promo-grid__container--boxed .promo-grid__bg {
+        height: 100%;
+    }
+
+    .shopify-section:first-of-type .promo-grid__content .rte--block:nth-of-type(2) {
+        font-size: 2.1rem;
+    }
+
+    .shopify-section:first-of-type .promo-grid__content .rte--block:nth-of-type(3) {
+        font-size: 0.9rem;
+    }
+}
+
+
 /* Product page */
 .product-single__title .primary {
     font-family: Roboto Mono, monospace;
