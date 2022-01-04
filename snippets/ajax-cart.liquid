@@ -32,11 +32,11 @@
 
     function _setText(text, btnEl) {
         if (btnEl.children.length > 0) {
-            btnEl.children.forEach((el) => {
+            for (const el of btnEl.children) {
                 if (el.textContent.trim() !== '') {
                     el.textContent = text;
                 }
-            });
+            }
         } else {
             btnEl.textContent = text;
         }
