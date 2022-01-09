@@ -62,22 +62,22 @@
   {%- endif -%}
 
   {%- liquid
-    assign default_text = 'products.product.add_to_cart' | t
-    assign button_text = 'products.product.add_to_cart' | t
-    if template == 'product.preorder'
-      assign default_text = 'products.product.preorder' | t
-      assign button_text = 'products.product.preorder' | t
-    endif
-    unless current_variant.available
-      assign button_text = 'products.product.sold_out' | t
-    endunless
-
     for bundleVariantID in bundleVariantIDs
       assign bundleVariantIDInt = bundleVariantID | plus: 0
       if bundleVariantIDInt == current_variant.id
         assign bundleVariantAvailable = bundleVariantAvailability[forloop.index0]
       endif
     endfor
+
+    assign default_text = 'products.product.add_to_cart' | t
+    assign button_text = 'products.product.add_to_cart' | t
+    if template == 'product.preorder'
+      assign default_text = 'products.product.preorder' | t
+      assign button_text = 'products.product.preorder' | t
+    endif
+    unless bundleVariantAvailable
+      assign button_text = 'products.product.sold_out' | t
+    endunless
   -%}
 
   <button
