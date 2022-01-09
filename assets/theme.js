@@ -6050,6 +6050,11 @@ lazySizesConfig.expFactor = 4;
         var cartBtnText = document.getElementById(this.selectors.addToCartText);
   
         if (variant) {
+          const bundleData = window.bundleData;
+          if (bundleData) {
+            variant.available = bundleData[variant.id].available;
+          }
+
           if (variant.available) {
             // Available, enable the submit button and change text
             cartBtn.classList.remove(classes.disabled);
