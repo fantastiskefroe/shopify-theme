@@ -32,24 +32,12 @@
         }{% unless forloop.last %},{% endunless %}
       {%- endfor -%}
     ],
-//    "aggregateRating": {
-//      "@type": "AggregateRating",
-//      "ratingCount": "0",
-//      "reviewCount": "0"
-//    },
-//    "review": [],
     "brand": {
       "@type": "Brand",
       "name": {{ product.vendor | json }},
       "slogan": "100% økologi - 110% haveglæde",
       "description": "I vores lille frøbutik kan du finde økologiske frø i illustrerede, bæredygtige frøposer. FantastiskeFrø er drevet af en passion for frø og med respekt for naturen 🌱",
       "url": {{ shop.url | json }},
-//      "aggregateRating": {
-//        "@type": "AggregateRating",
-//        "ratingCount": "0",
-//        "reviewCount": "0"
-//      },
-//      "review": []
       "logo": {
         "@type": "ImageObject",
         "url": "https://cdn.shopify.com/s/files/1/0276/3902/1652/files/FantastiskeFroe_logo_full.jpg",
