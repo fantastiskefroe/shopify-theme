@@ -2,11 +2,13 @@
     const _config = {
         // What you might want to change
         addToCartBtnLabel: 'Føj til kurv',
-        addedToCartBtnLabel: 'Tilføjet!',
         addingToCartBtnLabel: 'Tilføjer...',
+        addedToCartBtnLabel: 'Tilføjet!',
         soldOutBtnLabel: 'Udsolgt',
+        errorBtnLabel: 'Fejl!',
         howLongTillBtnReturnsToNormal: 1000, // in milliseconds.
         feedbackPosition: 'nextButton',
+        limitedVariantIDs: ['37789873078464'],
 
         // What you will never need to change
         addToCartBtnSelector: '[type="submit"]',
@@ -52,101 +54,125 @@
         return result;
     }
 
-    function _handleFormSubmit(event) {
-        event.preventDefault();
-        const formEl = event.target;
-        const formBtnEl = formEl.querySelector(_config.addToCartBtnSelector);
-        let formData = _serializeForm(formEl);
+    function _handleSuccess(response, formEl, formBtnEl, addMore) {
+        console.info(response);
 
-        _setText(_config.addingToCartBtnLabel, formBtnEl);
-        formBtnEl.classList.add('disabled');
-        formBtnEl.disabled = true;
+        formBtnEl.classList.add('inverted');
+        _setText(_config.addedToCartBtnLabel, formBtnEl);
+        _showFeedback(true, '<b>✓</b> Tilføjet til din <a href="/cart">kurv</a>!', formEl);
 
-        let postURL = _config.shopifyAjaxAddURL;
+        const cartBubbleEl = document.querySelector('.cart-link__bubble');
+        cartBubbleEl.classList.add('cart-link__bubble--visible');
 
-        const limitedVariantIDs = ['37789873078464'];
-        for (const limitedVariantID of limitedVariantIDs) {
-            if (formData.id === limitedVariantID) {
-                postURL = _config.shopifyAjaxUpdateURL;
-                formData = {
-                    updates: {}
-                }
-                formData.updates[limitedVariantID] = 1;
-
-                break;
-            }
+        if (addMore) {
+            window.setTimeout(() => {
+                formBtnEl.classList.remove('inverted', 'disabled');
+                formBtnEl.disabled = false;
+                _setText(_config.addToCartBtnLabel, formBtnEl);
+            }, _config.howLongTillBtnReturnsToNormal);
         }
+    }
 
-        const productType = document.getElementsByClassName('product-section')[0].dataset.productType;
-        if (productType === 'bundle') {
-            const bundleID = parseInt(formData.id);
-            const quantity = formData.quantity;
-            const bundleProducts = window.bundleData[bundleID].products;
-            const bundleTitle = window.bundleData[bundleID].title;
+    function _handleError(response, formEl, formBtnEl) {
+        console.warn(response);
 
-            formData = {
-                items: []
-            };
+        response.text()
+          .then((responseText) => {
+              formBtnEl.classList.add('inverted');
+              const textObj = JSON.parse(responseText);
+              let productSoldOut = textObj.description.includes('er allerede udsolgt.');
+              if (productSoldOut) {
+                  _setText(_config.soldOutBtnLabel, formBtnEl);
+                  _showFeedback(false, `<b>✕</b> ${textObj.description.replace('Produktet ', '').replace('allerede ', '')}`, formEl);
+              } else {
+                  _setText(_config.errorBtnLabel, formBtnEl);
+                  _showFeedback(false, `<b>✕</b> Der skete en fejl, prøv igen - ${textObj.description}`, formEl);
+                  formBtnEl.classList.remove('inverted', 'disabled');
+                  formBtnEl.disabled = false;
 
-            for (const bundleProduct of bundleProducts.reverse()) {
-                formData.items.push({
-                    id: bundleProduct.id,
-                    quantity: quantity,
-                    properties: {
-                        _partOf: bundleID,
-                        _bundleTitle: bundleTitle
-                    }
-                })
+                  Sentry.captureMessage("Add to cart gave an unknown error: " + responseText);
+              }
+          });
+    }
+
+    function _handleLimitedProduct(variantID) {
+        const body = {
+            updates: {}
+        }
+        body.updates[variantID] = 1;
+
+        return _sendRequest(_config.shopifyAjaxUpdateURL, body);
+    }
+
+    function _handleBundleProduct(formData) {
+        const bundleID = parseInt(formData.id);
+        const quantity = formData.quantity;
+        const bundleProducts = window.bundleData[bundleID].products;
+        const bundleTitle = window.bundleData[bundleID].title;
+
+        const items = [{
+            id: bundleID,
+            quantity: quantity,
+            properties: {
+                _bundle: true
             }
+        }];
 
-            formData.items.push({
-                id: bundleID,
+        for (const bundleProduct of bundleProducts) {
+            items.unshift({
+                id: bundleProduct.id,
                 quantity: quantity,
                 properties: {
-                    _bundle: true
+                    _partOf: bundleID,
+                    _bundleTitle: bundleTitle
                 }
-            });
+            })
         }
 
+        return _sendRequest(_config.shopifyAjaxAddURL, {items});
+    }
+
+    function _sendRequest(url, body) {
         const request = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(formData)
+            body: JSON.stringify(body)
         }
 
-        fetch(postURL, request)
-            .catch((error) => {
-                Sentry.captureMessage("Add to cart gave an error: " + JSON.stringify(error));
+        return fetch(url, request);
+    }
 
-                // var response = eval('(' + XMLHttpRequest.responseText + ')');
-                // response = response.description;
-                // if (response.slice(0, 4) === 'All ') {
-                //     _showFeedback('error', response.replace('All 1 ', 'All '), $addToCartForm);
-                //     $addToCartBtn.prop('disabled', false);
-                //     _setText($addToCartBtn, _config.soldOutBtnLabel);
-                //     $addToCartBtn.prop('disabled', true);
-                // } else {
-                //     _showFeedback('error', '<b>✕</b> ' + response, $addToCartForm);
-                //     $addToCartBtn.prop('disabled', false).removeClass('disabled');
-                //     _setText($addToCartBtn, _config.addToCartBtnLabel);
-                // }
-            })
-            .then(() => {
-                formBtnEl.classList.add('inverted');
-                _setText(_config.addedToCartBtnLabel, formBtnEl);
-                _showFeedback(true, '<b>✓</b> Tilføjet til din <a href="/cart">kurv</a>!', formEl);
+    function _handleFormSubmit(event) {
+        event.preventDefault();
 
-                const cartBubbleEl = document.querySelector('.cart-link__bubble');
-                cartBubbleEl.classList.add('cart-link__bubble--visible');
+        const formEl = event.target;
+        const formBtnEl = formEl.querySelector(_config.addToCartBtnSelector);
+        const formData = _serializeForm(formEl);
 
-                if (postURL === _config.shopifyAjaxAddURL) {
-                    window.setTimeout(() => {
-                        formBtnEl.classList.remove('inverted', 'disabled');
-                        formBtnEl.disabled = false;
-                        _setText(_config.addToCartBtnLabel, formBtnEl);
-                    }, _config.howLongTillBtnReturnsToNormal);
+        _setText(_config.addingToCartBtnLabel, formBtnEl);
+        formBtnEl.classList.add('disabled');
+        formBtnEl.disabled = true;
+
+        const limitedProduct = _config.limitedVariantIDs.indexOf(formData.id) >= 0;
+        const bundleProduct = document.getElementsByClassName('product-section')[0].dataset.productType === 'bundle';
+
+        let promise;
+        if (limitedProduct) {
+            promise = _handleLimitedProduct(formData.id);
+        } else if (bundleProduct) {
+            promise = _handleBundleProduct(formData);
+        } else {
+            promise = _sendRequest(_config.shopifyAjaxAddURL, formData);
+        }
+
+        promise
+            .then((response) => {
+                if (response.ok) {
+                    _handleSuccess(response, formEl, formBtnEl, !limitedProduct);
+                } else {
+                    _handleError(response, formEl, formBtnEl);
                 }
             });
 
