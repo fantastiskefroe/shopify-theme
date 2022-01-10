@@ -114,10 +114,10 @@
           <div class="cart__item-sub cart__item-row cart__subtotal">
           </div>
 
-          <div class="cart__item-sub cart__item-row">
-            <div>{{ 'cart.general.subtotal' | t }}</div>
-            <div data-subtotal>{{ cart.total_price | money }}</div>
-          </div>
+          {% comment %}<div class="cart__item-sub cart__item-row">{% endcomment %}
+            {% comment %}<div>{{ 'cart.general.subtotal' | t }}</div>{% endcomment %}
+            {% comment %}<div data-subtotal>{{ cart.total_price | money }}</div>{% endcomment %}
+          {% comment %}</div>{% endcomment %}
 
           {% if settings.cart_terms_conditions_enable %}
             <div class="cart__item-row cart__terms rte">
