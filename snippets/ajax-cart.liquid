@@ -34,7 +34,8 @@
 
     function _setText(text, btnEl) {
         if (btnEl.children.length > 0) {
-            for (const el of btnEl.children) {
+            for (let i = 0; i < btnEl.children.length; i++) {
+                const el = btnEl.children[i];
                 if (el.textContent.trim() !== '') {
                     el.textContent = text;
                 }
