@@ -25,7 +25,7 @@
             {% for p in item.properties %}
               {% if p.first == "_bundle" %}
                 {%- assign isBundle = true -%}
-                {%- liquid 
+                {%- liquid
                   assign bundleVariantName = item.options_with_values.first.value
                   assign bundleData_bundleVariants = item.product.metafields.bundle.bundleData | split: ','
                   for bundleVariant_i in bundleData_bundleVariants
@@ -54,7 +54,7 @@
             {% endif %}
 
             {% if isBundleProduct %}
-              {%- liquid 
+              {%- liquid
                 assign discountCoef = 0
                 for bundleItem in currentBundleMetaData
                   assign parts = bundleItem | split: '/'
@@ -94,6 +94,11 @@
               <textarea name="note" class="input-full cart-notes" id="CartNote"
                         placeholder="Tilføj en kommentar til ordren.">{{ cart.note }}</textarea>
             </div>
+
+            <div class="cart__item-sub cart__item-row cart__item-subtotal">
+              <div>{{ 'cart.general.subtotal' | t }}</div>
+              <div data-subtotal>{{ cart.total_price | money }}</div>
+            </div>
           {% endif %}
 
           <div data-discounts>
@@ -113,11 +118,6 @@
 
           <div class="cart__item-sub cart__item-row cart__subtotal">
           </div>
-
-          {% comment %}<div class="cart__item-sub cart__item-row">{% endcomment %}
-            {% comment %}<div>{{ 'cart.general.subtotal' | t }}</div>{% endcomment %}
-            {% comment %}<div data-subtotal>{{ cart.total_price | money }}</div>{% endcomment %}
-          {% comment %}</div>{% endcomment %}
 
           {% if settings.cart_terms_conditions_enable %}
             <div class="cart__item-row cart__terms rte">
