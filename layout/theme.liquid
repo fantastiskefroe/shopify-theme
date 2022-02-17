@@ -91,8 +91,8 @@
   <script
       src="https://browser.sentry-cdn.com/6.17.2/bundle.tracing.min.js"
       integrity="sha384-hySah00SvKME+98UjlzyfP852AXjPPTh2vgJu26gFcwTlZ02/zm82SINaKTKwIX2"
-      crossorigin="anonymous"
-  ></script>
+      crossorigin="anonymous">
+  </script>
 
   <script>
       Sentry.init({
@@ -100,6 +100,34 @@
           integrations: [new Sentry.Integrations.BrowserTracing()],
           tracesSampleRate: 0.05
       });
+  </script>
+
+  <script>
+      function applyDiscountCode() {
+          const params = new Proxy(new URLSearchParams(window.location.search), {
+              get: (searchParams, prop) => searchParams.get(prop),
+          });
+          const discountCode = params.rabatkode;
+
+          if (!discountCode) {
+              return;
+          }
+
+          const STORAGE_KEY = 'stkbl-codes';
+          const discountCodesString = localStorage.getItem(STORAGE_KEY);
+          if (!discountCodesString) {
+              localStorage.setItem(STORAGE_KEY, JSON.stringify([discountCode]));
+              return;
+          }
+
+          const discountCodes = JSON.parse(discountCodesString);
+          if (discountCodes.indexOf(discountCode) === -1) {
+              discountCodes.push(discountCode);
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(discountCodes));
+          }
+      }
+
+      applyDiscountCode();
   </script>
 </head>
 
