@@ -10,7 +10,7 @@
   assign price_min = product.price_min
   assign compare_at_price = product.compare_at_price
   assign isBundle = false
-  
+
   assign sold_out = false
   unless product.available
     assign sold_out = true
@@ -49,7 +49,7 @@
 
 
       for bundleVariant in bundleVariants
-        assign bundleVariantParts = bundleVariant | split:'='
+        assign bundleVariantParts = bundleVariant | split: '='
         assign productIdentifiers = bundleVariantParts | last | split: ':'
         assign bundleVariantSoldOut = false
         assign bundleVariantPrice = 0
@@ -61,15 +61,12 @@
           assign productVariantDiscount = productVariantList[2] | plus: 0
           assign productVariantPriceCoefficient = 100.0 | minus: productVariantDiscount | divided_by: 100.0
 
-
-
-
           for item in collections.all-products.products
             if item.handle == productHandle
               for productVariant in item.variants
                 if productVariant.id == productVariantID
                   assign productVariantDiscountedPrice = productVariant.price | times: productVariantPriceCoefficient
-                  assign bundleVariantPrice             = bundleVariantPrice             | plus: productVariant.price
+                  assign bundleVariantPrice = bundleVariantPrice | plus: productVariant.price
                   assign bundleVariantPriceWithDiscount = bundleVariantPriceWithDiscount | plus: productVariantDiscountedPrice
                   if productVariant.available == false
                     assign bundleVariantSoldOut = true
@@ -99,7 +96,9 @@
   endif
 -%}
 
-<div class="grid__item grid-product {{ grid_item_width }}{% if settings.quick_shop_enable %} grid-product__has-quick-shop{% endif %}" data-aos="row-of-{{ per_row }}" data-product-handle="{{ product.handle }}" data-product-id="{{ product.id }}">
+<div
+    class="grid__item grid-product {{ grid_item_width }}{% if settings.quick_shop_enable %} grid-product__has-quick-shop{% endif %}"
+    data-aos="row-of-{{ per_row }}" data-product-handle="{{ product.handle }}" data-product-id="{{ product.id }}">
   <div class="grid-product__content">
     {%- if sold_out -%}
       {%- if has_custom_label and custom_label == "Kommer_snart" -%}
@@ -119,9 +118,9 @@
       {%- endif -%}
       {%- if on_sale -%}
         {%- if isBundle == false -%}
-        <div class="grid-product__tag grid-product__tag--sale">
-          {{ 'products.general.sale' | t }}
-        </div>
+          <div class="grid-product__tag grid-product__tag--sale">
+            {{ 'products.general.sale' | t }}
+          </div>
         {%- endif -%}
       {%- endif -%}
     {%- endif -%}
@@ -140,34 +139,35 @@
     <a href="{{ product.url | within: collection }}" class="grid-product__link">
       <div class="grid-product__image-mask">
         {%- if settings.quick_shop_enable -%}
-          <div class="quick-product__btn quick-product__btn--not-ready js-modal-open-quick-modal-{{ product.id }} small--hide">
+          <div
+              class="quick-product__btn quick-product__btn--not-ready js-modal-open-quick-modal-{{ product.id }} small--hide">
             <span class="quick-product__label">{{ settings.quick_shop_text }}</span>
           </div>
         {%- endif -%}
         {%- if fixed_aspect_ratio -%}
           <div
-            class="grid__image-ratio grid__image-ratio--{{ settings.product_grid_image_size }}">
+              class="grid__image-ratio grid__image-ratio--{{ settings.product_grid_image_size }}">
             <img class="lazyload{% unless settings.product_grid_image_fill %} grid__image-contain{% endunless %}"
-                data-src="{{ img_url }}"
-                data-widths="[360, 540, 720, 900, 1080]"
-                data-aspectratio="{{ preview_image.aspect_ratio }}"
-                data-sizes="auto"
-                alt="{{ preview_image.alt | escape }}">
+                 data-src="{{ img_url }}"
+                 data-widths="[360, 540, 720, 900, 1080]"
+                 data-aspectratio="{{ preview_image.aspect_ratio }}"
+                 data-sizes="auto"
+                 alt="{{ preview_image.alt | escape }}">
           </div>
         {%- else -%}
           <div class="image-wrap"
-            style="height: 0; padding-bottom: {{ 100 | divided_by: preview_image.aspect_ratio }}%;"
-            >
+               style="height: 0; padding-bottom: {{ 100 | divided_by: preview_image.aspect_ratio }}%;"
+          >
             <img class="grid-product__image lazyload"
-                data-src="{{ img_url }}"
-                data-widths="[360, 540, 720, 900, 1080]"
-                data-aspectratio="{{ preview_image.aspect_ratio }}"
-                data-sizes="auto"
-                alt="{{ preview_image.alt | escape }}">
+                 data-src="{{ img_url }}"
+                 data-widths="[360, 540, 720, 900, 1080]"
+                 data-aspectratio="{{ preview_image.aspect_ratio }}"
+                 data-sizes="auto"
+                 alt="{{ preview_image.alt | escape }}">
             <noscript>
               <img class="grid-product__image lazyloaded"
-                src="{{ preview_image | img_url: '400x' }}"
-                alt="{{ preview_image.alt | escape }}">
+                   src="{{ preview_image | img_url: '400x' }}"
+                   alt="{{ preview_image.alt | escape }}">
             </noscript>
           </div>
         {%- endif -%}
@@ -179,11 +179,11 @@
           <div class="grid-product__secondary-image small--hide">
             {%- assign img_url = second_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
             <img class="lazyload"
-                data-src="{{ img_url }}"
-                data-widths="[360, 540, 720, 1000]"
-                data-aspectratio="{{ second_image.aspect_ratio }}"
-                data-sizes="auto"
-                alt="{{ second_image.alt }}">
+                 data-src="{{ img_url }}"
+                 data-widths="[360, 540, 720, 1000]"
+                 data-aspectratio="{{ second_image.aspect_ratio }}"
+                 data-sizes="auto"
+                 alt="{{ second_image.alt }}">
           </div>
         {%- endif -%}
 
@@ -213,7 +213,7 @@
 
                   {%- if variant.image -%}
                     <div
-                      class="grid-product__color-image grid-product__color-image--{{ variant.id }} small--hide">
+                        class="grid-product__color-image grid-product__color-image--{{ variant.id }} small--hide">
                     </div>
                   {%- endif -%}
                 {%- endunless -%}
@@ -310,22 +310,22 @@
               -%}
 
               <a
-                href="{{ variant.url | within: collection }}"
-                class="color-swatch color-swatch--small color-swatch--{{ value | handle }}{% if variant.image %} color-swatch--with-image{% endif %}"
-                {% if variant.image %}
-                  data-variant-id="{{ variant.id }}"
-                  data-variant-image="{{ variant.image | img_url: '400x' }}"
-                {% endif %}
-                style="background-image: url({{ color_image }}); background-color: {{ color_swatch_fallback }};">
+                  href="{{ variant.url | within: collection }}"
+                  class="color-swatch color-swatch--small color-swatch--{{ value | handle }}{% if variant.image %} color-swatch--with-image{% endif %}"
+                  {% if variant.image %}
+                    data-variant-id="{{ variant.id }}"
+                    data-variant-image="{{ variant.image | img_url: '400x' }}"
+                  {% endif %}
+                  style="background-image: url({{ color_image }}); background-color: {{ color_swatch_fallback }};">
                 <span class="visually-hidden">{{ value }}</span>
               </a>
             {%- endunless -%}
-           {%- endfor -%}
+          {%- endfor -%}
         </div>
         {%- if color_count < 2 -%}
           {%- style -%}
             .grid-product__colors--{{ product.id }} {
-              display: none;
+            display: none;
             }
           {%- endstyle -%}
         {%- endif -%}
