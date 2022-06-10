@@ -365,6 +365,10 @@
         "taxes_label": "Moms",
         "vat_label_html": "Inklusiv {{ amount }} moms",
         "recurring_total_tooltip": "Inkluderer ikke levering, moms, told eller eventuelle gældende rabatter."
+      },
+      "delivery_options": {
+        "pick_up": "Afhent hos os nær Hammel",
+        "ship": "Send med PostNord"
       }
     }
   }
