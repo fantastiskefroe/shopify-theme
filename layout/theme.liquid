@@ -5,6 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="{{ settings.color_button }}">
+  <meta name="facebook-domain-verification" content="1sf8o5nxfiez3mvng5wt8hq0tbv6zk" />
   <link rel="canonical" href="{{ canonical_url }}">
   <link rel="preconnect" href="https://cdn.shopify.com">
   <link rel="preconnect" href="https://fonts.shopifycdn.com">
@@ -113,17 +114,16 @@
               return;
           }
 
-          const STORAGE_KEY = 'stkbl-codes';
-          const discountCodesString = localStorage.getItem(STORAGE_KEY);
+          const discountCodesString = localStorage.getItem('stkbl-codes');
           if (!discountCodesString) {
-              localStorage.setItem(STORAGE_KEY, JSON.stringify([discountCode]));
+              localStorage.setItem('stkbl-codes', JSON.stringify([discountCode]));
               return;
           }
 
           const discountCodes = JSON.parse(discountCodesString);
           if (discountCodes.indexOf(discountCode) === -1) {
               discountCodes.push(discountCode);
-              localStorage.setItem(STORAGE_KEY, JSON.stringify(discountCodes));
+              localStorage.setItem('stkbl-codes', JSON.stringify(discountCodes));
           }
       }
 
