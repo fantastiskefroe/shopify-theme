@@ -16,6 +16,7 @@
       "id":      {{ product.id }},
       "title":  "{{ product.title | escape }}",
       "handle": "{{ product.handle | escape }}",
+      "url": "{{ product.url | escape }}",
       "image":  "{{ product.featured_image.src | product_img_url: 'x64' }}",
       "tags": {{ product.tags | json }},
       "type": {{ product.type | json }},
