@@ -1,6 +1,6 @@
 {%- liquid
   assign current_variant = product.selected_or_first_available_variant
-  assign days_price_valid_until = 31 | times: 86400
+  assign days_price_valid_until = 10 | times: 86400
   assign gtin_option = 'gtin'
   assign is_barcode_available = false
   if current_variant.barcode != blank
@@ -32,28 +32,12 @@
         }{% unless forloop.last %},{% endunless %}
       {%- endfor -%}
     ],
-    "brand": {
-      "@type": "Brand",
-      "name": {{ product.vendor | json }},
-      "slogan": "100% økologi - 110% haveglæde",
-      "description": "I vores lille frøbutik kan du finde økologiske frø i illustrerede, bæredygtige frøposer. FantastiskeFrø er drevet af en passion for frø og med respekt for naturen 🌱",
-      "url": {{ shop.url | json }},
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://cdn.shopify.com/s/files/1/0276/3902/1652/files/FantastiskeFroe_logo_full.jpg",
-        "name": "FantastiskeFrø logo",
-        "width": 1024,
-        "height": 444
-      }
-    },
+    "brand": {{ product.vendor | json }},
     "sku": {{ current_variant.sku | json }},
     "name": {{ product.title | json }},
-    "description": {{ page_description | strip_html | json }},
-    {% assign lines = product.title | split: "'" %}
-    "category": {{ lines[0] | strip | json }},
-    "itemCondition": "NewCondition",
+    "description": {{ product.description | strip_html | json }},
+    "category": "",
     "url": "{{ shop.url }}{{ product.url }}",
-    "mainEntityOfPage": "{{ shop.url }}{{ product.url }}",
     {%- if is_barcode_available and is_valid_gtin_length %}
       "{{gtin_option}}": {{ current_variant.barcode | json }},
       "productId": {{ current_variant.barcode | json }},

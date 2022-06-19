@@ -1,7 +1,7 @@
 {% comment %}
   JS-load cart markup without bloat of a full layout.
 
-  This is used in both the cart drawer and cart page.
+  This is used in both the mini cart drawer and cart page.
   When a quantity is changed, this file is scraped and data-products
     is fully replaced to account for possible cart discounts changing
 
@@ -14,49 +14,16 @@
   data-count="{{ cart.item_count }}"
   data-cart-subtotal="{{ cart.total_price }}">
   {% for item in cart.items %}
-    {%- assign isBundle = false -%}
-    {%- assign isBundleProduct = false -%}
-    {%- assign isLimitedProduct = false -%}
-
-    {% for p in item.properties %}
-      {% if p.first == "_bundle" %}
-        {%- assign isBundle = true -%}
-        {% break %}
-      {% endif %}
-      {% if p.first == "_partOf" %}
-        {%- assign isBundleProduct = true -%}
-        {% break %}
-      {% endif %}
-    {% endfor %}
-
-    {% if item.id == 37789873078464 %}
-      {%- assign isLimitedProduct = true -%}
-    {% endif %}
-
-    {% if isBundle %}
-      {%- render 'cart-item-bundle', product: item, lineNum: forloop.index -%}
-      {%- continue -%}
-    {% endif %}
-
-    {% if isBundleProduct %}
-      {%- render 'cart-item-bundle-product', product: item -%}
-      {%- continue -%}
-    {% endif %}
-
-    {% if isLimitedProduct %}
-      {%- render 'cart-item-limited', product: item, lineNum: forloop.index -%}
-      {%- continue -%}
-    {% endif %}
-
     {%- render 'cart-item', product: item -%}
   {% endfor %}
 </div>
-<div class="cart__discounts cart__item-sub cart__item-row{% if cart.cart_level_discount_applications == blank %} hide{% endif %}">
-  <div>{{ 'cart.general.discounts' | t }}</div>
+<div class="cart__discounts text-right{% if cart.cart_level_discount_applications == blank %} hide{% endif %}">
   <div>
     {% for cart_discount in cart.cart_level_discount_applications %}
+      {%- assign savings = cart_discount.total_allocated_amount | money -%}
       <div class="cart__discount">
-        {{ cart_discount.title }} (-{{ cart_discount.total_allocated_amount | money }})
+        {{ 'cart.general.savings_html' | t: saved_amount: savings }}
+        ({{ cart_discount.title }})
       </div>
     {% endfor %}
   </div>

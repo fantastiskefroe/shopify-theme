@@ -13,11 +13,13 @@
         {% endif %}
 
         <span class="breadcrumb__divider" aria-hidden="true">/</span>
+
         {% if collection.handle %}
           {% capture url %}{{ routes.collections_url }}/{{ collection.handle }}{% endcapture %}
           {{ collection.title | link_to: url }}
         {% endif %}
       {% endif %}
+
       <span class="breadcrumb__divider" aria-hidden="true">/</span>
 
     {% elsif template.name == 'collection' and collection.handle %}
@@ -29,7 +31,6 @@
       <span class="breadcrumb__divider" aria-hidden="true">/</span>
 
       {% if current_tags %}
-
         {% capture url %}{{ routes.collections_url }}/{{ collection.handle }}{% endcapture %}
         {{ collection.title | link_to: url }}
 
@@ -37,13 +38,12 @@
 
         {% for tag in current_tags %}
           {% if tag contains "_" %}{%- assign tag_starts_with = tag | slice: 0 -%}{% if tag_starts_with == "_" %}{% if tag_count %}{%- assign tag_count = tag_count | minus: 1 | at_least: 0 -%}{% endif %}{% continue %}{% endif %}{% endif %}
-
           {% assign tag_name = tag | strip %}
           {% assign tag_text = tag_name | capitalize %}
           <span>{{ tag_text }}</span>
 
           {% unless forloop.last %}
-            <span>+</span>
+            <span class="breadcrumb__divider" aria-hidden="true">+</span>
           {% endunless %}
 
         {% endfor %}

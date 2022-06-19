@@ -7,7 +7,7 @@
     </div>
   {%- endif -%}
 
-  <div class="grid grid--uniform{% unless section.settings.enable_gutter %} grid--no-gutters{% endunless %}">
+  <div class="new-grid" data-view="6-3">
     {%- liquid
       assign isEmpty = true
       if section.blocks.size > 0
@@ -18,37 +18,14 @@
     {%- for block in section.blocks -%}
       {%- liquid
         assign collection = collections[block.settings.collection]
-        assign background_position = block.settings.focal_point
-
-        case section.settings.per_row
-          when 2
-            assign grid_item_width = 'medium-up--one-half'
-          when 3
-            assign grid_item_width = 'small--one-half medium-up--one-third'
-          when 4
-            assign grid_item_width = 'small--one-half medium-up--one-quarter'
-          when 5
-            assign grid_item_width = 'small--one-half medium-up--one-fifth'
-        endcase
-      -%}
-
-      {%- render 'collection-grid-item',
-        collection: collection,
-        block: block,
-        grid_item_width: grid_item_width,
-        background_position: background_position,
-        per_row: section.settings.per_row
+        render 'collection-grid-item', collection: collection, block: block
       -%}
     {%- endfor -%}
 
     {%- if isEmpty -%}
       <div class="page-width">
-        <div class="grid">
-          <div class="grid__item">
-            <div class="rte">
-              {{ 'home_page.onboarding.no_content' | t }}
-            </div>
-          </div>
+        <div class="rte">
+          {{ 'home_page.onboarding.no_content' | t }}
         </div>
       </div>
     {%- endif -%}
@@ -59,49 +36,48 @@
 {%- if section.settings.divider -%}</div>{%- endif -%}
 
 {% schema %}
-  {
-    "name": "Collection list",
-    "class": "index-section",
-    "max_blocks": 15,
-    "settings": [
-      {
-        "type": "text",
-        "id": "title",
-        "label": "Heading",
-        "default": "Collection list"
-      },
-      {
-        "type": "checkbox",
-        "id": "divider",
-        "label": "Show section divider",
-        "default": false
-      },
-      {
-        "type": "range",
-        "id": "per_row",
-        "label": "Collections per row",
-        "default": 4,
-        "min": 2,
-        "max": 5,
-        "step": 1
-      },
-      {
-        "type": "checkbox",
-        "id": "enable_gutter",
-        "label": "Add spacing",
-        "default": true
-      }
-    ],
-    "presets": [{
-      "name": "Collection list",
-      "category": "Collection",
+{
+  "name": "t:sections.featured-collections.name",
+  "class": "index-section",
+  "max_blocks": 18,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.featured-collections.settings.title.label",
+      "default": "Popular categories"
+    },
+    {
+      "type": "checkbox",
+      "id": "divider",
+      "label": "t:sections.featured-collections.settings.divider.label",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "t:sections.featured-collections.blocks.collection.name",
+      "settings": [
+        {
+          "id": "collection",
+          "type": "collection",
+          "label": "t:sections.featured-collections.blocks.collection.settings.collection.label",
+          "info": "t:sections.featured-collections.blocks.collection.settings.collection.info"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.featured-collections.blocks.collection.settings.title.label",
+          "info": "t:sections.featured-collections.blocks.collection.settings.title.info"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.featured-collections.presets.collection_list.name",
       "blocks": [
-        {
-          "type": "collection"
-        },
-        {
-          "type": "collection"
-        },
         {
           "type": "collection"
         },
@@ -121,69 +97,7 @@
           "type": "collection"
         }
       ]
-    }],
-    "blocks": [
-      {
-        "type": "collection",
-        "name": "Collection",
-        "settings": [
-          {
-            "id": "collection",
-            "type": "collection",
-            "label": "Collection"
-          },
-          {
-            "type": "text",
-            "id": "title",
-            "label": "Title"
-          },
-          {
-            "type": "select",
-            "id": "focal_point",
-            "label": "Focal point",
-            "info": "Used to keep the subject of your photo in view.",
-            "default": "center center",
-            "options": [
-              {
-                "value": "20% 0",
-                "label": "Top left"
-              },
-              {
-                "value": "top center",
-                "label": "Top center"
-              },
-              {
-                "value": "80% 0",
-                "label": "Top right"
-              },
-              {
-                "value": "20% 50%",
-                "label": "Left"
-              },
-              {
-                "value": "center center",
-                "label": "Center"
-              },
-              {
-                "value": "80% 50%",
-                "label": "Right"
-              },
-              {
-                "value": "20% 100%",
-                "label": "Bottom left"
-              },
-              {
-                "value": "bottom center",
-                "label": "Bottom center"
-              },
-              {
-                "value": "80% 100%",
-                "label": "Bottom right"
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  }
+    }
+  ]
+}
 {% endschema %}

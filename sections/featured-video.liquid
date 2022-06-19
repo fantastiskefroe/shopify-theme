@@ -23,33 +23,36 @@
 {%- if section.settings.divider -%}</div>{%- endif -%}
 
 {% schema %}
-  {
-    "name": "Video",
-    "class": "index-section",
-    "settings": [
-      {
-        "type": "text",
-        "id": "title",
-        "label": "Heading"
-      },
-      {
-        "type": "video_url",
-        "id": "video_url",
-        "label": "Video link",
-        "accept": ["youtube", "vimeo"]
-      },
-      {
-        "type": "checkbox",
-        "id": "divider",
-        "label": "Show section divider",
-        "default": false
-      }
-    ],
-    "presets": [
-      {
-        "name": "Video",
-        "category": "Video"
-      }
-    ]
-  }
+{
+  "name": "t:sections.featured-video.name",
+  "class": "index-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.featured-video.settings.title.label"
+    },
+    {
+      "type": "video_url",
+      "id": "video_url",
+      "label": "t:sections.featured-video.settings.video_url.label",
+      "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+      "accept": [
+        "youtube",
+        "vimeo"
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "divider",
+      "label": "t:sections.featured-video.settings.divider.label",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.featured-video.presets.video.name"
+    }
+  ]
+}
 {% endschema %}

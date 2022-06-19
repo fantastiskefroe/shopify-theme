@@ -1,0 +1,44 @@
+<div class="footer__mobile-section">
+  <div class="footer__blocks--mobile">
+    <div class="footer__block--mobile">
+      <div class="footer__title">
+        {{ 'layout.footer.contact_title' | t }}
+      </div>
+
+      <ul class="footer__menu footer__menu--underline">
+        {%- if block.settings.phone != blank -%}
+          <li><a href="tel:{{ block.settings.phone }}">
+            <span class="icon-and-text">
+              <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-phone" viewBox="0 0 64 64"><defs><style>.a{fill:none;stroke:#000;stroke-width:2px}</style></defs><path class="a" d="M18.4 9.65l10.2 10.2-6.32 6.32c2.1 7 6.89 12.46 15.55 15.55l6.32-6.32 10.2 10.2-8.75 8.75C25.71 50.3 13.83 38.21 9.65 18.4z"/></svg>
+              <span>{{ block.settings.phone }}</span>
+            </span>
+          </a></li>
+        {%- endif -%}
+        {%- if block.settings.contact != blank -%}
+          <li><a href="{{ pages[block.settings.contact].url }}">
+            <span class="icon-and-text">
+              <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-email" viewBox="0 0 64 64"><defs><style>.cls-1{fill:none;stroke:#000;stroke-miterlimit:10;stroke-width:2px}</style></defs><path class="cls-1" d="M63 52H1V12h62zM1 12l25.68 24h9.72L63 12M21.82 31.68L1.56 51.16m60.78.78L41.27 31.68"/></svg>
+              <span>{{ 'layout.footer.email_link' | t }}</span>
+            </span>
+          </a></li>
+        {%- endif -%}
+        {%- if block.settings.chat != blank -%}
+          <li><a href="{{ pages[block.settings.chat].url }}">
+            <span class="icon-and-text">
+              <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-chat" viewBox="0 0 64 64"><defs><style>.cls-1{fill:none;stroke:#000;stroke-width:2px}</style></defs><path class="cls-1" d="M13.94 46.62a9 9 0 0 1-9-9V14a9 9 0 0 1 9-9h37.12a9 9 0 0 1 9 9v23.62a9 9 0 0 1-9 9h-1.68V59L36.44 46.62z"/></svg>
+              <span>{{ 'layout.footer.chat_link' | t }}</span>
+            </span>
+          </a></li>
+        {%- endif -%}
+      </ul>
+    </div>
+    {%- if block.settings.enable_social -%}
+      <div class="footer__block--mobile">
+        <div class="footer__title">
+          {{ 'layout.footer.social_title' | t }}
+        </div>
+        {% render 'social-icons', additional_classes: 'footer__social' %}
+      </div>
+    {%- endif -%}
+  </div>
+</div>

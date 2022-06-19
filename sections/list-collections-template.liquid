@@ -1,20 +1,6 @@
-{%- liquid
-  case section.settings.grid
-    when '1'
-      assign grid_item_width = ''
-    when '2'
-      assign grid_item_width = 'medium-up--one-half'
-    when '3'
-      assign grid_item_width = 'small--one-half medium-up--one-third'
-    when '4'
-      assign grid_item_width = 'small--one-half medium-up--one-quarter'
-    when '5'
-      assign grid_item_width = 'small--one-half medium-up--one-fifth'
-  endcase -%
--%}
-<div class="page-width page-content">
+{%- paginate collections by 20 -%}
 
-  {%- render 'breadcrumbs' -%}
+<div class="page-width page-content">
 
   {%- if section.settings.title_enable -%}
     <header class="section-header">
@@ -22,7 +8,7 @@
     </header>
   {%- endif -%}
 
-  <div class="grid grid--uniform{% unless settings.collection_grid_gutter %} grid--no-gutters{% endunless %}">
+  <div class="new-grid" data-view="xsmall">
     {%- if section.settings.display_type == 'all' -%}
       {%- liquid
         case section.settings.sort
@@ -34,126 +20,105 @@
       -%}
       {%- if section.settings.sort == 'products_low' or section.settings.sort == 'date' or section.settings.sort == 'alphabetical' -%}
         {%- for collection in collections -%}
-          {%- render 'collection-grid-item', collection: collection, grid_item_width: grid_item_width -%}
+          {%- render 'collection-grid-item', collection: collection -%}
         {%- endfor -%}
       {%- else -%}
         {%- for collection in collections reversed -%}
-          {%- render 'collection-grid-item', collection: collection, grid_item_width: grid_item_width -%}
+          {%- render 'collection-grid-item', collection: collection -%}
         {%- endfor -%}
       {%- endif -%}
     {%- else -%}
       {%- for block in section.blocks -%}
         {%- assign collection = collections[block.settings.collection] -%}
-        {%- render 'collection-grid-item', collection: collection, grid_item_width: grid_item_width -%}
+        {%- render 'collection-grid-item', collection: collection, block: block -%}
       {%- endfor -%}
     {%- endif -%}
   </div>
+
+  {%- if paginate.pages > 1 and section.settings.display_type == 'all' -%}
+    {%- render 'pagination', paginate: paginate -%}
+  {%- endif -%}
 </div>
 
+{%- endpaginate -%}
+
 {% schema %}
-  {
-    "name": "Collections list page",
-    "settings": [
-      {
-        "type": "checkbox",
-        "id": "title_enable",
-        "label": "Show title",
-        "default": true
-      },
-      {
-        "type": "paragraph",
-        "content": "All of your collections are listed by default. To customize your list, choose 'Selected' and add collections."
-      },
-      {
-        "type": "radio",
-        "id": "display_type",
-        "label": "Select collections to show",
-        "default": "all",
-        "options": [
-          {
-            "value": "all",
-            "label": "All"
-          },
-          {
-            "value": "selected",
-            "label": "Selected"
-          }
-        ]
-      },
-      {
-        "type": "select",
-        "id": "sort",
-        "label": "Sort collections by:",
-        "info": "Sorting only applies when 'All' is selected",
-        "default": "alphabetical",
-        "options": [
-          {
-            "value": "products_high",
-            "label": "Product count, high to low"
-          },
-          {
-            "value": "products_low",
-            "label": "Product count, low to high"
-          },
-          {
-            "value": "alphabetical",
-            "label": "Alphabetically, A-Z"
-          },
-          {
-            "value": "alphabetical_reversed",
-            "label": "Alphabetically, Z-A"
-          },
-          {
-            "value": "date",
-            "label": "Date, old to new"
-          },
-          {
-            "value": "date_reversed",
-            "label": "Date, new to old"
-          }
-        ]
-      },
-      {
-        "type": "select",
-        "id": "grid",
-        "label": "Collections per row",
-        "default": "3",
-        "options": [
-          {
-            "value": "1",
-            "label": "1"
-          },
-          {
-            "value": "2",
-            "label": "2"
-          },
-          {
-            "value": "3",
-            "label": "3"
-          },
-          {
-            "value": "4",
-            "label": "4"
-          },
-          {
-            "value": "5",
-            "label": "5"
-          }
-        ]
-      }
-    ],
-    "blocks": [
-      {
-        "type": "collection",
-        "name": "Collection",
-        "settings": [
-          {
-            "label": "Collection",
-            "id": "collection",
-            "type": "collection"
-          }
-        ]
-      }
-    ]
-  }
+{
+  "name": "t:sections.list-collections-template.name",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "title_enable",
+      "label": "t:sections.list-collections-template.settings.title_enable.label",
+      "default": true
+    },
+    {
+      "type": "paragraph",
+      "content": "t:sections.list-collections-template.settings.content"
+    },
+    {
+      "type": "radio",
+      "id": "display_type",
+      "label": "t:sections.list-collections-template.settings.display_type.label",
+      "default": "all",
+      "options": [
+        {
+          "value": "all",
+          "label": "t:sections.list-collections-template.settings.display_type.options.all.label"
+        },
+        {
+          "value": "selected",
+          "label": "t:sections.list-collections-template.settings.display_type.options.selected.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "sort",
+      "label": "t:sections.list-collections-template.settings.sort.label",
+      "info": "t:sections.list-collections-template.settings.sort.info",
+      "default": "alphabetical",
+      "options": [
+        {
+          "value": "products_high",
+          "label": "t:sections.list-collections-template.settings.sort.options.products_high.label"
+        },
+        {
+          "value": "products_low",
+          "label": "t:sections.list-collections-template.settings.sort.options.products_low.label"
+        },
+        {
+          "value": "alphabetical",
+          "label": "t:sections.list-collections-template.settings.sort.options.alphabetical.label"
+        },
+        {
+          "value": "alphabetical_reversed",
+          "label": "t:sections.list-collections-template.settings.sort.options.alphabetical_reversed.label"
+        },
+        {
+          "value": "date",
+          "label": "t:sections.list-collections-template.settings.sort.options.date.label"
+        },
+        {
+          "value": "date_reversed",
+          "label": "t:sections.list-collections-template.settings.sort.options.date_reversed.label"
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "t:sections.list-collections-template.blocks.collection.name",
+      "limit": 15,
+      "settings": [
+        {
+          "label": "t:sections.list-collections-template.blocks.collection.settings.collection.label",
+          "id": "collection",
+          "type": "collection"
+        }
+      ]
+    }
+  ]
+}
 {% endschema %}

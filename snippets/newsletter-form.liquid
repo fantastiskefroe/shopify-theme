@@ -16,7 +16,7 @@
     <div class="input-group newsletter__input-group">
       <input type="email" value="{% if customer %}{{ customer.email }}{% endif %}" placeholder="{{ 'general.newsletter_form.newsletter_email' | t }}" name="contact[email]" id="Email-{{ section_id }}" class="input-group-field newsletter__input" autocorrect="off" autocapitalize="off">
       <div class="input-group-btn">
-        <button type="submit" class="btn" name="commit">
+        <button type="submit" class="btn" name="commit" aria-label="{{ 'general.newsletter_form.submit' | t }}">
           <span class="form__submit--large">{{ 'general.newsletter_form.submit' | t }}</span>
           <span class="form__submit--small">
             <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon--wide icon-arrow-right" viewBox="0 0 50 15"><path d="M0 9.63V5.38h35V0l15 7.5L35 15V9.63z"/></svg>

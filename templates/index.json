@@ -1,0 +1,381 @@
+{
+  "sections": {
+    "slideshow-split": {
+      "type": "slideshow-split",
+      "blocks": {
+        "slideshow-split-0": {
+          "type": "slide",
+          "settings": {
+            "top_subheading": "",
+            "title": "100% Økologi\n110% Haveglæde",
+            "title_size": 46,
+            "subheading": "Velkommen til FantastiskeFrø!\nI vores lille frøbutik finder du fantastiske frø og havetilbehør med fokus på bæredygtighed og haveglæde. Alle vores frø er økologiske, og håndpakket af os i midtjylland.",
+            "link": "shopify:\/\/collections\/fro",
+            "link_text": "Se vores frø",
+            "link_2": "shopify:\/\/collections\/tilbehor",
+            "link_text_2": "Se tilbehør",
+            "text_position": "right",
+            "image": "shopify:\/\/shop_images\/Cover-129.jpg",
+            "indent_image": false,
+            "focal_point": "center center",
+            "color_scheme": "1"
+          }
+        },
+        "slideshow-split-1": {
+          "type": "slide",
+          "disabled": true,
+          "settings": {
+            "top_subheading": "",
+            "title": "Side by Side Slide",
+            "title_size": 60,
+            "subheading": "Add optional subtext",
+            "link": "",
+            "link_text": "Optional button",
+            "link_2": "",
+            "link_text_2": "",
+            "text_position": "left",
+            "indent_image": false,
+            "focal_point": "center center",
+            "color_scheme": "2"
+          }
+        }
+      },
+      "block_order": [
+        "slideshow-split-0",
+        "slideshow-split-1"
+      ],
+      "settings": {
+        "full_width": true,
+        "height": 600,
+        "height_mobile": 450,
+        "style": "arrows",
+        "autoplay": true,
+        "autoplay_speed": 7
+      }
+    },
+    "featured-collections": {
+      "type": "featured-collections",
+      "blocks": {
+        "featured-collections-0": {
+          "type": "collection",
+          "settings": {
+            "collection": "urter",
+            "title": ""
+          }
+        },
+        "featured-collections-1": {
+          "type": "collection",
+          "settings": {
+            "collection": "blomsterfro",
+            "title": ""
+          }
+        },
+        "featured-collections-2": {
+          "type": "collection",
+          "settings": {
+            "collection": "grontsager",
+            "title": ""
+          }
+        },
+        "featured-collections-3": {
+          "type": "collection",
+          "settings": {
+            "collection": "mikrogront",
+            "title": ""
+          }
+        },
+        "2472afa1-73e1-443c-a4a9-2994249b7335": {
+          "type": "collection",
+          "settings": {
+            "collection": "forspiring",
+            "title": ""
+          }
+        },
+        "89c36af6-eb8b-485c-b767-96611a430f0c": {
+          "type": "collection",
+          "settings": {
+            "collection": "tilbehor",
+            "title": ""
+          }
+        }
+      },
+      "block_order": [
+        "featured-collections-0",
+        "featured-collections-1",
+        "featured-collections-2",
+        "featured-collections-3",
+        "2472afa1-73e1-443c-a4a9-2994249b7335",
+        "89c36af6-eb8b-485c-b767-96611a430f0c"
+      ],
+      "settings": {
+        "title": "",
+        "divider": false
+      }
+    },
+    "promo-grid": {
+      "type": "promo-grid",
+      "disabled": true,
+      "blocks": {
+        "promo-grid-1": {
+          "type": "sale_collection",
+          "settings": {
+            "sale_collection": "",
+            "top_text": "Up to",
+            "middle_text": "50% off",
+            "bottom_text": "Select products",
+            "width": "50",
+            "color_scheme": "3"
+          }
+        },
+        "promo-grid-2": {
+          "type": "sale_collection",
+          "settings": {
+            "sale_collection": "",
+            "top_text": "Up to",
+            "middle_text": "50% off",
+            "bottom_text": "Select products",
+            "width": "50",
+            "color_scheme": "3"
+          }
+        }
+      },
+      "block_order": [
+        "promo-grid-1",
+        "promo-grid-2"
+      ],
+      "settings": {
+        "full_width": false,
+        "gutter_size": 20,
+        "space_above": false,
+        "space_below": false
+      }
+    },
+    "featured-collection": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "Det kan du så i juni",
+        "home_featured_products": "juni",
+        "count": 5,
+        "mobile_scrollable": true,
+        "view_all": true,
+        "divider": false
+      }
+    },
+    "16552958096976c2a9": {
+      "type": "hero-video",
+      "settings": {
+        "full_width": true,
+        "title": "Få en gratis pose 'BiBuffet'",
+        "title_size": 70,
+        "subheading": "Hjælp os med at give bedre betingelser for vores bier, sommerfugle og andre små hjælpere, ved at en gratis blomsterblanding i et hjørne af din have. Den første pose 'BiBuffet' du ligger i kurven er gratis.",
+        "link_text": "Ja tak!",
+        "link": "shopify:\/\/products\/bibuffet",
+        "color_accent": "#ffffff",
+        "text_align": "vertical-center horizontal-center",
+        "video_url": "https:\/\/youtu.be\/9GzHHMntSxY",
+        "overlay_opacity": 20,
+        "height": 600,
+        "height_mobile": 300
+      }
+    },
+    "featured-collection2": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "Nyt i butikken",
+        "home_featured_products": "nyt-i-butikken",
+        "count": 5,
+        "mobile_scrollable": false,
+        "view_all": true,
+        "divider": false
+      }
+    },
+    "1655297228e49cfbcf": {
+      "type": "text-with-icons",
+      "blocks": {
+        "1655297228ab5bd4e7-0": {
+          "type": "text_block",
+          "settings": {
+            "icon": "package",
+            "title": "CO2 Neutral levering",
+            "text": "<p>Alle pakker til Danmark bliver sendt med CO2-neutral forsendelse gennem PostNord. Du kan læse mere om hvad der ligger bag under <a href=\"https:\/\/fantastiskefroe.dk\/pages\/levering\" title=\"https:\/\/fantastiskefroe.dk\/pages\/levering\">levering<\/a>.<\/p>"
+          }
+        },
+        "1655297228ab5bd4e7-1": {
+          "type": "text_block",
+          "settings": {
+            "icon": "store",
+            "title": "Lokal afhentning",
+            "text": "<p>Du har altid mulighed for at spare leveringsgebyr ved at afhente din ordre hos os. Vi ligger til Nårup, på hovedvejen mellem Århus og Viborg.<\/p>"
+          }
+        },
+        "1655297228ab5bd4e7-2": {
+          "type": "text_block",
+          "settings": {
+            "icon": "recycle",
+            "title": "Grøn emballage",
+            "text": "<p>Vi arbejder løbende med at gøre vores emballage miljøvenlig - blandt andet ved at bruge bæredygtige materialer og undgå overforbrug og spild.<\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "1655297228ab5bd4e7-0",
+        "1655297228ab5bd4e7-1",
+        "1655297228ab5bd4e7-2"
+      ],
+      "settings": {
+        "title": "",
+        "align_text": "center",
+        "desktop_columns_per_row": 3,
+        "icon_color": "#000000",
+        "button_label": "",
+        "button_link": "",
+        "divider": false
+      }
+    },
+    "promo-grid2": {
+      "type": "promo-grid",
+      "disabled": true,
+      "blocks": {
+        "promo-grid-2-0": {
+          "type": "banner",
+          "settings": {
+            "heading": "Banner promotion",
+            "text": "Add the details of your promotion in smaller text",
+            "link": "",
+            "label": "Shop now",
+            "color_scheme": "2"
+          }
+        },
+        "promo-grid-2-1": {
+          "type": "product",
+          "settings": {
+            "product": "",
+            "subheading": "",
+            "heading": "Announce your product",
+            "textarea": "Include text explaining your featured product.",
+            "link_label": "Shop",
+            "label": "New",
+            "enable_price": true,
+            "width": "50",
+            "color_scheme": "1"
+          }
+        },
+        "promo-grid-2-2": {
+          "type": "product",
+          "settings": {
+            "product": "",
+            "subheading": "",
+            "heading": "Announce your product",
+            "textarea": "Include text explaining your featured product.",
+            "link_label": "Shop",
+            "label": "New",
+            "enable_price": true,
+            "width": "50",
+            "color_scheme": "1"
+          }
+        }
+      },
+      "block_order": [
+        "promo-grid-2-0",
+        "promo-grid-2-1",
+        "promo-grid-2-2"
+      ],
+      "settings": {
+        "full_width": false,
+        "gutter_size": 20,
+        "space_above": false,
+        "space_below": false
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "disabled": true,
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {
+            "title": "Få 10% rabat på frø"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.<\/p>"
+          }
+        },
+        "form": {
+          "type": "form",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "title",
+        "text",
+        "form"
+      ],
+      "settings": {
+        "color_scheme": "2"
+      }
+    },
+    "slideshow-split2": {
+      "type": "slideshow-split",
+      "blocks": {
+        "slideshow-split2-0": {
+          "type": "slide",
+          "settings": {
+            "top_subheading": "Laura Grubbe",
+            "title": "Økologi & Bæredygtighed",
+            "title_size": 45,
+            "subheading": "Jeg startede FantastiskeFrø i marts 2020, med et ønske om at arbejde med det jeg brænder for: frø og bæredygtighed. Jeg har skrevet lidt om mine tanker bag, samt hvem vi er her på vores lille frø-kontor.",
+            "link": "",
+            "link_text": "Læs mere om FantastiskeFrø",
+            "link_2": "",
+            "link_text_2": "",
+            "text_position": "left",
+            "image": "shopify:\/\/shop_images\/froposer_1.jpg",
+            "indent_image": false,
+            "focal_point": "top center",
+            "color_scheme": "1"
+          }
+        }
+      },
+      "block_order": [
+        "slideshow-split2-0"
+      ],
+      "settings": {
+        "full_width": true,
+        "height": 550,
+        "height_mobile": 450,
+        "style": "arrows",
+        "autoplay": true,
+        "autoplay_speed": 7
+      }
+    },
+    "blog-posts": {
+      "type": "blog-posts",
+      "settings": {
+        "title": "From the journal",
+        "blog": "news",
+        "blog_show_tags": true,
+        "blog_show_date": false,
+        "blog_show_comments": false,
+        "blog_show_author": false,
+        "blog_image_size": "wide",
+        "divider": false
+      }
+    }
+  },
+  "order": [
+    "slideshow-split",
+    "featured-collections",
+    "promo-grid",
+    "featured-collection",
+    "16552958096976c2a9",
+    "featured-collection2",
+    "1655297228e49cfbcf",
+    "promo-grid2",
+    "newsletter",
+    "slideshow-split2",
+    "blog-posts"
+  ]
+}

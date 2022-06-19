@@ -1,12 +1,13 @@
-<div class="variant-wrapper variant-wrapper--{{ settings.variant_type }} js">
-  <label class="variant__label{% if option.name == 'Default' or option.name == 'Title' %} hidden-label{% endif %}{% unless settings.variant_labels_enable %} hidden-label{% endunless %}"
-    for="SingleOptionSelector-{{ section_id }}-option-{{ forloop.index0 }}">
+<div class="variant-wrapper variant-wrapper--dropdown js" data-type="dropdown">
+  <label class="variant__label{% if option.name == 'Default' or option.name == 'Title' %} hidden-label{% endif %}{% unless variant_labels %} hidden-label{% endunless %}"
+    for="SingleOptionSelector-{{ section_id }}-{{ product.id }}-option-{{ forloop.index0 }}">
     {{ option.name }}
   </label>
   <div class="variant-input-wrap" data-index="option{{ forloop.index }}" data-handle="{{ option.name | handleize }}">
     <select
-      class="variant__input-{{ section_id }}"
-      id="SingleOptionSelector-{{ section_id }}-option-{{ forloop.index0 }}"
+      form="{{ form_id }}"
+      data-variant-input
+      id="SingleOptionSelector-{{ section_id }}-{{ product.id }}-option-{{ forloop.index0 }}"
       data-index="option{{ forloop.index }}">
       {%- for value in option.values -%}
         {%- liquid

@@ -8,19 +8,15 @@
 
     {%- style -%}
     .header-item--logo,
-    .header-layout--left-center .header-item--logo,
-    .header-layout--left-center .header-item--icons {
-      -webkit-box-flex: 0 1 {{ block.settings.mobile_logo_width }}px;
-      -ms-flex: 0 1 {{ block.settings.mobile_logo_width }}px;
+    [data-layout="left-center"] .header-item--logo,
+    [data-layout="left-center"] .header-item--icons {
       flex: 0 1 {{ block.settings.mobile_logo_width }}px;
     }
 
     @media only screen and (min-width: 769px) {
       .header-item--logo,
-      .header-layout--left-center .header-item--logo,
-      .header-layout--left-center .header-item--icons {
-        -webkit-box-flex: 0 0 {{ block.settings.desktop_logo_width }}px;
-        -ms-flex: 0 0 {{ block.settings.desktop_logo_width }}px;
+      [data-layout="left-center"] .header-item--logo,
+      [data-layout="left-center"] .header-item--icons {
         flex: 0 0 {{ block.settings.desktop_logo_width }}px;
       }
     }
@@ -43,33 +39,39 @@
     {%- endstyle -%}
 
     {%- if template == 'index' -%}
-      <h1 class="site-header__logo" itemscope itemtype="http://schema.org/Organization">
-        <span class="visually-hidden">{{ shop.name }}</span>
+      <h1 class="site-header__logo" {{ block.shopify_attributes }}>
     {%- else -%}
-      <div class="h1 site-header__logo" itemscope itemtype="http://schema.org/Organization">
+      <div class="h1 site-header__logo" {{ block.shopify_attributes }}>
     {%- endif -%}
 
     {%- if block.settings.logo -%}
+      <span class="visually-hidden">{{ shop.name }}</span>
       {% comment %}
         .logo--has-inverted is only applied to the default logo if the inverted logo exists. That way it'll only be hidden on the slider when it has a backup.
       {% endcomment %}
       <a
         href="{{ routes.root_url }}"
-        itemprop="url"
         class="site-header__logo-link{% if block.settings.logo-inverted %} logo--has-inverted{% endif %}">
-        {%- render 'header-logo-svg' -%}
+        <img
+          class="small--hide"
+          src="{{ block.settings.logo | img_url: header_logo_size }}"
+          srcset="{{ block.settings.logo | img_url: header_logo_size }} 1x, {{ block.settings.logo | img_url: header_logo_size, scale: 2 }} 2x"
+          alt="{{ block.settings.logo.alt | default: shop.name }}">
+        <img
+          class="medium-up--hide"
+          src="{{ block.settings.logo | img_url: header_logo_size_mobile }}"
+          srcset="{{ block.settings.logo | img_url: header_logo_size_mobile }} 1x, {{ block.settings.logo | img_url: header_logo_size_mobile, scale: 2 }} 2x"
+          alt="{{ block.settings.logo.alt | default: shop.name }}">
       </a>
       {%- if block.settings.logo-inverted -%}
         <a
           href="{{ routes.root_url }}"
-          itemprop="url"
           class="site-header__logo-link logo--inverted">
           <img
             class="small--hide"
             src="{{ block.settings.logo-inverted | img_url: header_logo_size }}"
             srcset="{{ block.settings.logo-inverted | img_url: header_logo_size }} 1x, {{ block.settings.logo-inverted | img_url: header_logo_size, scale: 2 }} 2x"
-            alt="{{ block.settings.logo-inverted.alt | default: shop.name }}"
-            itemprop="logo">
+            alt="{{ block.settings.logo-inverted.alt | default: shop.name }}">
           <img
             class="medium-up--hide"
             src="{{ block.settings.logo-inverted | img_url: header_logo_size_mobile }}"
@@ -78,7 +80,7 @@
         </a>
       {%- endif -%}
     {%- else -%}
-      <a href="{{ routes.root_url }}" itemprop="url">{{ shop.name }}</a>
+      <a href="{{ routes.root_url }}">{{ shop.name }}</a>
     {%- endif -%}
     {%- if template == 'index' -%}
       </h1>
@@ -97,11 +99,11 @@
     }
   {%- endstyle -%}
   {%- if template == 'index' -%}
-    <h1 class="site-header__logo" itemscope itemtype="http://schema.org/Organization">
+    <h1 class="site-header__logo">
   {%- else -%}
-    <div class="h1 site-header__logo" itemscope itemtype="http://schema.org/Organization">
+    <div class="h1 site-header__logo">
   {%- endif -%}
-  <a href="{{ routes.root_url }}" itemprop="url" class="site-header__logo-link">
+  <a href="{{ routes.root_url }}" class="site-header__logo-link">
     {{ shop.name }}
   </a>
   {%- if template == 'index' -%}

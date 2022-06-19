@@ -2,6 +2,14 @@
 
 {%- if section.settings.enable -%}
   {%- if section.settings.collection_image_enable and collection.image -%}
+    {% style %}
+      @media screen and (min-width: 769px) {
+        .collection-content {
+          border: 0;
+          margin-top: 0;
+        }
+      }
+    {% endstyle %}
     <div
       id="CollectionHeaderSection"
       data-section-id="{{ section.id }}"
@@ -10,7 +18,7 @@
 
       {%- assign img_url = collection.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
 
-      <div class="collection-hero">
+      <div class="collection-hero loading">
 
         {%- if section.settings.parallax -%}
           <div class="parallax-container">
@@ -21,7 +29,7 @@
             src=""
             data-src="{{ img_url }}"
             data-aspectratio="{{ collection.image.aspect_ratio }}"
-            data-widths="[720, 900, 1080, 1800, 2400]"
+            data-widths="[420, 620, 720, 900, 1080, 1800, 2400]"
             data-sizes="auto"
             alt="{{ collection.image.alt | escape }}">
 
@@ -38,18 +46,21 @@
 
         <div class="collection-hero__content">
           <div class="page-width">
-            <header class="section-header section-header--hero">
-              <div class="section-header__shadow">
-                {%- render 'breadcrumbs' -%}
-                <h1 class="section-header__title">
-                  {{ collection.title }}
-                </h1>
-              </div>
+            <header class="section-header section-header--flush">
+              {%- render 'breadcrumbs' -%}
+              <h1 class="section-header__title">
+                {{ collection.title }}
+              </h1>
             </header>
           </div>
         </div>
       </div>
     </div>
+
+    <div class="page-width medium-up--hide" data-collection-count style="padding-top: 15px;">
+      {{ 'collections.general.items_with_count' | t: count: collection.products_count }}
+    </div>
+
   {%- else -%}
     {%- assign disable_sticky_header = true -%}
     <div class="page-width page-content page-content--top">
@@ -58,6 +69,7 @@
         <h1 class="section-header__title">
           {{ collection.title }}
         </h1>
+        <p class="medium-up--hide" data-collection-count>{{ 'collections.general.items_with_count' | t: count: collection.products_count }}</p>
       </header>
     </div>
   {%- endif -%}
@@ -77,27 +89,26 @@
 {%- endif -%}
 
 {% schema %}
-  {
-    "name": "Collection header",
-    "settings": [
-      {
-        "type": "checkbox",
-        "id": "enable",
-        "label": "Enable header",
-        "default": true
-      },
-      {
-        "type": "checkbox",
-        "id": "collection_image_enable",
-        "label": "Show collection image",
-        "default": true
-      },
-      {
-        "type": "checkbox",
-        "id": "parallax",
-        "label": "Parallax image",
-        "default": true
-      }
-    ]
-  }
+{
+  "name": "t:sections.collection-header.name",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable",
+      "label": "t:sections.collection-header.settings.enable.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "collection_image_enable",
+      "label": "t:sections.collection-header.settings.collection_image_enable.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "parallax",
+      "label": "t:sections.collection-header.settings.parallax.label"
+    }
+  ]
+}
 {% endschema %}

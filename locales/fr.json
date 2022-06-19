@@ -26,7 +26,7 @@
       "signup_form_email_label": "Courriel",
       "signup_form_success": "Nous vous ferons parvenir un courriel juste avant l'ouverture!",
       "admin_link_html": "Êtes-vous le propriétaire de la boutique? <a href=\"\/admin\" class=\"text-link\">Connectez-vous ici<\/a>.",
-      "password_link": "Entrer avec un mot de passe",
+      "password_link": "Mot de passe",
       "powered_by_shopify_html": "Cette boutique sera propulsée par {{ shopify }}"
     },
     "breadcrumbs": {
@@ -34,6 +34,7 @@
       "home_link_title": "Retour à la page d'accueil"
     },
     "social": {
+      "share_this": "Partager",
       "share_on_facebook": "Partager",
       "share_on_twitter": "Tweeter",
       "share_on_pinterest": "Épingler",
@@ -56,8 +57,10 @@
       "no_results_html": "Votre recherche pour \"{{ terms }}\" n'a pas généré de résultats.",
       "results_for_html": "Votre recherche pour \"{{ terms }}\" a généré les résultats suivants:",
       "title": "Rechercher",
-      "placeholder": "Rechercher dans la boutique",
+      "placeholder": "Rechercher...",
       "submit": "Recherche",
+      "cancel": "Annuler",
+      "search_title": "Les plus recherchés",
       "result_count": {
         "one": "{{ count }} résultat",
         "other": "{{ count }} résultats"
@@ -94,6 +97,11 @@
       "view_all": "Voir toutes",
       "tags": "Tags",
       "read_more": "Plus",
+      "featured_product": "Produit en vedette",
+      "popular_posts": "Articles populaires",
+      "latest_posts": "Derniers articles",
+      "explore_more": "Explore plus",
+      "more_from": "Plus de",
       "back_to_blog": "Retour à {{ title }}"
     },
     "comments": {
@@ -115,20 +123,22 @@
     "general": {
       "title": "Panier",
       "remove": "Retirer",
-      "note": "Instructions spéciales pour la commande",
+      "note": "Ajouter des instructions de commande spéciales",
       "subtotal": "Sous-total",
       "discounts": "Réductions",
+      "savings_html": "Épargnez {{ saved_amount }}",
       "shipping_at_checkout": "Les codes promo, les frais d'envoi et les taxes seront ajoutés à la caisse.",
       "update": "Mettre à jour",
       "checkout": "Procéder au paiement",
       "empty": "Votre panier est vide.",
-      "continue_browsing_html": "<a href='{{ url }}'>Retourner au magasinage<\/a>.",
+      "continue_shopping": "Continuer vos achats",
       "close_cart": "Fermer le panier",
       "reduce_quantity": "Réduire la quantité de l'article de un",
       "increase_quantity": "Augmenter la quantité de l'article de un",
       "terms": "Je suis d'accord avec les termes et conditions",
       "terms_html": "Je suis d'accord avec les <a href='{{ url }}' target='_blank'>termes et conditions<\/a>",
-      "terms_confirm": "Vous devez accepter les termes et conditions de vente pour vérifier"
+      "terms_confirm": "Vous devez accepter les termes et conditions de vente pour vérifier",
+      "recommended_title": "Bien avec"
     },
     "label": {
       "price": "Prix",
@@ -144,6 +154,9 @@
       "see_more": "Afficher plus",
       "see_less": "Voir moins",
       "no_matches": "Aucun produit ne correspond à votre recherche.",
+      "large": "Grande",
+      "small": "Petit",
+      "list": "Lister",
       "items_with_count": {
         "one": "{{ count }} item",
         "other": "{{ count }} items"
@@ -289,22 +302,34 @@
       "create_account": "Créer un compte"
     },
     "footer": {
+      "accepted_payments": "Nous acceptons",
+      "contact_title": "Entrer en contact",
+      "chat_link": "Chat en direct",
+      "email_link": "Envoyez-nous un email",
+      "social_title": "Suivez nous",
       "social_platform": "{{ name }} sur {{ platform }}"
     }
   },
   "products": {
     "general": {
       "color_swatch_trigger": "Couleur",
+      "size_trigger": "Taille",
+      "size_chart": "Tableau des tailles",
       "save_html": "Épargnez {{ saved_amount }}",
       "collection_return": "Retour à {{ collection }}",
       "next_product": "Suivant: {{ title }}",
       "sale": "Réduit",
       "sale_price": "Prix réduit",
       "regular_price": "Prix régulier",
-      "from_text_html": "À partir de {{ price }}",
-      "recent_products": "Vu récemment"
+      "from_text_html": "<span>À partir de<\/span> {{ price }}",
+      "quick_shop": "Boutique rapide",
+      "more_from_html": "Plus de {{ link }}",
+      "recent_products": "Vu récemment",
+      "reviews": "Commentaires"
     },
     "product": {
+      "description": "Description",
+      "in_stock_label": "En stock",
       "stock_label": "{{ count }} en stock",
       "sold_out": "Épuisé",
       "unavailable": "Non disponible",

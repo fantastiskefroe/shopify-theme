@@ -1,15 +1,15 @@
 {%- assign show_announcement = false -%}
 {%- assign announcement_block_count = 0 -%}
-{% for block in section.blocks %}
+{%- for block in section.blocks -%}
   {%- if block.type == 'announcement' -%}
     {%- assign show_announcement = true -%}
     {%- assign announcement_block_count = announcement_block_count | plus: 1 -%}
   {%- endif -%}
-{% endfor %}
+{%- endfor -%}
 
 {% if show_announcement %}
-  <div class="announcement-bar">
-    <div class="page-width">
+  <div class="toolbar__item toolbar__item--announcements">
+    <div class="announcement-bar{% if section.settings.announcement_center %} text-center{% endif %}">
       <div class="slideshow-wrapper">
         <button type="button" class="visually-hidden slideshow__pause" data-id="{{ section.id }}" aria-live="polite">
           <span class="slideshow__pause-stop">
@@ -25,28 +25,27 @@
         <div
           id="AnnouncementSlider"
           class="announcement-slider"
-          data-compact="{{ section.settings.announcement_compact }}"
           data-block-count="{{ announcement_block_count }}">
           {%- assign slide_index = 0 -%}
           {%- for block in section.blocks -%}
             {%- if block.type == 'announcement' -%}
               <div
                 id="AnnouncementSlide-{{ block.id }}"
-                class="announcement-slider__slide"
+                class="slideshow__slide announcement-slider__slide"
                 data-index="{{ slide_index }}"
                 {{ block.shopify_attributes }}>
-                {%- if block.settings.link != blank -%}
-                  <a class="announcement-link" href="{{ block.settings.link }}">
-                {%- endif -%}
-                  {%- if block.settings.text != blank -%}
-                    <span class="announcement-text">{{ block.settings.text }}</span>
+                <div class="announcement-slider__content">
+                  {%- if block.settings.richtext_mobile != blank -%}
+                    <div class="medium-up--hide">
+                      {{ block.settings.richtext_mobile }}
+                    </div>
+                    <div class="small--hide">
+                      {{ block.settings.richtext }}
+                    </div>
+                  {%- else -%}
+                    {{ block.settings.richtext }}
                   {%- endif -%}
-                  {%- if block.settings.link_text != blank -%}
-                    <span class="announcement-link-text">{{ block.settings.link_text }}</span>
-                  {%- endif -%}
-                {%- if block.settings.link != blank -%}
-                  </a>
-                {%- endif -%}
+                </div>
               </div>
               {%- assign slide_index = slide_index | plus: 1 -%}
             {%- endif -%}
@@ -55,5 +54,4 @@
       </div>
     </div>
   </div>
-
 {% endif %}

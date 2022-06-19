@@ -3,8 +3,6 @@
 {%- assign base_font_bold = base_font | font_modify: 'weight', '600' -%}
 {%- assign base_font_italic = base_font | font_modify: 'style', 'italic' -%}
 {%- assign base_font_bold_italic = base_font_bold | font_modify: 'style', 'italic' -%}
-{%- assign paragraph_font = settings.type_paragraph_font_family -%}
-
 
 {%- style -%}
   {{ header_font | font_face: font_display: 'swap' }}
@@ -13,7 +11,4 @@
   {{ base_font_bold | font_face: font_display: 'swap' }}
   {{ base_font_italic | font_face: font_display: 'swap' }}
   {{ base_font_bold_italic | font_face: font_display: 'swap' }}
-
-  {{ paragraph_font | font_face: font_display: 'swap' }}
-
 {%- endstyle -%}

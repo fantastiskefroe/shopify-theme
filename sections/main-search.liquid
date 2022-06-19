@@ -1,0 +1,127 @@
+<div class="search-content" data-section-id="{{ section.id }}" data-section-type="collection-template" data-collection-template="true">
+  <div class="page-width page-content">
+    {%- render 'breadcrumbs' -%}
+
+    <header class="section-header">
+      <h1 class="section-header__title">
+        {{ 'general.search.title' | t }}
+      </h1>
+      <p class="medium-up--hide" data-collection-count>
+        {{ 'general.search.result_count' | t: count: search.results_count }}
+      </p>
+    </header>
+
+
+
+    <form action="{{ routes.search_url }}" method="get" class="input-group search-bar search-bar--page" role="search">
+      <input type="hidden" name="type" value="{{ settings.search_type }}">
+      <input type="hidden" name="options[prefix]" value="last">
+      <input type="search" name="q" value="{{ search.terms | escape | replace: '*', '' }}" placeholder="{{ 'general.search.placeholder' | t }}" class="input-group-field" aria-label="{{ 'general.search.placeholder' | t }}">
+      <div class="input-group-btn">
+        <button type="submit" class="btn btn--large btn--icon">
+          <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-search" viewBox="0 0 64 64"><defs><style>.cls-1{fill:none;stroke:#000;stroke-miterlimit:10;stroke-width:2px}</style></defs><path class="cls-1" d="M47.16 28.58A18.58 18.58 0 1 1 28.58 10a18.58 18.58 0 0 1 18.58 18.58zM54 54L41.94 42"/></svg>
+          <span class="icon__fallback-text">{{ 'general.search.submit' | t }}</span>
+        </button>
+      </div>
+    </form>
+
+    {%- if search.performed -%}
+      {%- if search.results_count == 0 -%}
+        <div class="section-header">
+            <p>{{ 'general.search.no_results_html' | t: terms: search.terms | replace: '*', '' }}</p>
+        </div>
+      {%- else -%}
+        <div id="CollectionAjaxContent" class="grid collection-content">
+          <div class="grid__item medium-up--one-fifth grid__item--sidebar">
+            {%- render 'collection-grid-filters',
+              collection: search,
+              enable_sidebar: section.settings.enable_sidebar,
+              enable_color_swatches: section.settings.enable_color_swatches,
+              tags_combine: section.settings.tags_combine,
+              enable_sort: section.settings.enable_sort,
+              collapse_filters: section.settings.collapse_filters
+            -%}
+          </div>
+          <div class="grid__item medium-up--four-fifths grid__item--content">
+            {%- paginate search.results by paginate_by -%}
+
+            <div {{ block.shopify_attributes }}>
+              {%- render 'collection-grid'
+                collection: search,
+                items: search.results,
+                grid_style: section.settings.grid_style,
+                quick_shop_enable: settings.quick_shop_enable
+              -%}
+            </div>
+
+            {%- liquid
+              if paginate.pages > 1
+                render 'pagination', paginate: paginate
+              endif
+            -%}
+
+            {%- endpaginate -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.main-search.name",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.main-search.settings.header_filtering_and_sorting"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sidebar",
+      "label": "t:sections.main-search.settings.enable_sidebar.label",
+      "default": true,
+      "info": "t:sections.main-search.settings.enable_sidebar.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "collapse_filters",
+      "label": "t:sections.main-search.settings.collapse_filters.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_color_swatches",
+      "label": "t:sections.main-search.settings.enable_color_swatches.label",
+      "info": "t:sections.main-search.settings.enable_color_swatches.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sort",
+      "label": "t:sections.main-search.settings.enable_sort.label",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "grid_style",
+      "label": "t:sections.main-search.settings.grid_style.label",
+      "default": "small",
+      "options": [
+        {
+          "value": "large",
+          "label": "t:sections.main-search.settings.grid_style.options.large.label"
+        },
+        {
+          "value": "small",
+          "label": "t:sections.main-search.settings.grid_style.options.small.label"
+        },
+        {
+          "value": "list",
+          "label": "t:sections.main-search.settings.grid_style.options.list.label"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

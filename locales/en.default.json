@@ -1,5 +1,9 @@
 {
   "general": {
+    "404": {
+      "title": "404 Page Not Found",
+      "subtext_html": "<p>The page you were looking for does not exist. <\/p><p><a href='{{ url }}'>Continue shopping<\/a><\/p>"
+    },
     "accessibility": {
       "skip_to_content": "Skip to content",
       "close_modal": "Close (esc)",
@@ -9,10 +13,6 @@
     "meta": {
       "tags": "Tagged \"{{ tags }}\"",
       "page": "Page {{ page }}"
-    },
-    "404": {
-      "title": "404 Page Not Found",
-      "subtext_html": "<p>The page you were looking for does not exist. <\/p><p><a href='{{ url }}'>Continue shopping<\/a><\/p>"
     },
     "pagination": {
       "previous": "Previous",
@@ -24,9 +24,9 @@
       "login_form_password_placeholder": "Your password",
       "login_form_submit": "Enter",
       "signup_form_email_label": "Email",
-      "signup_form_success": "We will send you an email right before we open!",
+      "signup_form_success": "We will send you an email when we open!",
       "admin_link_html": "Store owner? <a href=\"\/admin\" class=\"text-link\">Log in here<\/a>",
-      "password_link": "Enter using password",
+      "password_link": "Password",
       "powered_by_shopify_html": "This shop will be powered by {{ shopify }}"
     },
     "breadcrumbs": {
@@ -34,6 +34,7 @@
       "home_link_title": "Back to the frontpage"
     },
     "social": {
+      "share_this": "Share this",
       "share_on_facebook": "Share",
       "share_on_twitter": "Tweet",
       "share_on_pinterest": "Pin it",
@@ -56,8 +57,10 @@
       "no_results_html": "Your search for \"{{ terms }}\" did not yield any results.",
       "results_for_html": "Your search for \"{{ terms }}\" revealed the following:",
       "title": "Search",
-      "placeholder": "Search our store",
+      "placeholder": "Search...",
       "submit": "Search",
+      "cancel": "Cancel",
+      "search_title": "Top searched",
       "result_count": {
         "one": "{{ count }} result",
         "other": "{{ count }} results"
@@ -94,6 +97,11 @@
       "view_all": "View all",
       "tags": "Tags",
       "read_more": "Continue reading",
+      "featured_product": "Featured product",
+      "popular_posts": "Popular posts",
+      "latest_posts": "Latest posts",
+      "explore_more": "Explore more",
+      "more_from": "More from",
       "back_to_blog": "Back to {{ title }}"
     },
     "comments": {
@@ -115,20 +123,22 @@
     "general": {
       "title": "Cart",
       "remove": "Remove",
-      "note": "Order note",
+      "note": "Add order note",
       "subtotal": "Subtotal",
       "discounts": "Discounts",
+      "savings_html": "You save {{ saved_amount }}",
       "shipping_at_checkout": "Shipping, taxes, and discount codes calculated at checkout.",
       "update": "Update cart",
       "checkout": "Check out",
       "empty": "Your cart is currently empty.",
-      "continue_browsing_html": "<a href='{{ url }}'>Continue shopping<\/a>",
+      "continue_shopping": "Continue shopping",
       "close_cart": "Close cart",
       "reduce_quantity": "Reduce item quantity by one",
       "increase_quantity": "Increase item quantity by one",
       "terms": "I agree with the terms and conditions",
       "terms_html": "I agree with the <a href='{{ url }}' target='_blank'>terms and conditions<\/a>",
-      "terms_confirm": "You must agree with the terms and conditions of sales to check out"
+      "terms_confirm": "You must agree with the terms and conditions of sales to check out",
+      "recommended_title": "Goes great with"
     },
     "label": {
       "price": "Price",
@@ -144,6 +154,9 @@
       "see_more": "Show more",
       "see_less": "Show less",
       "no_matches": "Sorry, there are no products in this collection.",
+      "large": "Large",
+      "small": "Small",
+      "list": "List",
       "items_with_count": {
         "one": "{{ count }} product",
         "other": "{{ count }} products"
@@ -289,23 +302,38 @@
       "create_account": "Create account"
     },
     "footer": {
+      "accepted_payments": "We accept",
+      "contact_title": "Get in touch",
+      "chat_link": "Live chat",
+      "email_link": "Email us",
+      "social_title": "Follow us",
       "social_platform": "{{ name }} on {{ platform }}"
     }
   },
   "products": {
     "general": {
       "color_swatch_trigger": "Color",
+      "size_trigger": "Size",
+      "size_chart": "Size chart",
       "save_html": "Save {{ saved_amount }}",
       "collection_return": "Back to {{ collection }}",
       "next_product": "Next: {{ title }}",
       "sale": "Sale",
       "sale_price": "Sale price",
       "regular_price": "Regular price",
-      "from_text_html": "from {{ price }}",
-      "recent_products": "Recently viewed"
+      "from_text_html": "<span>from<\/span> {{ price }}",
+      "quick_shop": "Quick shop",
+      "more_from_html": "More from {{ link }}",
+      "recent_products": "Recently viewed",
+      "reviews": "Reviews"
     },
     "product": {
-      "stock_label": "Only {{ count }} items in stock!",
+      "description": "Description",
+      "in_stock_label": "In stock, ready to ship",
+      "stock_label": {
+        "one": "Low stock - {{ count }} item left",
+        "other": "Low stock - {{ count }} items left"
+      },
       "sold_out": "Sold Out",
       "unavailable": "Unavailable",
       "quantity": "Quantity",
@@ -313,8 +341,8 @@
       "preorder": "Pre-order",
       "include_taxes": "Tax included.",
       "shipping_policy_html": "<a href='{{ link }}'>Shipping<\/a> calculated at checkout.",
-      "will_not_ship_until": "Will not ship until {{ date }}",
-      "will_be_in_stock_after": "Will be in stock after {{ date }}",
+      "will_not_ship_until": "Ready to ship {{ date }}",
+      "will_be_in_stock_after": "Back in stock {{ date }}",
       "waiting_for_stock": "Inventory on the way",
       "view_in_space": "View in your space",
       "view_in_space_label": "View in your space, loads item in augmented reality window"

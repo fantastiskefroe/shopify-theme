@@ -1,16 +1,11 @@
-{%- style -%}
-  .testimonials-{{ section.id }} {
-    background-color: {{ section.settings.color_background }};
-    color: {{ section.settings.color_text }};
-  }
-}
-{%- endstyle -%}
-
 <div
-  class="testimonials-section testimonials-{{ section.id }}{% if section.settings.color_background == settings.color_body_bg %} testimonials-section--with-divider{% endif %} text-{{ section.settings.align_text }}"
+  class="testimonials-section testimonials-{{ section.id }} text-{{ section.settings.align_text }} color-scheme-{{ section.settings.color_scheme }}"
   data-section-id="{{ section.id }}"
-  data-section-type="testimonials"
-  data-aos>
+  data-section-type="testimonials">
+  {%- if section.settings.color_scheme != 'none' -%}
+    {%- render 'color-scheme-texture', color_scheme: section.settings.color_scheme -%}
+  {%- endif -%}
+
   {%- if section.settings.title != blank -%}
     <div class="page-width">
       <div class="section-header">
@@ -30,7 +25,6 @@
           <div
             class="testimonials-slide testimonials-slide--{{ block.id }}"
             data-index="{{ forloop.index0 }}"
-            data-aos="row-of-{{ section.blocks.size }}"
             {{ block.shopify_attributes }}>
             <blockquote class="testimonials-slider__text">
               {%- if block.settings.icon == 'quote' -%}
@@ -83,145 +77,156 @@
 </div>
 
 {% schema %}
-  {
-    "name": "Testimonials",
-    "class": "index-section",
-    "max_blocks": 9,
-    "settings": [
-      {
-        "type": "text",
-        "id": "title",
-        "label": "Heading",
-        "default": "Testimonials"
-      },
-      {
-        "type": "select",
-        "id": "align_text",
-        "label": "Text alignment",
-        "default": "center",
-        "options": [
-          {
-            "value": "left",
-            "label": "Left"
-          },
-          {
-            "value": "center",
-            "label": "Centered"
-          },
-          {
-            "value": "right",
-            "label": "Right"
-          }
-        ]
-      },
-      {
-        "type": "checkbox",
-        "id": "round_images",
-        "label": "Circular images",
-        "info": "Requires square images"
-      },
-      {
-        "type": "color",
-        "id": "color_background",
-        "label": "Background",
-        "default": "#f9f9f9"
-      },
-      {
-        "type": "color",
-        "id": "color_text",
-        "label": "Text",
-        "default": "#1c1d1d"
-      }
-    ],
-    "blocks": [
-      {
-        "type": "testimonial",
-        "name": "Testimonial",
-        "settings": [
-          {
-            "type": "select",
-            "id": "icon",
-            "label": "Icon",
-            "default": "5-stars",
-            "options": [
-              {
-                "value": "none",
-                "label": "None"
-              },
-              {
-                "value": "quote",
-                "label": "Quote"
-              },
-              {
-                "value": "5-stars",
-                "label": "5 stars"
-              },
-              {
-                "value": "4-stars",
-                "label": "4 stars"
-              },
-              {
-                "value": "3-stars",
-                "label": "3 stars"
-              },
-              {
-                "value": "2-stars",
-                "label": "2 stars"
-              },
-              {
-                "value": "1-star",
-                "label": "1 star"
-              }
-            ]
-          },
-          {
-            "type": "richtext",
-            "id": "testimonial",
-            "label": "Text",
-            "default": "<p>Add customer reviews and testimonials to showcase your store’s happy customers.</p>"
-          },
-          {
-            "type": "image_picker",
-            "id": "image",
-            "label": "Author's image"
-          },
-          {
-            "type": "text",
-            "id": "author",
-            "label": "Author",
-            "default": "Author's name"
-          },
-          {
-            "type": "text",
-            "id": "author_info",
-            "label": "Author info",
-            "default": "Los Angeles, CA"
-          }
-        ]
-      }
-    ],
-    "presets": [
-      {
-        "name": "Testimonials",
-        "category": "Text",
-        "blocks": [
-          {
-            "type": "testimonial"
-          },
-          {
-            "type": "testimonial"
-          },
-          {
-            "type": "testimonial"
-          },
-          {
-            "type": "testimonial"
-          },
-          {
-            "type": "testimonial"
-          }
-        ]
-      }
-    ]
-  }
+{
+  "name": "t:sections.testimonials.name",
+  "max_blocks": 9,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.testimonials.settings.title.label",
+      "default": "From our customers"
+    },
+    {
+      "type": "select",
+      "id": "align_text",
+      "label": "t:sections.testimonials.settings.align_text.label",
+      "default": "center",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.testimonials.settings.align_text.options.left.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.testimonials.settings.align_text.options.center.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.testimonials.settings.align_text.options.right.label"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "round_images",
+      "label": "t:sections.testimonials.settings.round_images.label",
+      "info": "t:sections.testimonials.settings.round_images.info",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "t:sections.testimonials.settings.color_scheme.label",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.testimonials.settings.color_scheme.options.none.label"
+        },
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "t:sections.testimonials.blocks.testimonial.name",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "t:sections.testimonials.blocks.testimonial.settings.icon.label",
+          "default": "5-stars",
+          "options": [
+            {
+              "value": "none",
+              "label": "t:sections.testimonials.blocks.testimonial.settings.icon.options.none.label"
+            },
+            {
+              "value": "quote",
+              "label": "t:sections.testimonials.blocks.testimonial.settings.icon.options.quote.label"
+            },
+            {
+              "value": "5-stars",
+              "label": "t:sections.testimonials.blocks.testimonial.settings.icon.options.5-stars.label"
+            },
+            {
+              "value": "4-stars",
+              "label": "t:sections.testimonials.blocks.testimonial.settings.icon.options.4-stars.label"
+            },
+            {
+              "value": "3-stars",
+              "label": "t:sections.testimonials.blocks.testimonial.settings.icon.options.3-stars.label"
+            },
+            {
+              "value": "2-stars",
+              "label": "t:sections.testimonials.blocks.testimonial.settings.icon.options.2-stars.label"
+            },
+            {
+              "value": "1-star",
+              "label": "t:sections.testimonials.blocks.testimonial.settings.icon.options.1-star.label"
+            }
+          ]
+        },
+        {
+          "type": "richtext",
+          "id": "testimonial",
+          "label": "t:sections.testimonials.blocks.testimonial.settings.testimonial.label",
+          "default": "<p>Add customer reviews and testimonials to showcase your store’s happy customers.</p>"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.testimonials.blocks.testimonial.settings.image.label"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "t:sections.testimonials.blocks.testimonial.settings.author.label",
+          "default": "Author's name"
+        },
+        {
+          "type": "text",
+          "id": "author_info",
+          "label": "t:sections.testimonials.blocks.testimonial.settings.author_info.label",
+          "default": "Los Angeles, CA"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.testimonials.presets.testimonials.name",
+      "blocks": [
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        }
+      ]
+    }
+  ]
+}
 {% endschema %}

@@ -1,16 +1,19 @@
-{%- style -%}
-  @media screen and (max-width: 768px) {
-    .background-media-text--{{ section.id }} {
-      background-image: url({{ section.settings.image | img_url: '1x1' }});
+{%- if section.settings.image != blank -%}
+  {%- style -%}
+    @media screen and (max-width: 768px) {
+      .loaded.background-media-text--{{ section.id }} {
+        background-image: url({{ section.settings.image | img_url: '350x350', crop: 'center' }});
+        background-size: cover;
+        background-position: 50% 50%;
+      }
     }
-  }
-{%- endstyle -%}
+  {%- endstyle -%}
+{%- endif -%}
 
 <div
   data-section-id="{{ section.id }}"
   data-section-type="background-image"
-  class="background-media-text background-media-text--{{ section.id }} background-media-text--{{ section.settings.height }} loaded"
-  data-aos="background-media-text__animation"
+  class="background-media-text background-media-text--{{ section.id }} background-media-text--{{ section.settings.height }}"
   {% if section.settings.parallax %}data-parallax="true"{% endif %}>
 
   <div class="background-media-text__container">
@@ -22,7 +25,7 @@
       {%- if section.settings.image != blank -%}
         {%- assign img_url = section.settings.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
         <img
-          class="background-media-text__image background-media-text__image--{{ section.id }} lazyload"
+          class="image-fit background-media-text__image background-media-text__image--{{ section.id }} lazyload"
           src=""
           data-src="{{ img_url }}"
           data-aspectratio="{{ section.settings.image.aspect_ratio }}"
@@ -48,24 +51,22 @@
   {%- if section.settings.subtitle != blank or section.settings.title != blank or section.settings.text != blank -%}
     <div class="background-media-text__inner">
       <div class="background-media-text__aligner background-media-text--{{ section.settings.layout }}">
-        <div class="animation-cropper">
-          <div class="animation-contents">
-            <div class="background-media-text__text{% if section.settings.framed %} background-media-text__text--framed{% endif %}">
-              {%- if section.settings.subtitle -%}
-                <p class="h5">{{ section.settings.subtitle }}</p>
-              {%- endif -%}
-              {%- if section.settings.title != blank -%}
-                <p class="h3">{{ section.settings.title | escape }}</p>
-              {%- endif -%}
-              {%- if section.settings.text != blank -%}
-                <div class="rte background-media-text__subtext">{{ section.settings.text }}</div>
-              {%- endif -%}
-              {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
-                <a href="{{ section.settings.button_link }}" class="btn">
-                  {{ section.settings.button_label }}
-                </a>
-              {%- endif -%}
-            </div>
+        <div class="animation-contents">
+          <div class="background-media-text__text">
+            {%- if section.settings.subtitle != blank -%}
+              <p class="accent-subtitle">{{ section.settings.subtitle }}</p>
+            {%- endif -%}
+            {%- if section.settings.title != blank -%}
+              <p class="h3">{{ section.settings.title | escape }}</p>
+            {%- endif -%}
+            {%- if section.settings.text != blank -%}
+              <div class="rte background-media-text__subtext">{{ section.settings.text }}</div>
+            {%- endif -%}
+            {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+              <a href="{{ section.settings.button_link }}" class="btn">
+                {{ section.settings.button_label }}
+              </a>
+            {%- endif -%}
           </div>
         </div>
       </div>
@@ -73,135 +74,124 @@
   {%- endif -%}
 </div>
 
-<div class="background-media-text__spacer background-media-text--{{ section.settings.height }}"></div>
-
 {% schema %}
-  {
-    "name": "Large image with text box",
-    "class": "index-section--flush",
-    "settings": [
-      {
-        "type": "text",
-        "id": "subtitle",
-        "label": "Subheading",
-        "default": "Impressive"
-      },
-      {
-        "type": "text",
-        "id": "title",
-        "label": "Heading",
-        "default": "Large image with text box"
-      },
-      {
-        "type": "richtext",
-        "id": "text",
-        "label": "Text",
-        "default": "<p>Pair large text with a full-width image to draw attention to an important detail of your brand or product line.</p>"
-      },
-      {
-        "type": "text",
-        "id": "button_label",
-        "label": "Button label"
-      },
-      {
-        "type": "url",
-        "id": "button_link",
-        "label": "Button link"
-      },
-      {
-        "type": "image_picker",
-        "id": "image",
-        "label": "Image"
-      },
-      {
-        "type": "select",
-        "id": "focal_point",
-        "label": "Image focal point",
-        "info": "Used to keep the subject of your photo in view.",
-        "default": "center",
-        "options": [
-          {
-            "value": "20% 0",
-            "label": "Top left"
-          },
-          {
-            "value": "top",
-            "label": "Top"
-          },
-          {
-            "value": "80% 0",
-            "label": "Top right"
-          },
-          {
-            "value": "20% 50%",
-            "label": "Left"
-          },
-          {
-            "value": "center",
-            "label": "Middle"
-          },
-          {
-            "value": "80% 50%",
-            "label": "Right"
-          },
-          {
-            "value": "20% 100%",
-            "label": "Bottom left"
-          },
-          {
-            "value": "bottom",
-            "label": "Bottom"
-          },
-          {
-            "value": "80% 100%",
-            "label": "Bottom right"
-          }
-        ]
-      },
-      {
-        "type": "select",
-        "id": "layout",
-        "label": "Layout",
-        "default": "left",
-        "options": [
-          {
-            "value": "left",
-            "label": "Text on left"
-          },
-          {
-            "value": "right",
-            "label": "Text on right"
-          }
-        ]
-      },
-      {
-        "type": "range",
-        "id": "height",
-        "label": "Section height",
-        "default": 550,
-        "min": 450,
-        "max": 750,
-        "step": 100,
-        "unit": "px"
-      },
-      {
-        "type": "checkbox",
-        "id": "framed",
-        "label": "Add frame",
-        "default": false
-      },
-      {
-        "type": "checkbox",
-        "id": "parallax",
-        "label": "Enable parallax",
-        "default": true
-      }
-    ],
-    "presets": [
-      {
-        "name": "Large image with text box",
-        "category": "Image"
-      }
-    ]
-  }
+{
+  "name": "t:sections.background-image-text.name",
+  "class": "index-section--flush",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "t:sections.background-image-text.settings.subtitle.label"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.background-image-text.settings.title.label",
+      "default": "Large image with text box"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "t:sections.background-image-text.settings.text.label",
+      "default": "<p>Pair large text with a full-width image to draw attention to an important detail of your brand or product line.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "t:sections.background-image-text.settings.button_label.label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "t:sections.background-image-text.settings.button_link.label"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.background-image-text.settings.image.label"
+    },
+    {
+      "type": "select",
+      "id": "focal_point",
+      "label": "t:sections.background-image-text.settings.focal_point.label",
+      "info": "t:sections.background-image-text.settings.focal_point.info",
+      "default": "center",
+      "options": [
+        {
+          "value": "20% 0",
+          "label": "t:sections.background-image-text.settings.focal_point.options.20_0.label"
+        },
+        {
+          "value": "top",
+          "label": "t:sections.background-image-text.settings.focal_point.options.top.label"
+        },
+        {
+          "value": "80% 0",
+          "label": "t:sections.background-image-text.settings.focal_point.options.80_0.label"
+        },
+        {
+          "value": "20% 50%",
+          "label": "t:sections.background-image-text.settings.focal_point.options.20_50.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.background-image-text.settings.focal_point.options.center.label"
+        },
+        {
+          "value": "80% 50%",
+          "label": "t:sections.background-image-text.settings.focal_point.options.80_50.label"
+        },
+        {
+          "value": "20% 100%",
+          "label": "t:sections.background-image-text.settings.focal_point.options.20_100.label"
+        },
+        {
+          "value": "bottom",
+          "label": "t:sections.background-image-text.settings.focal_point.options.bottom.label"
+        },
+        {
+          "value": "80% 100%",
+          "label": "t:sections.background-image-text.settings.focal_point.options.80_100.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "t:sections.background-image-text.settings.layout.label",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.background-image-text.settings.layout.options.left.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.background-image-text.settings.layout.options.right.label"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "height",
+      "label": "t:sections.background-image-text.settings.height.label",
+      "default": 550,
+      "min": 450,
+      "max": 750,
+      "step": 100,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "parallax",
+      "label": "t:sections.background-image-text.settings.parallax.label"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.background-image-text.presets.large_image_with_text_box.name"
+    }
+  ]
+}
 {% endschema %}

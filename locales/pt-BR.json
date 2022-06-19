@@ -26,7 +26,7 @@
       "signup_form_email_label": "E-mail",
       "signup_form_success": "Nós lhe enviaremos um e-mail logo antes de abrirmos!",
       "admin_link_html": "Você é o dono da loja? <a href=\"\/admin\" class=\"text-link\">Faça login aqui<\/a>",
-      "password_link": "Entre usando a senha",
+      "password_link": "Senha",
       "powered_by_shopify_html": "Esta loja será patrocinada por {{ shopify }}"
     },
     "breadcrumbs": {
@@ -34,6 +34,7 @@
       "home_link_title": "Voltar à página inicial"
     },
     "social": {
+      "share_this": "Compartilhar isso",
       "share_on_facebook": "Compartilhar",
       "share_on_twitter": "Tweetar",
       "share_on_pinterest": "Pin it",
@@ -56,8 +57,10 @@
       "no_results_html": "Sua busca por \"{{ terms }}\" não gerou resultados.",
       "results_for_html": "Sua busca por \"{{ terms }}\" encontrou os itens a seguir:",
       "title": "Pesquisa",
-      "placeholder": "Busque em nossa loja",
+      "placeholder": "Buscar",
       "submit": "Buscar",
+      "cancel": "Cancelar",
+      "search_title": "Mais pesquisados",
       "result_count": {
         "one": "{{ count }} resultado",
         "other": "{{ count }} resultados"
@@ -94,6 +97,11 @@
       "view_all": "Ver todo",
       "tags": "Marcadores",
       "read_more": "Ler mais",
+      "featured_product": "Produto em destaque",
+      "popular_posts": "Artigos populares",
+      "latest_posts": "Artigos Mais Recentes",
+      "explore_more": "Explore mais",
+      "more_from": "Mais de",
       "back_to_blog": "Voltar para {{ title }}"
     },
     "comments": {
@@ -118,17 +126,19 @@
       "note": "Instruções especiais para o vendedor",
       "subtotal": "Subtotal",
       "discounts": "Descontos",
+      "savings_html": "Economize {{ saved_amount }}",
       "shipping_at_checkout": "Os códigos de desconto, o frete e os impostos são adicionados no encerramento.",
       "update": "Atualizar Carrinho",
       "checkout": "Fechar pedido",
       "empty": "Seu carrinho está vazio no momento.",
-      "continue_browsing_html": "Continue navegando <a href='{{ url }}'>aqui<\/a>.",
+      "continue_shopping": "Continue comprando",
       "close_cart": "Fechar carrinho",
       "reduce_quantity": "Reduzir quantidade em uma unidade",
       "increase_quantity": "Aumentar quantidade em uma unidade",
       "terms": "Eu concordo com os termos e condições",
       "terms_html": "Eu concordo com os <a href='{{ url }}' target='_blank'>termos e condições<\/a>",
-      "terms_confirm": "Você deve concordar com os termos e condições de vendas para verificar"
+      "terms_confirm": "Você deve concordar com os termos e condições de vendas para verificar",
+      "recommended_title": "Vai grande com"
     },
     "label": {
       "price": "Preço",
@@ -144,6 +154,9 @@
       "see_more": "Mostre mais",
       "see_less": "Mostre menos",
       "no_matches": "Desculpe, mas não há produtos correspondentes à sua busca.",
+      "large": "Large",
+      "small": "Small",
+      "list": "List",
       "items_with_count": {
         "one": "{{ count }} produto",
         "other": "{{ count }} produtos"
@@ -289,22 +302,34 @@
       "create_account": "Criar conta"
     },
     "footer": {
+      "accepted_payments": "Nós aceitamos",
+      "contact_title": "Entrar em contato",
+      "chat_link": "Bate-papo ao vivo",
+      "email_link": "Envia-nos um email",
+      "social_title": "Siga-nos",
       "social_platform": "{{ name }} em {{ platform }}"
     }
   },
   "products": {
     "general": {
       "color_swatch_trigger": "Cor",
+      "size_trigger": "Tamanho",
+      "size_chart": "Gráfico de tamanho",
       "save_html": "Economize {{ saved_amount }}",
       "collection_return": "Voltar à {{ collection }}",
       "next_product": "Próximo: {{ title }}",
       "sale": "Venda",
       "sale_price": "Preço promocional",
       "regular_price": "Preço normal",
-      "from_text_html": "A partir de {{ price }}",
-      "recent_products": "Visto recentemente"
+      "from_text_html": "<span>A partir de<\/span> {{ price }}",
+      "quick_shop": "Compra rápida",
+      "more_from_html": "Mais de {{ link }}",
+      "recent_products": "Visto recentemente",
+      "reviews": "Avaliações"
     },
     "product": {
+      "description": "Descrição",
+      "in_stock_label": "Em estoque",
       "stock_label": "{{ count }} em estoque",
       "sold_out": "Esgotado",
       "unavailable": "Indisponível",

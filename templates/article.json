@@ -1,0 +1,64 @@
+{
+  "sections": {
+    "main": {
+      "type": "article-template",
+      "settings": {
+        "blog_capitalize_first": false,
+        "blog_show_tags": true,
+        "blog_show_date": true,
+        "blog_show_comments": true,
+        "blog_show_author": true
+      }
+    },
+    "sidebar": {
+      "type": "blog-sidebar",
+      "blocks": {
+        "9af7b16d-3996-42ce-9958-5e5d1aa75a18": {
+          "type": "article",
+          "settings": {
+            "title": "Mest læste",
+            "article": "news\/guide-til-valg-af-forspiringsbakker",
+            "blog_show_tags": true,
+            "blog_show_date": true,
+            "blog_show_comments": true,
+            "blog_show_author": false,
+            "blog_image_size": "wide"
+          }
+        },
+        "tags": {
+          "type": "tags",
+          "settings": {}
+        },
+        "b7167d01-3537-4b76-9a0d-4a8ed9fd9856": {
+          "type": "product",
+          "settings": {
+            "featured_product": "startpakke-forspiring"
+          }
+        },
+        "05c3f3d8-2359-4357-a380-c7531ffd20d7": {
+          "type": "product",
+          "settings": {
+            "featured_product": "forspiringsbakke-charles-dowding-15-cell"
+          }
+        },
+        "share": {
+          "type": "share",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "9af7b16d-3996-42ce-9958-5e5d1aa75a18",
+        "tags",
+        "b7167d01-3537-4b76-9a0d-4a8ed9fd9856",
+        "05c3f3d8-2359-4357-a380-c7531ffd20d7",
+        "share"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "main",
+    "sidebar"
+  ],
+  "wrapper": "div.page-width.page-content.blog-layout"
+}

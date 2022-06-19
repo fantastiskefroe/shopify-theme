@@ -16,18 +16,16 @@
     {%- endstyle -%}
   {%- endif -%}
 
-  <h1 class="site-header__logo{% unless has_logo %} text-center{% endunless %}" itemscope itemtype="http://schema.org/Organization">
+  <h1 class="site-header__logo{% unless has_logo %} text-center{% endunless %}">
     {%- if section.settings.logo -%}
       <a
         href="{{ routes.root_url }}"
-        itemprop="url"
         class="site-header__logo-link">
         <img
           class="small--hide"
           src="{{ section.settings.logo | img_url: header_logo_size }}"
           srcset="{{ section.settings.logo | img_url: header_logo_size }} 1x, {{ section.settings.logo | img_url: header_logo_size, scale: 2 }} 2x"
-          alt="{{ section.settings.logo.alt | default: shop.name }}"
-          itemprop="logo">
+          alt="{{ section.settings.logo.alt | default: shop.name }}">
         <img
           class="medium-up--hide"
           src="{{ section.settings.logo | img_url: header_logo_size_mobile }}"
@@ -35,7 +33,7 @@
           alt="{{ section.settings.logo.alt | default: shop.name }}">
       </a>
     {%- else -%}
-      <a href="{{ routes.root_url }}" itemprop="url">{{ shop.name }}</a>
+      <a href="{{ routes.root_url }}">{{ shop.name }}</a>
     {%- endif -%}
   </h1>
 
@@ -43,38 +41,38 @@
 </header>
 
 {% schema %}
-  {
-    "name": "Header",
-    "settings": [
-      {
-        "type": "image_picker",
-        "id": "logo",
-        "label": "Logo"
-      },
-      {
-        "type": "range",
-        "id": "desktop_logo_width",
-        "label": "Desktop logo width",
-        "default": 200,
-        "min": 100,
-        "max": 400,
-        "step": 10,
-        "unit": "px"
-      },
-      {
-        "type": "range",
-        "id": "mobile_logo_width",
-        "label": "Mobile logo width",
-        "default": 140,
-        "min": 60,
-        "max": 200,
-        "step": 10,
-        "unit": "px",
-        "info": "Set as a max-width, may appear smaller"
-      }
-    ],
-    "default": {
-      "settings": {}
+{
+  "name": "t:sections.giftcard-header.name",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "t:sections.giftcard-header.settings.logo.label"
+    },
+    {
+      "type": "range",
+      "id": "desktop_logo_width",
+      "label": "t:sections.giftcard-header.settings.desktop_logo_width.label",
+      "default": 200,
+      "min": 100,
+      "max": 400,
+      "step": 10,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_logo_width",
+      "label": "t:sections.giftcard-header.settings.mobile_logo_width.label",
+      "default": 140,
+      "min": 60,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "info": "t:sections.giftcard-header.settings.mobile_logo_width.info"
     }
+  ],
+  "default": {
+    "settings": {}
   }
+}
 {% endschema %}
