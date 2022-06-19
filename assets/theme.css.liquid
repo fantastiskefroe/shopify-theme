@@ -11515,21 +11515,98 @@ html[dir=rtl] .product-single__meta .rte{
 }
 
 
-/* Footer */
+/*========================= Footer =========================*/
+/*===================== Instagram feed =====================*/
+.insta-feed-container {
+    position: relative;
+    margin-bottom: 32px;
+}
+
+.insta-feed-link {
+    display: inline-block !important;
+    position: absolute !important;
+    top: calc(50% + 1.2rem);
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+
+    background-color: white;
+    font-size: 1.2rem;
+    padding: 16px 24px;
+}
+
+.instafeed-overlay {
+    display: none !important;
+}
+
+@media only screen and (max-width: 768px) {
+    .instafeed-container {
+        width: 33.333% !important;
+        padding-top: 33.333% !important;
+    }
+
+    #insta-feed a:nth-of-type(4),
+    #insta-feed a:nth-of-type(5) {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 560px) {
+    .instafeed-container {
+        width: 50% !important;
+        padding-top: 50% !important;
+    }
+
+    #insta-feed a:nth-of-type(3) {
+        display: none;
+    }
+}
+
+
 .footer-icons {
     width: 100%;
     float: left
 }
 
-.footer-icons .footer-icon img {
+.footer-icons img {
     height: 110px;
     padding: 0;
     margin: 10px;
 }
 
-.footer-icons .footer-icon img:last-of-type {
+.footer-icons img:last-of-type {
     margin-left: 0;
 }
+
+.payment-icons {
+    justify-content: center;
+}
+
+.payment-icon {
+    display: inline-block;
+    width: 38px;
+    height: 24px;
+    border-radius: 0.2142857143em;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.payment-icon--dankort {
+    background-image: url(//cdn.shopify.com/shopifycloud/shopify/assets/payment_icons/dankort-a92b320b417b7c123265e1e4fe134935ac76ec7e297be9b02a5ef76b182a29cc.svg), none
+}
+
+.payment-icon--master {
+    background-image: url(//cdn.shopify.com/shopifycloud/shopify/assets/payment_icons/master-173035bc8124581983d4efa50cf8626e8553c2b311353fbf67485f9c1a2b88d1.svg), none
+}
+
+.payment-icon--mobilepay {
+    background-image: url(//cdn.shopify.com/shopifycloud/shopify/assets/payment_icons/mobilepay-8189c41b1722f6fcb30a138fbf543f2ea7c6eff901994c6dff22a31f432ab27e.svg), none
+}
+
+.payment-icon--visa {
+    background-image: url(//cdn.shopify.com/shopifycloud/shopify/assets/payment_icons/visa-319d545c6fd255c9aad5eeaad21fd6f7f7b4fdbdb1a35ce83b89cca12a187f00.svg), none
+}
+
 
 /* Front page */
 .parallax-image {
@@ -11790,50 +11867,4 @@ html[dir=rtl] .product-single__meta .rte{
 
 .stkbl-tags-header {
     margin-top: 1em;
-}
-
-/*===================== Instagram feed =====================*/
-.insta-feed-container {
-    position: relative;
-    margin-bottom: 32px;
-}
-
-.insta-feed-link {
-    display: inline-block !important;
-    position: absolute !important;
-    top: calc(50% + 1.2rem);
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1;
-
-    background-color: white;
-    font-size: 1.2rem;
-    padding: 16px 24px;
-}
-
-.instafeed-overlay {
-    display: none !important;
-}
-
-@media only screen and (max-width: 768px) {
-    .instafeed-container {
-        width: 33.333% !important;
-        padding-top: 33.333% !important;
-    }
-
-    #insta-feed a:nth-of-type(4),
-    #insta-feed a:nth-of-type(5) {
-        display: none;
-    }
-}
-
-@media only screen and (max-width: 560px) {
-    .instafeed-container {
-        width: 50% !important;
-        padding-top: 50% !important;
-    }
-
-    #insta-feed a:nth-of-type(3) {
-        display: none;
-    }
 }

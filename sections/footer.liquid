@@ -82,6 +82,20 @@
   <div class="footer__section">
     <div class="page-width text-center small--text-left">
       <div class="footer__base-links">
+        <ul class="inline-list payment-icons">
+          <li class="payment-icon payment-icon--visa" data-payment-icon="visa" aria-current="false">
+            <span class="visually-hidden">Visa, </span>
+          </li>
+          <li class="payment-icon payment-icon--master" data-payment-icon="master" aria-current="false">
+            <span class="visually-hidden">Mastercard, </span>
+          </li>
+          <li class="payment-icon payment-icon--dankort" data-payment-icon="dankort" aria-current="false">
+            <span class="visually-hidden">Dankort og </span>
+          </li>
+          <li class="payment-icon payment-icon--mobilepay" data-payment-icon="mobilepay" aria-current="false">
+            <span class="visually-hidden">MobilePay</span>
+          </li>
+        </ul>
         {%- if section.settings.show_copyright -%}
           <span>
             &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}

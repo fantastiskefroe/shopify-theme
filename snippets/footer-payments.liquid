@@ -20,10 +20,10 @@
     {%- if block.settings.show_payment_icons -%}
       {%- unless shop.enabled_payment_types == empty -%}
         <div class="footer__block--mobile">
-          <div class="footer__title">
-            {{ 'layout.footer.accepted_payments' | t }}
-          </div>
           <ul class="inline-list payment-icons">
+            <li class="icon--payment">
+              {%- render 'mobile-pay-logo-small' -%}
+            </li>
             {%- for type in shop.enabled_payment_types -%}
               <li class="icon--payment">
                 {{ type | payment_type_svg_tag }}
