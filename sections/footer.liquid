@@ -42,6 +42,39 @@
             -%}
           </div>
         {%- endfor -%}
+
+        <div class="footer-icons">
+          <ul class="inline-list footer__section">
+            <li class="footer-icon">
+              <a href="https://miljoevenlig-pakning.dk/"
+                 target="_blank"
+                 title="Miljøvenlig pakning"
+                 rel="noopener">
+                <img alt="Miljøvenlig pakning logo"
+                     src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/Miljovenling-pakning.png?v=1578570479">
+              </a>
+            </li>
+            <li class="footer-icon">
+              <a href="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/fantastiskefroe_autorisationsbevis_1106984_gjern_2022.pdf"
+                 target="_blank"
+                 title="Økologicertifikat"
+                 rel="noopener noreferrer">
+                <img alt="Ø-mærket"
+                     src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/DK-Oko-uden_tekst.png?v=1578570873">
+              </a>
+            </li>
+            <li class="footer-icon">
+              <a href="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/Demetercertifikat_2021.pdf"
+                 target="_blank"
+                 title="Demetergodkendelse"
+                 rel="noopener noreferrer">
+                <img alt="Demeter logo"
+                     src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/Demeter.png?v=1591110274">
+              </a>
+            </li>
+          </ul>
+        </div>
+
       </div>
     </div>
   </div>
@@ -62,8 +95,6 @@
             <a href="{{ link.url }}">{{ link.title }}</a>
           {%- endfor -%}
         {%- endif -%}
-
-        {{ powered_by_link }}
       </div>
     </div>
   </div>
