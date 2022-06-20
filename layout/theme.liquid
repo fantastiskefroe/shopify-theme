@@ -5,6 +5,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="{{ settings.color_button }}">
+  <meta name="description" content="{{ page_description | escape }}">
+  <meta name="facebook-domain-verification" content="1sf8o5nxfiez3mvng5wt8hq0tbv6zk" />
   <link rel="canonical" href="{{ canonical_url }}">
   <link rel="preload" as="script" href="{{ 'theme.js' | asset_url }}">
   <link rel="preconnect" href="https://cdn.shopify.com">
@@ -13,6 +15,9 @@
   <link rel="dns-prefetch" href="https://ajax.googleapis.com">
   <link rel="dns-prefetch" href="https://maps.googleapis.com">
   <link rel="dns-prefetch" href="https://maps.gstatic.com">
+  <link rel="shortcut icon"
+        href="//cdn.shopify.com/s/files/1/0276/3902/1652/files/FantastiskeFroe_logo_mini_32x32.png?v=1583103209"
+        type="image/png">
 
   {%- if settings.favicon != blank -%}
     <link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png" />
@@ -20,9 +25,6 @@
 
   {%- render 'seo-title' -%}
 
-  {%- if page_description -%}
-  <meta name="description" content="{{ page_description | escape }}">
-  {%- endif -%}
 
   {%- render 'social-meta-tags' -%}
 
@@ -102,6 +104,11 @@
   {%- if request.page_type contains 'customers/' -%}
     <script src="{{ 'shopify_common.js' | shopify_asset_url }}" defer="defer"></script>
   {%- endif -%}
+
+  {%- render 'sentry' -%}
+
+  {%- render 'url-discount-code' -%}
+
 </head>
 
 <body class="template-{{ template | replace: '.', ' ' | truncatewords: 1, '' | handle }}{% if request.path == '/challenge' %} template-challange{% endif %}" data-transitions="{{ settings.animate_page_transitions }}" data-button_style="{{ settings.button_style }}" data-edges="{{ settings.roundness }}" data-type_header_capitalize="{{ settings.type_header_capitalize }}" data-swatch_style="{{ settings.swatch_style }}" data-grid-style="{{ settings.product_grid_style }}">

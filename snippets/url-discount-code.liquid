@@ -1,0 +1,26 @@
+<script>
+    function applyDiscountCode() {
+        const params = new Proxy(new URLSearchParams(window.location.search), {
+            get: (searchParams, prop) => searchParams.get(prop),
+        });
+        const discountCode = params.rabatkode;
+
+        if (!discountCode) {
+            return;
+        }
+
+        const discountCodesString = localStorage.getItem('stkbl-codes');
+        if (!discountCodesString) {
+            localStorage.setItem('stkbl-codes', JSON.stringify([discountCode]));
+            return;
+        }
+
+        const discountCodes = JSON.parse(discountCodesString);
+        if (discountCodes.indexOf(discountCode) === -1) {
+            discountCodes.push(discountCode);
+            localStorage.setItem('stkbl-codes', JSON.stringify(discountCodes));
+        }
+    }
+
+    applyDiscountCode();
+</script>

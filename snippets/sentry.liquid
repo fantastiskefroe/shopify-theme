@@ -1,0 +1,17 @@
+<script
+        src="https://browser.sentry-cdn.com/7.2.0/bundle.tracing.min.js"
+        integrity="sha384-aYRZnyYiAq6LYJuiGYtIcU7pA8IJkO863hHMi3e84f5+2aNYtUWgOAHBu/3rBp11"
+        crossorigin="anonymous"
+></script>
+
+<script>
+    try {
+        Sentry.init({
+            dsn: "https://e66ab5fb514e47be844f4c9f46ffa0b5@o1249239.ingest.sentry.io/6517736",
+            integrations: [new Sentry.BrowserTracing()],
+            tracesSampleRate: 0.05,
+        });
+    } catch (e) {
+        console.log('Failed to load Sentry', e);
+    }
+</script>
