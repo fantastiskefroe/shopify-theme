@@ -1,0 +1,205 @@
+{% layout none %}<?xml version="1.0"?>
+<rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">
+    {%- paginate collection.products by 5000 -%}
+    {%- assign CountryCode = 'DK' -%}
+    {%- assign PriceAdjustment = 1.0 -%}
+    {%- assign PriceAdjustmentEffectiveDate = '20181226T080000-0500/20190102T235900-0800' -%}
+
+    <channel>
+        <title>{{ shop.name }} {{ collection.title | replace: '&', '&amp;' }}</title>
+        <link>{{ shop.url }}</link>
+        <description>{{ collection.description | strip_html }}</description>
+
+        {%- for product in collection.products -%}
+            {%- assign GoogleProductCategory = product.metafields.mm-google-shopping.google_product_category -%}
+            {%- assign Gender = product.metafields.mm-google-shopping.gender -%}
+            {%- assign AgeGroup = product.metafields.mm-google-shopping.age_group -%}
+            {%- assign Color = "" -%}
+            {%- assign Size = "" -%}
+
+
+            {%- if product.variants.size > 0 -%}
+                {%- liquid
+                    if product.metafields.bundle.bundleData
+                        paginate collections.all-products.products by 1000
+                            assign bundleVariants = product.metafields.bundle.bundleData | split: ','
+
+                            assign bundleVariantNames = "" | split: '¤'
+                            assign bundleVariantPrices = "" | split: '¤'
+                            assign bundleVariantDiscountedPrices = "" | split: '¤'
+                            assign bundleVariantAvailability = "" | split: '¤'
+
+                            for bundleVariant in bundleVariants
+                                assign bundleVariantParts = bundleVariant | split: '='
+                                assign name = bundleVariantParts | slice: 0, 1
+                                assign bundleVariantNames = bundleVariantNames | concat: name
+                                assign productIdentifiers = bundleVariantParts | last | split: ':'
+
+                                assign bundleVariantPrice = 0
+                                assign bundleVariantDiscountedPrice = 0
+                                assign bundleVariantAvailable = "true"
+
+                                for productIdentifier in productIdentifiers
+                                    assign productVariantList = productIdentifier | split: '/'
+                                    assign productHandle = productVariantList[0]
+                                    assign productVariantID = productVariantList[1] | plus: 0
+                                    assign productVariantDiscount = productVariantList[2] | plus: 0
+                                    assign productVariantPriceCoefficient = 100.0 | minus: productVariantDiscount | divided_by: 100.0
+
+                                    for item in collections.all-products.products
+                                        if item.handle == productHandle
+                                            for productVariant in item.variants
+                                                if productVariant.id == productVariantID
+                                                    assign bundleVariantPrice = bundleVariantPrice | plus: productVariant.price
+                                                    assign bundleVariantProductDiscountedPrice = productVariant.price | times: productVariantPriceCoefficient
+                                                    assign bundleVariantDiscountedPrice = bundleVariantDiscountedPrice | plus: bundleVariantProductDiscountedPrice
+
+                                                    if productVariant.available == false
+                                                        assign bundleVariantAvailable = "false"
+                                                    endif
+                                                    break
+                                                endif
+                                            endfor
+                                            break
+                                        endif
+                                    endfor
+                                endfor
+
+                                assign bundleVariantPriceSingleton = bundleVariantPrice | string | split: '¤'
+                                assign bundleVariantDiscountedPriceSingleton = bundleVariantDiscountedPrice | string | split: '¤'
+                                assign bundleVariantAvailableSingleton       = bundleVariantAvailable                | split: '¤'
+
+                                assign bundleVariantPrices = bundleVariantPrices | concat: bundleVariantPriceSingleton
+                                assign bundleVariantDiscountedPrices = bundleVariantDiscountedPrices | concat: bundleVariantDiscountedPriceSingleton
+                                assign bundleVariantAvailability     = bundleVariantAvailability     | concat: bundleVariantAvailableSingleton
+
+                            endfor
+                        endpaginate
+                    endif
+                -%}
+
+                {%- for variant in product.variants -%}
+                    {%- for option in product.options -%}
+                        {%- if option == 'Farve' -%}
+                            {% capture Color %}{{ variant.options[forloop.index0] }}{% endcapture %}
+                        {%- elsif option == 'Størrelse' -%}
+                            {% capture Size %}{{ variant.options[forloop.index0] }}{% endcapture %}
+                        {%- endif -%}
+                    {%- endfor -%}
+
+                    {% comment %} Calculate Sales vs Base Pricing {% endcomment %}
+                    {%- if variant.compare_at_price == blank -%}
+                        {%- assign BasePrice = variant.price -%}
+                    {%- else -%}
+                        {%- assign BasePrice = variant.compare_at_price -%}
+                    {%- endif -%}
+                    {%- assign SalePrice = variant.price | times: PriceAdjustment -%}
+
+                    <item>
+                        <title>{{ product.title | strip_html | strip_newlines | replace: '&', '&amp;' }}{% unless product.title contains Color %} {{ Color | replace: '&', '&amp;' }}{% endunless %}</title>
+                        <link>{{ shop.url }}{{ variant.url }}</link>
+                        <description>{{ product.description | replace: '</', ' </' | strip_html | strip_newlines | replace: '&', '&amp;' | split: 'Højde:' | first }}</description>
+                        <g:google_product_category>{{ GoogleProductCategory | replace: '&', '&amp;' }}</g:google_product_category>
+                        <g:item_group_id>{{ product.id }}</g:item_group_id>
+                        <g:id>{{ variant.id }}</g:id>
+                        <g:condition>new</g:condition>
+                        {%- if product.metafields.bundle.bundleData -%}
+                            {%- for name in bundleVariantNames -%}
+                                {% if variant.title == name %}
+                                    <g:price>{{ bundleVariantDiscountedPrices[forloop.index0] | money_without_currency }} {{ shop.currency }}</g:price>
+                                {%- endif %}
+                            {%- endfor -%}
+                        {%- else -%}
+                            <g:price>{{ BasePrice | money_without_currency }} {{ shop.currency }}</g:price>
+                        {%- endif -%}
+                        {%- if SalePrice < BasePrice -%}
+                            <g:sale_price>{{ SalePrice | money_without_currency }} {{ shop.currency }}</g:sale_price>{%- endif -%}
+                        {%- if PriceAdjustment < 1 -%}
+                            <g:sale_price_effective_date>{{ PriceAdjustmentEffectiveDate }}</g:sale_price_effective_date>{%- endif -%}
+                        {%- if product.metafields.bundle.bundleData -%}
+                            {%- for name in bundleVariantNames -%}
+                                {% if variant.title == name %}
+                                    <g:availability>
+                                        {% if bundleVariantAvailability[forloop.index0] == "true" %}
+                                            in stock
+                                        {% else %}
+                                            out of stock
+                                        {% endif %}
+                                    </g:availability>
+                                {%- endif %}
+                            {%- endfor -%}
+                        {%- else -%}
+                            <g:availability>
+                                {% if variant.available %}
+                                    in stock
+                                {% else %}
+                                    out of stock
+                                {% endif %}
+                            </g:availability>
+                        {%- endif -%}
+                        <g:image_link>
+                            http:{% if variant.image.src %}{{ variant.image.src | product_img_url: 'grande' }}{% else %}{{ product.featured_image.src | product_img_url: 'grande' }}{% endif %}</g:image_link>
+                        <g:gtin>{{ variant.barcode }}</g:gtin>
+                        <g:brand>{{ product.vendor }}</g:brand>
+                        <g:mpn>{{ variant.sku }}</g:mpn>
+                        <g:product_type>{{ product.type | replace: '&', '&amp;' }}</g:product_type>
+                        <g:age_group>{{ AgeGroup }}</g:age_group>
+                        {% unless Color == "" %}
+                            <g:color>{{ Color | strip_html | strip_newlines | replace: '&', '&amp;' }}</g:color>{% endunless %}
+                        {% unless Size == "" %}
+                            <g:size>{{ Size | strip_html | strip_newlines | replace: '&', '&amp;' }}</g:size>
+                            <g:size_system>US</g:size_system>{% endunless %}
+                        <g:gender>{{ Gender }}</g:gender>
+                        <g:custom_label_0>{{ product.metafields.mm-google-shopping.custom_label_0 }}</g:custom_label_0>
+                        <g:custom_label_1>{{ product.metafields.mm-google-shopping.custom_label_1 }}</g:custom_label_1>
+                        <g:custom_label_2>{{ product.metafields.mm-google-shopping.custom_label_2 }}</g:custom_label_2>
+                        <g:custom_label_3>{{ product.metafields.mm-google-shopping.custom_label_3 }}</g:custom_label_3>
+                        <g:custom_label_4>{{ product.metafields.mm-google-shopping.custom_label_4 }}</g:custom_label_4>
+                        <g:shipping_weight>{{ variant.weight | weight_with_unit }}</g:shipping_weight>
+                    </item>
+
+                    {% comment %} endfor {% endcomment %}
+                {%- endfor -%}
+
+            {% else %}
+                {% comment %} Calculate Sales vs Base Pricing {% endcomment %}
+                {%- if product.compare_at_price_min == blank -%}
+                    {%- assign BasePrice = product.price -%}
+                {%- else -%}
+                    {%- assign BasePrice = product.compare_at_price_min -%}
+                {%- endif -%}
+                {%- assign SalePrice = product.price | times: PriceAdjustment -%}
+
+                <item>
+                    <title>{{ product.title | strip_html | strip_newlines | replace: '&', '&amp;' }}</title>
+                    <link>{{ shop.url }}{{ product.url }}</link>
+                    <description>{{ product.description | replace: '</', ' </' | strip_html | strip_newlines | replace: '&', '&amp;' | split: 'Højde:' | first }}</description>
+                    <g:google_product_category>{{ GoogleProductCategory | replace: '&', '&amp;' }}</g:google_product_category>
+                    <g:item_group_id>{{ product.id }}</g:item_group_id>
+                    <g:id>{{ product.id }}</g:id>
+                    <g:condition>new</g:condition>
+                    <g:price>{{ BasePrice | money_without_currency }} {{ shop.currency }}</g:price>
+                    {%- if SalePrice < BasePrice -%}
+                        <g:sale_price>{{ SalePrice | money_without_currency }} {{ shop.currency }}</g:sale_price>{%- endif -%}
+                    {%- if PriceAdjustment < 1 -%}
+                        <g:sale_price_effective_date>{{ PriceAdjustmentEffectiveDate }}</g:sale_price_effective_date>{%- endif -%}
+                    <g:availability>{% if product.available %}in stock{% else %}out of stock{% endif %}</g:availability>
+                    <g:image_link>http:{{ product.featured_image.src | product_img_url: 'grande' }}</g:image_link>
+                    <g:gtin>{{ product.barcode }}</g:gtin>
+                    <g:brand>{{ product.vendor }}</g:brand>
+                    <g:mpn>{{ product.sku }}</g:mpn>
+                    <g:product_type>{{ product.type }}</g:product_type>
+                    <g:age_group>{{ AgeGroup }}</g:age_group>
+                    <g:gender>{{ Gender }}</g:gender>
+                    <g:custom_label_0>{{ product.metafields.mm-google-shopping.custom_label_0 }}</g:custom_label_0>
+                    <g:custom_label_1>{{ product.metafields.mm-google-shopping.custom_label_1 }}</g:custom_label_1>
+                    <g:custom_label_2>{{ product.metafields.mm-google-shopping.custom_label_2 }}</g:custom_label_2>
+                    <g:custom_label_3>{{ product.metafields.mm-google-shopping.custom_label_3 }}</g:custom_label_3>
+                    <g:custom_label_4>{{ product.metafields.mm-google-shopping.custom_label_4 }}</g:custom_label_4>
+                    <g:shipping_weight>{{ variant.weight | weight_with_unit }}</g:shipping_weight>
+                </item>
+            {% endif %}
+        {% endfor %}
+    </channel>
+</rss>
+{% endpaginate %}
