@@ -1,0 +1,148 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product-bundle",
+      "blocks": {
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "variant_labels": true,
+            "picker_type": "button",
+            "color_swatches": false
+          }
+        },
+        "0c68f4c9-8772-4f16-97ee-401e54f4c203": {
+          "type": "quantity_selector",
+          "settings": {}
+        },
+        "inventory_status": {
+          "type": "inventory_status",
+          "settings": {
+            "inventory_threshold": 20,
+            "inventory_transfers_enable": true
+          }
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": false,
+            "surface_pickup_enable": false
+          }
+        },
+        "sales_point3": {
+          "type": "sales_point",
+          "settings": {
+            "icon": "leaf",
+            "text": "CO2-neutral forsendelse"
+          }
+        },
+        "c4aaa963-76e5-4135-9023-726c4f23fbec": {
+          "type": "description",
+          "disabled": true,
+          "settings": {
+            "is_tab": false
+          }
+        },
+        "07774d5e-ae00-477b-9530-0cd6275fd42c": {
+          "type": "share",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "price",
+        "variant_picker",
+        "0c68f4c9-8772-4f16-97ee-401e54f4c203",
+        "inventory_status",
+        "buy_buttons",
+        "sales_point3",
+        "c4aaa963-76e5-4135-9023-726c4f23fbec",
+        "07774d5e-ae00-477b-9530-0cd6275fd42c"
+      ],
+      "settings": {
+        "sku_enable": false,
+        "image_position": "left",
+        "image_container_size": "medium",
+        "product_image_size": "square",
+        "product_zoom_enable": false,
+        "thumbnail_position": "below",
+        "thumbnail_arrows": false,
+        "mobile_layout": "partial",
+        "enable_video_looping": true,
+        "product_video_style": "muted"
+      }
+    },
+    "sub": {
+      "type": "product-full-width",
+      "blocks": {
+        "a5241026-70f4-45d1-a1f2-3607948f4732": {
+          "type": "description",
+          "settings": {
+            "is_tab": false
+          }
+        },
+        "7dcadc2b-8675-402b-b7a2-7a72a79bebfe": {
+          "type": "tab",
+          "settings": {
+            "title": "{{ product.metafields.custom.kom_godt_i_gang_med_titel.value }}",
+            "content": "",
+            "page": "{{ product.metafields.custom.kom_godt_i_gang_med_side.value }}"
+          }
+        },
+        "tab": {
+          "type": "tab",
+          "settings": {
+            "title": "Leveringsinformation",
+            "content": "",
+            "page": "levering"
+          }
+        }
+      },
+      "block_order": [
+        "a5241026-70f4-45d1-a1f2-3607948f4732",
+        "7dcadc2b-8675-402b-b7a2-7a72a79bebfe",
+        "tab"
+      ],
+      "settings": {
+        "max_width": true
+      }
+    },
+    "recommendations": {
+      "type": "product-recommendations",
+      "settings": {
+        "product_recommendations_heading": "Relaterede produkter"
+      }
+    },
+    "more-products-vendor": {
+      "type": "more-products-vendor",
+      "disabled": true,
+      "settings": {}
+    },
+    "more-products-collection": {
+      "type": "more-products-collection",
+      "settings": {}
+    },
+    "recently-viewed": {
+      "type": "recently-viewed",
+      "settings": {}
+    },
+    "collection-return": {
+      "type": "collection-return",
+      "settings": {
+        "color_scheme": "2"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "sub",
+    "recommendations",
+    "more-products-vendor",
+    "more-products-collection",
+    "recently-viewed",
+    "collection-return"
+  ]
+}
