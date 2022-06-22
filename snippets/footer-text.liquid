@@ -1,0 +1,13 @@
+<div class="footer__title">
+  {%- unless block.settings.title == blank -%}
+    {{ block.settings.title }}
+  {%- endunless -%}
+</div>
+
+<ul class="footer__menu">
+  {%- if block.settings.text != blank -%}
+    <div {{ block.shopify_attributes }}>
+      {{ block.settings.text }}
+    </div>
+  {%- endif -%}
+</ul>

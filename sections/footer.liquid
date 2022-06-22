@@ -45,6 +45,8 @@
                   render 'footer-payments', block: block, show_currency_flags: show_currency_flags
                 when 'contact'
                   render 'footer-contact', block: block
+                when 'text'
+                  render 'footer-text', block: block
               endcase
             -%}
           </div>
@@ -260,6 +262,23 @@
           "id": "enable_social",
           "label": "t:sections.footer.blocks.contact_and_social.settings.enable_social.label",
           "default": true
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "t:sections.newsletter.blocks.text.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.footer.blocks.navigation.settings.title.label"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "t:sections.newsletter.blocks.text.settings.text.label",
+          "default": "<p>Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.</p>"
         }
       ]
     }
