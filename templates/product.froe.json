@@ -47,9 +47,31 @@
             "text": "1-3 dages levering"
           }
         },
+        "40377b83-74d3-45b4-a8a6-9a17343f2070": {
+          "type": "description",
+          "settings": {
+            "is_tab": false
+          }
+        },
         "07774d5e-ae00-477b-9530-0cd6275fd42c": {
           "type": "share",
           "settings": {}
+        },
+        "98a4aed6-0e2b-4b44-9b10-ec939a3560c5": {
+          "type": "tab",
+          "settings": {
+            "title": "Levering",
+            "content": "",
+            "page": "levering"
+          }
+        },
+        "6f04f6b4-d694-47c6-b2c8-c848638746f4": {
+          "type": "tab",
+          "settings": {
+            "title": "{{ product.metafields.custom.kom_godt_i_gang_med_titel.value }}",
+            "content": "",
+            "page": "{{ product.metafields.custom.kom_godt_i_gang_med_side.value }}"
+          }
         }
       },
       "block_order": [
@@ -60,7 +82,10 @@
         "buy_buttons",
         "sales_point3",
         "5aac1c5b-d9a1-452c-be67-d5e13becaba4",
-        "07774d5e-ae00-477b-9530-0cd6275fd42c"
+        "40377b83-74d3-45b4-a8a6-9a17343f2070",
+        "07774d5e-ae00-477b-9530-0cd6275fd42c",
+        "98a4aed6-0e2b-4b44-9b10-ec939a3560c5",
+        "6f04f6b4-d694-47c6-b2c8-c848638746f4"
       ],
       "settings": {
         "sku_enable": false,
@@ -77,43 +102,6 @@
     },
     "sub": {
       "type": "product-full-width",
-      "blocks": {
-        "e668f48b-099a-4048-b8b0-469c4479cd8e": {
-          "type": "description",
-          "settings": {
-            "is_tab": false
-          }
-        },
-        "7dcadc2b-8675-402b-b7a2-7a72a79bebfe": {
-          "type": "tab",
-          "settings": {
-            "title": "{{ product.metafields.custom.kom_godt_i_gang_med_titel.value }}",
-            "content": "",
-            "page": "{{ product.metafields.custom.kom_godt_i_gang_med_side.value }}"
-          }
-        },
-        "tab": {
-          "type": "tab",
-          "settings": {
-            "title": "Leveringsinformation",
-            "content": "",
-            "page": "levering"
-          }
-        },
-        "e530eadc-e8ea-422d-b599-511cf5aea725": {
-          "type": "contact",
-          "settings": {
-            "title": "Ask a question",
-            "phone": false
-          }
-        }
-      },
-      "block_order": [
-        "e668f48b-099a-4048-b8b0-469c4479cd8e",
-        "7dcadc2b-8675-402b-b7a2-7a72a79bebfe",
-        "tab",
-        "e530eadc-e8ea-422d-b599-511cf5aea725"
-      ],
       "settings": {
         "max_width": true
       }

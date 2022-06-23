@@ -317,6 +317,19 @@
         "color_scheme": "2"
       }
     },
+    "blog-posts": {
+      "type": "blog-posts",
+      "settings": {
+        "title": "From the journal",
+        "blog": "news",
+        "blog_show_tags": true,
+        "blog_show_date": false,
+        "blog_show_comments": false,
+        "blog_show_author": false,
+        "blog_image_size": "wide",
+        "divider": false
+      }
+    },
     "slideshow-split2": {
       "type": "slideshow-split",
       "blocks": {
@@ -350,19 +363,6 @@
         "autoplay": true,
         "autoplay_speed": 7
       }
-    },
-    "blog-posts": {
-      "type": "blog-posts",
-      "settings": {
-        "title": "From the journal",
-        "blog": "news",
-        "blog_show_tags": true,
-        "blog_show_date": false,
-        "blog_show_comments": false,
-        "blog_show_author": false,
-        "blog_image_size": "wide",
-        "divider": false
-      }
     }
   },
   "order": [
@@ -375,7 +375,7 @@
     "1655297228e49cfbcf",
     "promo-grid2",
     "newsletter",
-    "slideshow-split2",
-    "blog-posts"
+    "blog-posts",
+    "slideshow-split2"
   ]
 }

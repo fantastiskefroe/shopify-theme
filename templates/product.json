@@ -12,7 +12,7 @@
           "settings": {
             "variant_labels": true,
             "picker_type": "button",
-            "color_swatches": true
+            "color_swatches": false
           }
         },
         "0c68f4c9-8772-4f16-97ee-401e54f4c203": {
@@ -40,16 +40,34 @@
             "text": "CO2-neutral forsendelse"
           }
         },
+        "a8824787-b769-4a6a-bfd2-9387c80b2939": {
+          "type": "sales_point",
+          "settings": {
+            "icon": "truck",
+            "text": "1-3 dages levering"
+          }
+        },
         "c4aaa963-76e5-4135-9023-726c4f23fbec": {
           "type": "description",
-          "disabled": true,
           "settings": {
             "is_tab": false
           }
         },
-        "07774d5e-ae00-477b-9530-0cd6275fd42c": {
-          "type": "share",
-          "settings": {}
+        "12605096-96ab-48de-b935-341275ddf13a": {
+          "type": "tab",
+          "settings": {
+            "title": "{{ product.metafields.custom.kom_godt_i_gang_med_titel.value }}",
+            "content": "<p>{{ product.metafields.theme.label.value }}<\/p>",
+            "page": ""
+          }
+        },
+        "012f6ef9-d2b0-4bd2-accb-7f23e8df8fa8": {
+          "type": "tab",
+          "settings": {
+            "title": "Levering",
+            "content": "",
+            "page": "levering"
+          }
         }
       },
       "block_order": [
@@ -59,8 +77,10 @@
         "inventory_status",
         "buy_buttons",
         "sales_point3",
+        "a8824787-b769-4a6a-bfd2-9387c80b2939",
         "c4aaa963-76e5-4135-9023-726c4f23fbec",
-        "07774d5e-ae00-477b-9530-0cd6275fd42c"
+        "12605096-96ab-48de-b935-341275ddf13a",
+        "012f6ef9-d2b0-4bd2-accb-7f23e8df8fa8"
       ],
       "settings": {
         "sku_enable": false,
@@ -77,43 +97,8 @@
     },
     "sub": {
       "type": "product-full-width",
-      "blocks": {
-        "a5241026-70f4-45d1-a1f2-3607948f4732": {
-          "type": "description",
-          "settings": {
-            "is_tab": false
-          }
-        },
-        "7dcadc2b-8675-402b-b7a2-7a72a79bebfe": {
-          "type": "tab",
-          "settings": {
-            "title": "{{ product.metafields.custom.kom_godt_i_gang_med_titel.value }}",
-            "content": "",
-            "page": "{{ product.metafields.custom.kom_godt_i_gang_med_side.value }}"
-          }
-        },
-        "tab": {
-          "type": "tab",
-          "settings": {
-            "title": "Leveringsinformation",
-            "content": "",
-            "page": "levering"
-          }
-        }
-      },
-      "block_order": [
-        "a5241026-70f4-45d1-a1f2-3607948f4732",
-        "7dcadc2b-8675-402b-b7a2-7a72a79bebfe",
-        "tab"
-      ],
       "settings": {
         "max_width": true
-      }
-    },
-    "recommendations": {
-      "type": "product-recommendations",
-      "settings": {
-        "product_recommendations_heading": "Relaterede produkter"
       }
     },
     "more-products-vendor": {
@@ -124,6 +109,12 @@
     "more-products-collection": {
       "type": "more-products-collection",
       "settings": {}
+    },
+    "recommendations": {
+      "type": "product-recommendations",
+      "settings": {
+        "product_recommendations_heading": "Relaterede produkter"
+      }
     },
     "recently-viewed": {
       "type": "recently-viewed",
@@ -139,9 +130,9 @@
   "order": [
     "main",
     "sub",
-    "recommendations",
     "more-products-vendor",
     "more-products-collection",
+    "recommendations",
     "recently-viewed",
     "collection-return"
   ]
