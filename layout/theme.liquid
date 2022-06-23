@@ -65,7 +65,7 @@
     theme.strings = {
       soldOut: {{ 'products.product.sold_out' | t | json }},
       unavailable: {{ 'products.product.unavailable' | t | json }},
-      inStockLabel: {{ 'products.product.in_stock_label' | t | json }},
+      inStockLabel: {{ 'products.product.in_stock_label' | t: count: '[count]' | json }},
       stockLabel: {{ 'products.product.stock_label' | t: count: '[count]' | json }},
       willNotShipUntil: {{ 'products.product.will_not_ship_until' | t: date: '[date]' | json }},
       willBeInStockAfter: {{ 'products.product.will_be_in_stock_after' | t: date: '[date]' | json }},

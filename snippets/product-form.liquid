@@ -2,9 +2,6 @@
 
   {%- if shop.taxes_included or shop.shipping_policy.body != blank -%}
     <div class="product__policies rte">
-      {%- if shop.taxes_included -%}
-        {{ 'products.product.include_taxes' | t }}
-      {%- endif -%}
       {%- if shop.shipping_policy.body != blank -%}
         {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
       {%- endif -%}

@@ -722,7 +722,7 @@
     },
     "product": {
       "description": "Beskrivelse",
-      "in_stock_label": "På lager, klar til at blive afsendt",
+      "in_stock_label": "{{ count }} på lager, klar til at blive afsendt",
       "stock_label": {
         "one": "Lavt lagerantal - {{ count }} stk. tilbage",
         "other": "Lavt lagerantal - {{ count }} stk. tilbage"

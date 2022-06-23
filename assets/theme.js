@@ -7749,26 +7749,30 @@ lazySizesConfig.expFactor = 4;
       },
   
       updateInventory: function(evt) {
-        var variant = evt.detail.variant;
-  
+        const variant = evt.detail.variant;
+        let variantInventoryObject;
+        let quantity = 0;
+
+        if (window.inventories && window.inventories[this.productId]) {
+          variantInventoryObject = window.inventories[this.productId][variant.id];
+          quantity = variantInventoryObject.quantity;
+        }
+
         // Hide stock if no inventory management or policy is continue
         if (!variant || !variant.inventory_management || variant.inventory_policy === 'continue') {
-          this.toggleInventoryQuantity(variant, false);
+          this.toggleInventoryQuantity(variant, quantity);
           this.toggleIncomingInventory(false);
           return;
         }
   
-        if (variant.inventory_management === 'shopify' && window.inventories && window.inventories[this.productId]) {
-          var variantInventoryObject = window.inventories[this.productId][variant.id];
-  
+        if (variant.inventory_management === 'shopify' && variantInventoryObject) {
           // Hide stock if policy is continue
           if (variantInventoryObject.policy === 'continue') {
-            this.toggleInventoryQuantity(variant, false);
+            this.toggleInventoryQuantity(variant);
             this.toggleIncomingInventory(false);
             return;
           }
   
-          var quantity = variantInventoryObject.quantity;
           var showInventory = true;
           var showIncomingInventory = false;
   
@@ -7776,7 +7780,7 @@ lazySizesConfig.expFactor = 4;
             showInventory = false;
           }
   
-          this.toggleInventoryQuantity(variant, showInventory, quantity);
+          this.toggleInventoryQuantity(variant, quantity);
   
           // Only show incoming inventory when:
           // - inventory notice itself is hidden
@@ -7799,20 +7803,16 @@ lazySizesConfig.expFactor = 4;
         this.storeAvailability.updateContent(variant.id);
       },
   
-      toggleInventoryQuantity: function(variant, show, qty) {
-        if (!this.settings.inventory) {
-          show = false;
-        }
-  
-        var el = this.container.querySelector(this.selectors.inventory);
-        var salesPoint = el.closest('.product-block');
-  
+      toggleInventoryQuantity: function (variant, qty) {
+        const el = this.container.querySelector(this.selectors.inventory);
+        const salesPoint = el.closest('.product-block');
+
         if (parseInt(qty) <= parseInt(this.settings.inventoryThreshold)) {
           el.parentNode.classList.add('inventory--low')
           el.textContent = theme.strings.stockLabel.replace('[count]', qty);
         } else {
           el.parentNode.classList.remove('inventory--low')
-          el.textContent = theme.strings.inStockLabel;
+          el.textContent = theme.strings.inStockLabel.replace('[count]', qty);
         }
   
         if (variant && variant.available) {
@@ -7830,12 +7830,12 @@ lazySizesConfig.expFactor = 4;
   
       toggleIncomingInventory: function(show, available, date) {
         var el = this.container.querySelector(this.selectors.incomingInventory);
-        var salesPoint = el.closest('.product-block');
-  
+
         if (!el) {
           return;
         }
-  
+
+        var salesPoint = el.closest('.product-block');
         var textEl = el.querySelector('.js-incoming-text');
   
         if (show) {

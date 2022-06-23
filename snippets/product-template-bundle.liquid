@@ -82,11 +82,12 @@
         comment
          properties that are a sum of the childrens property
         endcomment
-        assign bundleVariantPrices           = "" | split: '¤'
-        assign bundleVariantDiscountedPrices = "" | split: '¤'
-        assign bundleVariantAvailability     = "" | split: '¤'
-        assign bundleVariantHideOrganicLogo  = "" | split: '¤'
-        assign bundleVariantHideDemeterLogo  = "" | split: '¤'
+        assign bundleVariantPrices                  = "" | split: '¤'
+        assign bundleVariantDiscountedPrices        = "" | split: '¤'
+        assign bundleVariantMinInventoryQuantities  = "" | split: '¤'
+        assign bundleVariantAvailability            = "" | split: '¤'
+        assign bundleVariantHideOrganicLogo         = "" | split: '¤'
+        assign bundleVariantHideDemeterLogo         = "" | split: '¤'
         comment
          list of lists (list of strings seperated by '§') that contain the data for each child
         endcomment
@@ -117,6 +118,7 @@
 
           assign bundleVariantPrice = 0
           assign bundleVariantDiscountedPrice = 0
+          assign bundleVariantMinInventoryQuantity = 99999
           assign bundleVariantProductIDList = ""
           assign bundleVariantProductTitleList = ""
           assign bundleVariantProductPriceList = ""
@@ -141,6 +143,9 @@
                   if productVariant.id == productVariantID
                     assign bundleVariantPrice = bundleVariantPrice | plus: productVariant.price
                     assign bundleVariantProductDiscountedPrice = productVariant.price | times: productVariantPriceCoefficient
+                    if productVariant.inventory_quantity < bundleVariantMinInventoryQuantity
+                      assign bundleVariantMinInventoryQuantity = productVariant.inventory_quantity
+                    endif
                     assign bundleVariantDiscountedPrice = bundleVariantDiscountedPrice | plus: bundleVariantProductDiscountedPrice
                     assign bundleVariantProductIDList = bundleVariantProductIDList | append: productVariant.id | append: '§'
                     if productVariant.title == 'Default Title'
@@ -186,11 +191,12 @@
           comment
            turn variables into arrays of length 1 to be able to concat to other array
           endcomment
-          assign bundleVariantPriceSingleton           = bundleVariantPrice           | string | split: '¤'
-          assign bundleVariantDiscountedPriceSingleton = bundleVariantDiscountedPrice | string | split: '¤'
-          assign bundleVariantAvailableSingleton       = bundleVariantAvailable                | split: '¤'
-          assign bundleVariantOrganicLogoSingleton     = bundleVariantOrganicLogoSingleton     | split: '¤'
-          assign bundleVariantDemeterLogoSingleton     = bundleVariantDemeterLogoSingleton     | split: '¤'
+          assign bundleVariantPriceSingleton                = bundleVariantPrice                | string | split: '¤'
+          assign bundleVariantDiscountedPriceSingleton      = bundleVariantDiscountedPrice      | string | split: '¤'
+          assign bundleVariantMinInventoryQuantitySingleton = bundleVariantMinInventoryQuantity | split: '¤'
+          assign bundleVariantAvailableSingleton            = bundleVariantAvailable            | split: '¤'
+          assign bundleVariantOrganicLogoSingleton          = bundleVariantOrganicLogoSingleton | split: '¤'
+          assign bundleVariantDemeterLogoSingleton          = bundleVariantDemeterLogoSingleton | split: '¤'
 
           assign bundleVariantProductIDsSingleton              = bundleVariantProductIDList              | split: '¤'
           assign bundleVariantProductTitlesSingleton           = bundleVariantProductTitleList           | split: '¤'
@@ -199,11 +205,12 @@
           assign bundleVariantProductAvailabilitysSingleton    = bundleVariantProductAvailabilityList    | split: '¤'
           assign bundleVariantProductURLsSingleton             = bundleVariantProductURLsList            | split: '¤'
 
-          assign bundleVariantPrices           = bundleVariantPrices           | concat: bundleVariantPriceSingleton
-          assign bundleVariantDiscountedPrices = bundleVariantDiscountedPrices | concat: bundleVariantDiscountedPriceSingleton
-          assign bundleVariantAvailability     = bundleVariantAvailability     | concat: bundleVariantAvailableSingleton
-          assign bundleVariantOrganicLogo      = bundleVariantOrganicLogo      | concat: bundleVariantOrganicLogoSingleton
-          assign bundleVariantDemeterLogo      = bundleVariantDemeterLogo      | concat: bundleVariantDemeterLogoSingleton
+          assign bundleVariantPrices                 = bundleVariantPrices                  | concat: bundleVariantPriceSingleton
+          assign bundleVariantDiscountedPrices       = bundleVariantDiscountedPrices        | concat: bundleVariantDiscountedPriceSingleton
+          assign bundleVariantMinInventoryQuantities = bundleVariantMinInventoryQuantities  | concat: bundleVariantMinInventoryQuantitySingleton
+          assign bundleVariantAvailability           = bundleVariantAvailability            | concat: bundleVariantAvailableSingleton
+          assign bundleVariantOrganicLogo            = bundleVariantOrganicLogo             | concat: bundleVariantOrganicLogoSingleton
+          assign bundleVariantDemeterLogo            = bundleVariantDemeterLogo             | concat: bundleVariantDemeterLogoSingleton
 
           assign bundleVariantProductIDs              = bundleVariantProductIDs              | concat: bundleVariantProductIDsSingleton
           assign bundleVariantProductTitles           = bundleVariantProductTitles           | concat: bundleVariantProductTitlesSingleton
@@ -230,6 +237,7 @@
                     'id': {{ bundleVariantIDs[forloop.index0] }},
                     'price': {{ bundleVariantPrices[forloop.index0] }},
                     'discountedPrice': {{ bundleVariantDiscountedPrices[forloop.index0] }},
+                    'quantity': {{ bundleVariantMinInventoryQuantities[forloop.index0] }},
                     'available': {{ bundleVariantAvailability[forloop.index0] }},
                     'quality': {
                         'organic': {{ bundleVariantOrganicLogo[forloop.index0] }},
@@ -245,8 +253,8 @@
                         {
                             'id': {{ productID | plus: 0 }},
                             'name': "{{ productTitles[forloop.index0] | escape }}",
-                            'price': {{ productPrices[forloop.index0] | plus: 0 }},
-                            'discountedPrice': {{ productDiscountedPrices[forloop.index0] | plus: 0 }},
+                            'price': {{ productPrices[forloop.index0] }},
+                            'discountedPrice': {{ productDiscountedPrices[forloop.index0] }},
                             'available': {{ productAvailability[forloop.index0] }}
                         },
                       {%- endfor -%} ]
@@ -268,6 +276,20 @@
         </h1>
       </h1>
     {%- endif -%}
+
+    {%- for name in bundleVariantNames -%}
+      {% if current_variant.title == name %}
+        <div class="quality-logos">
+          <img src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/Demeter_480x480.png?v=1591110274"
+               alt="Demeter - biodynamisk certificeret"
+               class="logo-demeter{% if bundleVariantDemeterLogo[forloop.index0] != 'true' %} hide{% endif %}">
+          <img
+              src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/DK-Oko-uden_tekst_200x200.png?v=1578570873"
+              alt="Statskontrolleret økologiske frø"
+              class="logo-organic {% if bundleVariantOrganicLogo[forloop.index0] != 'true' %} hide{% endif %}">
+        </div>
+      {%- endif %}
+    {%- endfor -%}
 
     {%- if settings.vendor_enable or sku_enable -%}
       <div class="product-single__vendor-sku">
@@ -548,7 +570,17 @@
                       </div>
                     {%- endunless -%}
                   {%- when 'inventory_status' -%}
-                    {%- render 'product-inventory', product: product, current_variant: current_variant, block: block -%}
+                    {%- for name in bundleVariantNames -%}
+                      {% if current_variant.title == name %}
+                        {%- render 'product-inventory-bundle',
+                            product: product,
+                            bundleVariantIDs: bundleVariantIDs,
+                            bundleVariantMinInventoryQuantities: bundleVariantMinInventoryQuantities,
+                            variantAvailable: bundleVariantAvailability[forloop.index0],
+                            quantity: bundleVariantMinInventoryQuantities[forloop.index0] ,
+                            block: block -%}
+                      {%- endif %}
+                    {%- endfor -%}
                   {%- when 'share' -%}
                     <div class="product-block" {{ block.shopify_attributes }}>
                       {%- render 'social-sharing', share_title: product.title, share_permalink: product.url, share_image: product -%}

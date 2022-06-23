@@ -23,7 +23,7 @@
           "type": "inventory_status",
           "settings": {
             "inventory_threshold": 20,
-            "inventory_transfers_enable": true
+            "inventory_transfers_enable": false
           }
         },
         "buy_buttons": {

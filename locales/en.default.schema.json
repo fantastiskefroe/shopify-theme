@@ -3429,7 +3429,7 @@
       },
       "product": {
         "description": "Description",
-        "in_stock_label": "In stock, ready to ship",
+        "in_stock_label": "{{ count }} in stock, ready to ship",
         "stock_label": {
           "one": "Low stock - {{ count }} item left",
           "other": "Low stock - {{ count }} items left"
