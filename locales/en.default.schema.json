@@ -3655,5 +3655,18 @@
         }
       }
     }
+  },
+  "product_bundle_block": {
+    "contents": {
+      "name": "Bundle contents",
+      "settings": {
+        "is_tab": {
+          "label": "Show as tab"
+        },
+        "tab_title": {
+          "label": "Tab title"
+        }
+      }
+    }
   }
 }

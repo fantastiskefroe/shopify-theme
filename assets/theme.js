@@ -7527,6 +7527,7 @@ lazySizesConfig.expFactor = 4;
         }
   
         this.container.on('variantChange' + this.settings.namespace, this.updateCartButton.bind(this));
+        this.container.on('variantChange' + this.settings.namespace, this.updateQualityLogos.bind(this));
         this.container.on('variantImageChange' + this.settings.namespace, this.updateVariantImage.bind(this));
         this.container.on('variantPriceChange' + this.settings.namespace, this.updatePrice.bind(this));
         this.container.on('variantUnitPriceChange' + this.settings.namespace, this.updateUnitPrice.bind(this));
@@ -7620,7 +7621,45 @@ lazySizesConfig.expFactor = 4;
           cartBtnText.textContent = theme.strings.unavailable;
         }
       },
-  
+
+      updateQualityLogos: function(evt) {
+        const variant = evt.detail.variant;
+        if (!variant) {
+          return;
+        }
+
+        const bundleData = window.bundleData;
+        let organic;
+        let demeter;
+
+        if (bundleData) {
+          const qualities = bundleData[variant.id].quality;
+          organic = qualities.organic;
+          demeter = qualities.demeter;
+        } else {
+          organic = variant.sku.indexOf('-Ø-') >= 0 || variant.sku.indexOf('-D-') >= 0;
+          demeter = variant.sku.indexOf('-D-') >= 0;
+        }
+
+        const organicLogos = document.querySelectorAll('.quality-logos .logo-organic');
+        if (organic) {
+          organicLogos
+              .forEach(logo => logo.classList.remove(classes.hidden));
+        } else {
+          organicLogos
+              .forEach(logo => logo.classList.add(classes.hidden));
+        }
+
+        const demeterLogos = document.querySelectorAll('.quality-logos .logo-demeter');
+        if (demeter) {
+          demeterLogos
+              .forEach(logo => logo.classList.remove(classes.hidden));
+        } else {
+          demeterLogos
+              .forEach(logo => logo.classList.add(classes.hidden));
+        }
+      },
+
       updatePrice: function(evt) {
         var variant = evt.detail.variant;
   

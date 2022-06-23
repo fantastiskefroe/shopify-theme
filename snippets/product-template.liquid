@@ -72,13 +72,30 @@
       </p>
     {%- else -%}
       <h1 class="h2 product-single__title">
-        {%- unless product.empty? -%}
-          {{ product.title }}
-        {%- else -%}
-          {{ 'home_page.onboarding.product_title' | t }}
-        {%- endunless -%}
+        {% assign lines = product.title | split: "'" %}
+        <h1 class="h2 product-single__title">
+          <span class="primary">{{ lines[0] }}</span>
+          <span class="secondary">'{{ lines[1] }}'</span>
+        </h1>
       </h1>
     {%- endif -%}
+
+    {%- liquid
+      assign organic = false
+      assign demeter = false
+
+      if current_variant.sku contains '-Ø-'
+        assign organic = true
+      endif
+      if current_variant.sku contains '-D-'
+        assign organic = true
+        assign demeter = true
+      endif
+    -%}
+    {%- render 'quality-logos',
+        organic: organic,
+        demeter: demeter
+    -%}
 
     {%- if settings.vendor_enable or sku_enable -%}
       <div class="product-single__vendor-sku">
@@ -166,7 +183,7 @@
                   {%- when 'description' -%}
                     <div class="product-block{% if block.settings.is_tab %} product-block--tab{% endif %}" {{ block.shopify_attributes }}>
                       {%- assign id = block.id | append: product.id -%}
-                      {%- render 'product-description', id: id, product: product, is_tab: block.settings.is_tab -%}
+                      {%- render 'product-description', id: id, description: product.description, is_tab: block.settings.is_tab -%}
                     </div>
                   {%- when 'price' -%}
                     <div class="product-block product-block--price" {{ block.shopify_attributes }}>
