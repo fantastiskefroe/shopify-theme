@@ -7700,8 +7700,6 @@ lazySizesConfig.expFactor = 4;
             variant.compare_at_price = bundleData[variant.id].price;
           }
 
-          console.log(variant.price, variant.compare_at_price);
-
           // If no price element, form initiated later than rest of
           // product page. Update cached elements
           if (!this.cache.price) {
