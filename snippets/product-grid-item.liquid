@@ -154,11 +154,11 @@
             {%- endfor -%}
           {%- endif -%}
 
-          {%- unless product.available -%}
+          {%- if sold_out -%}
             <div class="grid-product__tag grid-product__tag--sold-out">
               {{ 'products.product.sold_out' | t }}
             </div>
-          {%- endunless -%}
+          {%- endif -%}
           {%- if on_sale and product.available and isBundle == false -%}
             <div class="grid-product__tag grid-product__tag--sale">
               {{ 'products.general.sale' | t }}
