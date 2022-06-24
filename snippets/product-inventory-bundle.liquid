@@ -4,10 +4,10 @@
   {%- assign inventory_visible = true -%}
 {%- endif -%}
 
-<div class="product-block product-block--sales-point{% unless variantAvailable %} hide{% endunless %}" {{ block.shopify_attributes }}>
+<div class="product-block product-block--sales-point{% if variantAvailable == 'false' %} hide{% endif %}" {{ block.shopify_attributes }}>
   <ul class="sales-points">
     <li class="sales-point">
-      <span class="icon-and-text{% if inventory_visible == true %} inventory--low{% endif %}{% unless variantAvailable %} hide{% endunless %}">
+      <span class="icon-and-text{% if inventory_visible == true %} inventory--low{% endif %}{% if variantAvailable == 'false' %} hide{% endif %}">
         <span class="icon icon--inventory"></span>
         <span data-product-inventory data-threshold="{{ block.settings.inventory_threshold }}">
           {%- if inventory_visible -%}
