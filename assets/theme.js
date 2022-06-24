@@ -33,7 +33,7 @@ if (theme.config.isTouch) {
 }
 
 if (console && console.log) {
-  console.log('Expanse theme ('+theme.settings.themeVersion+') by ARCHΞTYPE | Learn more at https://archetypethemes.co');
+  // console.log('Expanse theme ('+theme.settings.themeVersion+') by ARCHΞTYPE | Learn more at https://archetypethemes.co');
 }
 
 window.lazySizesConfig = window.lazySizesConfig || {};
@@ -976,6 +976,7 @@ lazySizesConfig.expFactor = 4;
         this._updatePrice(variant);
         this._updateUnitPrice(variant);
         this._updateSKU(variant);
+        this._updateBundleProductList(variant);
         this.currentVariant = variant;
   
         if (this.enableHistoryState) {
@@ -999,7 +1000,9 @@ lazySizesConfig.expFactor = 4;
       },
   
       _updatePrice: function(variant) {
-        if (this.currentVariant && variant.price === this.currentVariant.price && variant.compare_at_price === this.currentVariant.compare_at_price) {
+        // The different variants of a bundle all have the same price, so we need to skip the following optimization
+        const bundleData = window.bundleData;
+        if (!bundleData && this.currentVariant && variant.price === this.currentVariant.price && variant.compare_at_price === this.currentVariant.compare_at_price) {
           return;
         }
   
@@ -1032,6 +1035,24 @@ lazySizesConfig.expFactor = 4;
             variant: variant
           }
         }));
+      },
+
+      _updateBundleProductList: function(variant) {
+        const bundleData = window.bundleData;
+        if (!bundleData) {
+          return;
+        }
+
+        const bundleProductLists = document.getElementsByClassName('bundle-product-list');
+        //console.log(bundleProductList);
+        for (const el of bundleProductLists) {
+          const variantID = parseInt(el.dataset.variant);
+          if (variantID === variant.id) {
+            el.classList.remove('hide');
+          } else {
+            el.classList.add('hide');
+          }
+        }
       },
   
       _updateHistoryState: function(variant) {
@@ -2919,16 +2940,20 @@ lazySizesConfig.expFactor = 4;
   
     QtySelector.prototype = Object.assign({}, QtySelector.prototype, {
       init: function() {
-        this.plus.addEventListener('click', function() {
-          var qty = this._getQty();
-          this._change(qty + 1);
-        }.bind(this));
-  
-        this.minus.addEventListener('click', function() {
-          var qty = this._getQty();
-          this._change(qty - 1);
-        }.bind(this));
-  
+        if (this.plus) {
+          this.plus.addEventListener('click', function() {
+            var qty = this._getQty();
+            this._change(qty + 1);
+          }.bind(this));
+        }
+
+        if (this.minus) {
+          this.minus.addEventListener('click', function() {
+            var qty = this._getQty();
+            this._change(qty - 1);
+          }.bind(this));
+        }
+
         this.input.addEventListener('change', function(evt) {
           this._change(this._getQty());
         }.bind(this));
@@ -7602,6 +7627,11 @@ lazySizesConfig.expFactor = 4;
         var cartBtnText = this.container.querySelector(this.selectors.addToCartText);
   
         if (variant) {
+          const bundleData = window.bundleData;
+          if (bundleData) {
+            variant.available = bundleData[variant.id].available;
+          }
+
           if (variant.available) {
             // Available, enable the submit button and change text
             cartBtn.classList.remove(classes.disabled);
@@ -7664,12 +7694,20 @@ lazySizesConfig.expFactor = 4;
         var variant = evt.detail.variant;
   
         if (variant) {
+          const bundleData = window.bundleData;
+          if (bundleData) {
+            variant.price = bundleData[variant.id].discountedPrice;
+            variant.compare_at_price = bundleData[variant.id].price;
+          }
+
+          console.log(variant.price, variant.compare_at_price);
+
           // If no price element, form initiated later than rest of
           // product page. Update cached elements
           if (!this.cache.price) {
             this.cacheElements();
           }
-  
+
           // Regular price
           this.cache.price.innerHTML = theme.Currency.formatMoney(variant.price, theme.settings.moneyFormat);
   
@@ -7687,8 +7725,8 @@ lazySizesConfig.expFactor = 4;
   
             var savings = variant.compare_at_price - variant.price;
   
-            if (theme.settings.saveType == 'percent') {
-              savings = Math.round(((savings) * 100) / variant.compare_at_price) + '%';
+            if (theme.settings.saveType === 'percent') {
+              savings = Math.floor(((savings) * 100) / variant.compare_at_price) + '%';
             } else {
               savings = theme.Currency.formatMoney(savings, theme.settings.moneyFormat);
             }
