@@ -102,7 +102,7 @@
                                 assign filter_value_index = forloop.index
 
                                 assign color_file_name = filter_value.label | handle | append: '.' | append: swatch_file_extension
-                                assign color_image = color_file_name | file_img_url: '50x50' | prepend: 'https:' | split: '?' | first
+                                assign color_image = color_file_name | asset_url
                                 assign color_swatch_fallback = filter_value.label | split: ' ' | last | handle
                               -%}
 
@@ -118,7 +118,7 @@
                                     <span
                                       class="color-swatch color-swatch--filter color-swatch--{{ filter_value.label | handle }}"
                                       title="{{ filter_value.label }}"
-                                      style="background-color: {{ color_swatch_fallback }};{% if images[color_file_name] != blank %}  background-image: url({{ color_image }});{% endif %}"
+                                      style="background-color: {{ color_swatch_fallback }}; background-image: url({{ color_image }});"
                                     >
                                       {{ filter_value.label }}
                                     </span>

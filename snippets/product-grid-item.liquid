@@ -282,7 +282,7 @@
                         assign values = values | join: ',' | append: ',' | append: value | split: ','
 
                         assign color_file_name = value | handle | append: '.' | append: swatch_file_extension
-                        assign color_image = color_file_name | file_img_url: '50x50' | prepend: 'https:' | split: '?' | first
+                        assign color_image = color_file_name | asset_url
                         assign color_swatch_fallback = value | split: ' ' | last | handle
                         assign color_count = color_count | plus: 1
                       -%}
@@ -295,7 +295,7 @@
                             data-variant-id="{{ variant.id }}"
                             data-variant-image="{{ variant.image | img_url: '400x' }}"
                           {% endif %}
-                          style="background-color: {{ color_swatch_fallback }};{% if images[color_file_name] != blank %}  background-image: url({{ color_image }});{% endif %}">
+                          style="background-color: {{ color_swatch_fallback }}; background-image: url({{ color_image }});">
                           <span class="visually-hidden">{{ value }}</span>
                         </span>
                       {%- else -%}
