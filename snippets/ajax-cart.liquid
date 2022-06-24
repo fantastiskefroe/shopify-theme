@@ -1,0 +1,201 @@
+<script>
+    const _config = {
+        // What you might want to change
+        addToCartBtnLabel: 'Føj til kurv',
+        addingToCartBtnLabel: 'Tilføjer...',
+        addedToCartBtnLabel: 'Tilføjet!',
+        soldOutBtnLabel: 'Udsolgt',
+        errorBtnLabel: 'Fejl!',
+        howLongTillBtnReturnsToNormal: 1000, // in milliseconds.
+        feedbackPosition: 'nextButton',
+        limitedVariantIDs: ['37789873078464'],
+
+        // What you will never need to change
+        addToCartBtnSelector: '[type="submit"]',
+        feedbackSelector: 'ajaxified-cart-feedback',
+        shopifyAjaxAddURL: '/cart/add.js',
+        shopifyAjaxUpdateURL: '/cart/update.js',
+        shopifyAjaxCartURL: '/cart.js'
+    };
+
+    function _showFeedback(success, content, formEl) {
+        const existingFeedbackEl = document.getElementById(_config.feedbackSelector);
+        if (existingFeedbackEl) {
+            existingFeedbackEl.remove();
+        }
+
+        const newFeedbackEl = document.createElement('p');
+        newFeedbackEl.id = _config.feedbackSelector;
+        newFeedbackEl.classList.add(success ? 'success' : 'error');
+        newFeedbackEl.innerHTML = content;
+
+        formEl.querySelector(_config.addToCartBtnSelector).after(newFeedbackEl);
+    }
+
+    function _setText(text, btnEl) {
+        if (btnEl.children.length > 0) {
+            for (let i = 0; i < btnEl.children.length; i++) {
+                const el = btnEl.children[i];
+                if (el.textContent.trim() !== '') {
+                    el.textContent = text;
+                }
+            }
+        } else {
+            btnEl.textContent = text;
+        }
+    }
+
+    function _serializeForm(formEl) {
+        const formData = new FormData(formEl);
+        const result = {};
+        for (const [key, value] of formData) {
+            result[key] = value;
+        }
+
+        return result;
+    }
+
+    function _handleSuccess(response, formEl, formBtnEl, addMore) {
+        console.info(response);
+
+        formBtnEl.classList.add('inverted');
+        _setText(_config.addedToCartBtnLabel, formBtnEl);
+        _showFeedback(true, '<b>✓</b> Tilføjet til din <a href="/cart">kurv</a>!', formEl);
+
+        const cartBubbleEl = document.querySelector('.cart-link__bubble');
+        cartBubbleEl.classList.add('cart-link__bubble--visible');
+
+        if (addMore) {
+            window.setTimeout(() => {
+                formBtnEl.classList.remove('inverted', 'disabled');
+                formBtnEl.disabled = false;
+                _setText(_config.addToCartBtnLabel, formBtnEl);
+            }, _config.howLongTillBtnReturnsToNormal);
+        }
+    }
+
+    function _handleError(response, formEl, formBtnEl) {
+        console.warn(response);
+
+        response.text()
+            .then((responseText) => {
+                formBtnEl.classList.add('inverted');
+                const textObj = JSON.parse(responseText);
+                let productSoldOut = textObj.description.includes('er allerede udsolgt.');
+                if (productSoldOut) {
+                    _setText(_config.soldOutBtnLabel, formBtnEl);
+                    _showFeedback(false, `<b>✕</b> ${textObj.description.replace('Produktet ', '').replace('allerede ', '')}`, formEl);
+                } else {
+                    _setText(_config.errorBtnLabel, formBtnEl);
+                    _showFeedback(false, `<b>✕</b> Der skete en fejl, prøv igen - ${textObj.description}`, formEl);
+                    formBtnEl.classList.remove('inverted', 'disabled');
+                    formBtnEl.disabled = false;
+
+                    Sentry.captureMessage("Add to cart gave an unknown error: " + responseText);
+                }
+            });
+    }
+
+    function _handleBundleProduct(formData) {
+        const bundleID = parseInt(formData.id);
+        const quantity = formData.quantity;
+        const bundleProducts = window.bundleData[bundleID].products;
+        const bundleTitle = window.bundleData[bundleID].title;
+
+        const items = [{
+            id: bundleID,
+            quantity: quantity,
+            properties: {
+                _bundle: true
+            }
+        }];
+
+        for (const bundleProduct of bundleProducts) {
+            items.unshift({
+                id: bundleProduct.id,
+                quantity: quantity,
+                properties: {
+                    _partOf: bundleID,
+                    _bundleTitle: bundleTitle
+                }
+            })
+        }
+
+        return _sendRequest(_config.shopifyAjaxAddURL, {items});
+    }
+
+    function _sendRequest(url, body) {
+        const request = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        }
+
+        console.info(request);
+
+        return fetch(url, request);
+    }
+
+    function _handleFormSubmit(event) {
+        event.preventDefault();
+
+        const formEl = event.target;
+        const formBtnEl = formEl.querySelector(_config.addToCartBtnSelector);
+        const formData = _serializeForm(formEl);
+
+        _setText(_config.addingToCartBtnLabel, formBtnEl);
+        formBtnEl.classList.add('disabled');
+        formBtnEl.disabled = true;
+
+        const limitedProduct = _config.limitedVariantIDs.indexOf(formData.id) >= 0;
+        const bundleProduct = window.bundleData !== undefined || window.bundleData !== null;
+
+        let promise;
+        if (bundleProduct) {
+            promise = _handleBundleProduct(formData);
+        } else {
+            promise = _sendRequest(_config.shopifyAjaxAddURL, formData);
+        }
+
+        promise
+            .then((response) => {
+                if (response.ok) {
+                    _handleSuccess(response, formEl, formBtnEl, !limitedProduct);
+                } else {
+                    _handleError(response, formEl, formBtnEl);
+                }
+            });
+
+        return false;
+    }
+
+    document.addEventListener('page:loaded', () => {
+        const formEl = document.querySelector('form[action="/cart/add"]');
+        if (formEl) {
+            formEl.addEventListener('submit', _handleFormSubmit);
+        }
+    });
+</script>
+
+<style>
+    #ajaxified-cart-feedback {
+        display: block;
+        line-height: 36px;
+        font-size: 90%;
+        vertical-align: middle;
+    }
+
+    #ajaxified-cart-feedback.success {
+        color: #3D9970;
+    }
+
+    #ajaxified-cart-feedback.error {
+        color: #FF4136;
+    }
+
+    #ajaxified-cart-feedback a {
+        border-bottom: 1px solid;
+    }
+</style>
