@@ -1,0 +1,88 @@
+{%- form 'product', product, id: form_id, class: 'product-single__form' -%}
+
+  {%- if shop.taxes_included or shop.shipping_policy.body != blank -%}
+    <div class="product__policies rte">
+      {%- if shop.shipping_policy.body != blank -%}
+        {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  {%- liquid
+    assign enable_dynamic_buttons = false
+    if show_dynamic_checkout and template != 'product.preorder'
+      assign enable_dynamic_buttons = true
+    endif
+  -%}
+
+  {%- if enable_dynamic_buttons -%}
+    <div class="payment-buttons">
+  {%- endif -%}
+
+    {%- liquid
+      assign default_text = 'products.product.add_to_cart' | t
+      assign button_text = 'products.product.add_to_cart' | t
+      if template contains 'preorder'
+        assign default_text = 'products.product.preorder' | t
+        assign button_text = 'products.product.preorder' | t
+      endif
+
+      for name in bundleVariantNames
+        if current_variant.title == name
+          if bundleVariantAvailability[forloop.index0] == 'false'
+            assign button_text = 'products.product.sold_out' | t
+          endif
+        endif
+      endfor
+    -%}
+
+    {%- for name in bundleVariantNames -%}
+      {% if current_variant.title == name %}
+        <button
+            {% if product.empty? %}type="button"{% else %}type="submit"{% endif %}
+            name="add"
+            data-add-to-cart
+            class="btn btn--full add-to-cart{% if enable_dynamic_buttons and product.selling_plan_groups == empty %} btn--secondary{% endif %}"
+            {% if bundleVariantAvailability[forloop.index0] == 'false' %} disabled="disabled"{% endif %}>
+          <span data-add-to-cart-text data-default-text="{{ default_text }}">
+            {{ button_text }}
+          </span>
+        </button>
+      {%- endif %}
+    {%- endfor -%}
+
+
+    {%- if enable_dynamic_buttons -%}
+      {{ form | payment_button }}
+    {%- endif -%}
+
+  {%- if enable_dynamic_buttons -%}
+    </div>
+  {%- endif -%}
+
+  <div class="shopify-payment-terms product__policies">{{ form | payment_terms }}</div>
+
+  <select name="id" data-product-select class="product-single__variants no-js">
+    {%- for name in bundleVariantNames -%}
+      {%- if bundleVariantAvailability[forloop.index0] == 'true' -%}
+        <option {% if current_variant.title == name %}selected="selected"{% endif %}
+          value="{{ bundleVariantIDs[forloop.index0] }}">
+          {{ name }} - {{ bundleVariantPrices[forloop.index0] | money_with_currency }}
+        </option>
+      {%- else -%}
+        <option disabled="disabled">
+          {{ name }} - {{ 'products.product.sold_out' | t }}
+        </option>
+      {%- endif -%}
+    {%- endfor -%}
+  </select>
+
+  <textarea data-variant-json class="hide" aria-hidden="true" aria-label="Product JSON">
+    {{ product.variants | json }}
+  </textarea>
+  {%- if product.options.size > 1 -%}
+    <textarea data-current-variant-json class="hide" aria-hidden="true" aria-label="Variant JSON">
+      {{ current_variant | json }}
+    </textarea>
+  {%- endif -%}
+{%- endform -%}
