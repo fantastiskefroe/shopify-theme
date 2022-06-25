@@ -127,9 +127,9 @@
       "subtotal": "Subtotal",
       "discounts": "Rabat",
       "savings_html": "Du sparede {{ saved_amount }}",
-      "shipping_at_checkout": "Fragt, moms og rabatter vil blive beregnet ved checkout.",
+      "shipping_at_checkout": "Fragt, moms og rabatter beregnes ved checkout.",
       "update": "Opdater kurv",
-      "checkout": "Ckeck ud",
+      "checkout": "Check ud",
       "empty": "Din kurv er tom.",
       "continue_shopping": "Fortsæt med at shoppe",
       "close_cart": "Luk kurv",
@@ -137,7 +137,7 @@
       "increase_quantity": "Øg antal med én",
       "terms": "Jeg accepterer handelsbetingelserne",
       "terms_html": "Jeg accepterer <a href='{{ url }}' target='_blank'>handelsbetingelserne<\/a>",
-      "terms_confirm": "Venligst accepter handelsbetingelserne for a fortsætte",
+      "terms_confirm": "Accepter venligst handelsbetingelserne for at fortsætte",
       "recommended_title": "Relaterede produkter"
     },
     "label": {
