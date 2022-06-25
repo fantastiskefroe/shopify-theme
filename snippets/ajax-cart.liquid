@@ -55,7 +55,7 @@
         return result;
     }
 
-    function _handleSuccess(response, formEl, formBtnEl, addMore) {
+    function _handleSuccess(response, formEl, formBtnEl) {
         console.info(response);
 
         formBtnEl.classList.add('inverted');
@@ -65,13 +65,11 @@
         const cartBubbleEl = document.querySelector('.cart-link__bubble');
         cartBubbleEl.classList.add('cart-link__bubble--visible');
 
-        if (addMore) {
-            window.setTimeout(() => {
-                formBtnEl.classList.remove('inverted', 'disabled');
-                formBtnEl.disabled = false;
-                _setText(_config.addToCartBtnLabel, formBtnEl);
-            }, _config.howLongTillBtnReturnsToNormal);
-        }
+        window.setTimeout(() => {
+            formBtnEl.classList.remove('inverted', 'disabled');
+            formBtnEl.disabled = false;
+            _setText(_config.addToCartBtnLabel, formBtnEl);
+        }, _config.howLongTillBtnReturnsToNormal);
     }
 
     function _handleError(response, formEl, formBtnEl) {
@@ -96,11 +94,13 @@
             });
     }
 
-    function _handleBundleProduct(formData) {
+    function _handleBundleProduct(productID, formData) {
+        console.log(formData);
         const bundleID = parseInt(formData.id);
         const quantity = formData.quantity;
-        const bundleProducts = window.bundleData[bundleID].products;
-        const bundleTitle = window.bundleData[bundleID].title;
+        const bundleData = window.bundleData[productID];
+        const bundleProducts = bundleData[bundleID].products;
+        const bundleTitle = bundleData[bundleID].title;
 
         const items = [{
             id: bundleID,
@@ -149,12 +149,12 @@
         formBtnEl.classList.add('disabled');
         formBtnEl.disabled = true;
 
-        const limitedProduct = _config.limitedVariantIDs.indexOf(formData.id) >= 0;
-        const bundleProduct = window.bundleData !== undefined || window.bundleData !== null;
+        const bundleDataEl = document.querySelector('.js-bundle-data');
 
         let promise;
-        if (bundleProduct) {
-            promise = _handleBundleProduct(formData);
+        if (bundleDataEl) {
+            const productID = bundleDataEl.dataset.productId;
+            promise = _handleBundleProduct(productID, formData);
         } else {
             promise = _sendRequest(_config.shopifyAjaxAddURL, formData);
         }
@@ -162,7 +162,7 @@
         promise
             .then((response) => {
                 if (response.ok) {
-                    _handleSuccess(response, formEl, formBtnEl, !limitedProduct);
+                    _handleSuccess(response, formEl, formBtnEl);
                 } else {
                     _handleError(response, formEl, formBtnEl);
                 }
@@ -172,6 +172,20 @@
     }
 
     document.addEventListener('page:loaded', () => {
+        const formEl = document.querySelector('form[action="/cart/add"]');
+        if (formEl) {
+            formEl.addEventListener('submit', _handleFormSubmit);
+        }
+    });
+
+    document.addEventListener('quickview:loaded', () => {
+        const formEl = document.querySelector('form[action="/cart/add"]');
+        if (formEl) {
+            formEl.addEventListener('submit', _handleFormSubmit);
+        }
+    });
+
+    document.addEventListener('quickadd:loaded', () => {
         const formEl = document.querySelector('form[action="/cart/add"]');
         if (formEl) {
             formEl.addEventListener('submit', _handleFormSubmit);

@@ -5126,33 +5126,33 @@ lazySizesConfig.expFactor = 4;
           }]
         };
 
-        const bundleData = window.bundleData;
-        if (bundleData) {
-          const bundleID = parseInt(formData.id);
-          const bundleProducts = window.bundleData[bundleID].products;
-          const bundleTitle = window.bundleData[bundleID].title;
-
-          const items = [{
-            id,
-            quantity: 1,
-            properties: {
-              _bundle: true
-            }
-          }];
-
-          for (const bundleProduct of bundleProducts) {
-            items.unshift({
-              id: bundleProduct.id,
-              quantity: 1,
-              properties: {
-                _partOf: bundleID,
-                _bundleTitle: bundleTitle
-              }
-            })
-          }
-
-          data = {items};
-        }
+        // const bundleData = window.bundleData;
+        // if (bundleData) {
+        //   const bundleID = parseInt(formData.id);
+        //   const bundleProducts = window.bundleData[bundleID].products;
+        //   const bundleTitle = window.bundleData[bundleID].title;
+        //
+        //   const items = [{
+        //     id,
+        //     quantity: 1,
+        //     properties: {
+        //       _bundle: true
+        //     }
+        //   }];
+        //
+        //   for (const bundleProduct of bundleProducts) {
+        //     items.unshift({
+        //       id: bundleProduct.id,
+        //       quantity: 1,
+        //       properties: {
+        //         _partOf: bundleID,
+        //         _bundleTitle: bundleTitle
+        //       }
+        //     })
+        //   }
+        //
+        //   data = {items};
+        // }
 
         fetch(theme.routes.cartAdd, {
           method: 'POST',
@@ -7662,8 +7662,9 @@ lazySizesConfig.expFactor = 4;
         var cartBtnText = this.container.querySelector(this.selectors.addToCartText);
   
         if (variant) {
-          const bundleData = window.bundleData;
-          if (bundleData) {
+          if (window.bundleData && window.bundleData[this.productId]) {
+            const bundleData = window.bundleData[this.productId];
+
             variant.available = bundleData[variant.id].available;
           }
 
@@ -7693,11 +7694,11 @@ lazySizesConfig.expFactor = 4;
           return;
         }
 
-        const bundleData = window.bundleData;
         let organic;
         let demeter;
 
-        if (bundleData) {
+        if (window.bundleData && window.bundleData[this.productId]) {
+          const bundleData = window.bundleData[this.productId];
           const qualities = bundleData[variant.id].quality;
           organic = qualities.organic;
           demeter = qualities.demeter;
@@ -7729,8 +7730,8 @@ lazySizesConfig.expFactor = 4;
         var variant = evt.detail.variant;
   
         if (variant) {
-          const bundleData = window.bundleData;
-          if (bundleData) {
+          if (window.bundleData && window.bundleData[this.productId]) {
+            const bundleData = window.bundleData[this.productId];
             variant.price = bundleData[variant.id].discountedPrice;
             variant.compare_at_price = bundleData[variant.id].price;
           }
@@ -7742,11 +7743,17 @@ lazySizesConfig.expFactor = 4;
           }
 
           // Regular price
-          this.cache.price.innerHTML = theme.Currency.formatMoney(variant.price, theme.settings.moneyFormat);
-  
+          const regularPrice = theme.Currency.formatMoney(variant.price, theme.settings.moneyFormat)
+          this.cache.price.children.forEach(el => {
+            el.textContent = regularPrice;
+          });
+
           // Sale price, if necessary
           if (variant.compare_at_price > variant.price) {
-            this.cache.comparePrice.innerHTML = theme.Currency.formatMoney(variant.compare_at_price, theme.settings.moneyFormat);
+            const comparePrice = theme.Currency.formatMoney(variant.compare_at_price, theme.settings.moneyFormat)
+            this.cache.comparePrice.children.forEach(el => {
+              el.textContent = comparePrice;
+            });
             this.cache.priceWrapper.classList.remove(classes.hidden);
             this.cache.price.classList.add(classes.onSale);
             if (this.cache.comparePriceA11y) {
@@ -8370,6 +8377,7 @@ lazySizesConfig.expFactor = 4;
   
             this.formSetup();
             this.updateModalProductInventory();
+            this.updateModalBundleData();
 
             if (Shopify && Shopify.PaymentButton) {
               Shopify.PaymentButton.init();
@@ -8438,6 +8446,43 @@ lazySizesConfig.expFactor = 4;
           });
         });
       },
+
+      updateModalBundleData: function() {
+        window.bundleData = window.bundleData || {};
+        this.container.querySelectorAll('.js-bundle-data').forEach(el => {
+          const productId = el.dataset.productId;
+          const productTitle = el.dataset.productTitle;
+          window.bundleData[productId] = {};
+
+          el.querySelectorAll('.js-bundle-variant-data').forEach(el => {
+            const variantId = el.dataset.variantId;
+            window.bundleData[productId][variantId] = {
+              title: productTitle,
+              name: el.dataset.variantName,
+              id: parseInt(variantId),
+              price: parseInt(el.dataset.variantPrice),
+              discountedPrice: parseInt(el.dataset.variantDiscountedPrice),
+              quantity: parseInt(el.dataset.variantQuantity),
+              available: el.dataset.variantAvailable === 'true',
+              quality: {
+                organic: el.dataset.variantOrganic === 'true',
+                demeter: el.dataset.variantDemeter === 'true',
+              },
+              products: []
+            };
+
+            el.querySelectorAll('.js-bundle-product-data').forEach(el => {
+              window.bundleData[productId][variantId]['products'].push({
+                id: parseInt(el.dataset.bundleProductId),
+                title: el.dataset.bundleProductTitle,
+                price: parseInt(el.dataset.bundleProductPrice),
+                discounted_price: parseInt(el.dataset.bundleProductDiscountedPrice),
+                available: el.dataset.bundleProductAvailable === 'true',
+              });
+            });
+          });
+        });
+      },
   
       closeModalProduct: function() {
         this.stopVideos();
@@ -8445,6 +8490,7 @@ lazySizesConfig.expFactor = 4;
   
       initQuickAddForm: function() {
         this.updateModalProductInventory();
+        this.updateModalBundleData();
 
         if (Shopify && Shopify.PaymentButton) {
           Shopify.PaymentButton.init();

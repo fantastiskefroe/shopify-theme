@@ -212,45 +212,12 @@
   endpaginate
 -%}
 
-<script type="text/javascript">
-    window.bundleData =
-        { {%- for name in bundleVariantNames -%}
-            '{{ bundleVariantIDs[forloop.index0] }}': {
-                'title': "{{ product.title }}",
-                'name': "{{ name }}",
-                'id': {{ bundleVariantIDs[forloop.index0] }},
-                'price': {{ bundleVariantPrices[forloop.index0] }},
-                'discountedPrice': {{ bundleVariantDiscountedPrices[forloop.index0] }},
-                'quantity': {{ bundleVariantMinInventoryQuantities[forloop.index0] }},
-                'available': {{ bundleVariantAvailability[forloop.index0] }},
-                'quality': {
-                    'organic': {{ bundleVariantOrganicLogo[forloop.index0] }},
-                    'demeter': {{ bundleVariantDemeterLogo[forloop.index0] }}
-                },
-              {% assign productIDs = bundleVariantProductIDs[forloop.index0] | split: '§' %}
-              {%- assign productTitles = bundleVariantProductTitles[forloop.index0] | split: '§' -%}
-              {%- assign productPrices = bundleVariantProductPrices[forloop.index0] | split: '§' -%}
-              {%- assign productDiscountedPrices = bundleVariantProductDiscountedPrices[forloop.index0] | split: '§' -%}
-              {%- assign productAvailability = bundleVariantProductAvailability[forloop.index0] | split: '§' -%}
-              {%- assign productURLs = bundleVariantProductURLs[forloop.index0] | split: '§' -%}
-                'products': [ {%- for productID in productIDs -%}
-                    {
-                        'id': {{ productID | plus: 0 }},
-                        'name': "{{ productTitles[forloop.index0] | escape }}",
-                        'price': {{ productPrices[forloop.index0] }},
-                        'discountedPrice': {{ productDiscountedPrices[forloop.index0] }},
-                        'available': {{ productAvailability[forloop.index0] }}
-                    },
-                  {%- endfor -%} ]
-            },
-          {%- endfor -%} }
-</script>
-
 <div id="ProductSection-{{ section_id }}-{{ product.id }}"
   class="product-section"
   data-section-id="{{ section_id }}"
   data-section-type="product"
   data-product-id="{{ product.id }}"
+  data-fisk="{{ product.id }}"
   data-product-handle="{{ product.handle }}"
   data-product-title="{{ product.title | escape }}"
   data-history="{{ enableHistory }}"
@@ -276,15 +243,6 @@
         </h1>
       </h1>
     {%- endif -%}
-
-    {%- for name in bundleVariantNames -%}
-      {% if current_variant.title == name %}
-        {%- render 'quality-logos',
-            organic: bundleVariantOrganicLogo[forloop.index0],
-            demeter: bundleVariantDemeterLogo[forloop.index0]
-        -%}
-      {%- endif %}
-    {%- endfor -%}
 
     {%- if settings.vendor_enable or sku_enable -%}
       <div class="product-single__vendor-sku">
@@ -344,6 +302,78 @@
             </div>
 
             <div data-product-blocks>
+
+              <script type="text/javascript">
+                  window.bundleData = window.bundleData || {};
+                  window.bundleData['{{ product.id }}'] =
+                      { {%- for name in bundleVariantNames -%}
+                          '{{ bundleVariantIDs[forloop.index0] }}': {
+                              'title': "{{ product.title }}",
+                              'name': "{{ name }}",
+                              'id': {{ bundleVariantIDs[forloop.index0] }},
+                              'price': {{ bundleVariantPrices[forloop.index0] }},
+                              'discountedPrice': {{ bundleVariantDiscountedPrices[forloop.index0] }},
+                              'quantity': {{ bundleVariantMinInventoryQuantities[forloop.index0] }},
+                              'available': {{ bundleVariantAvailability[forloop.index0] }},
+                              'quality': {
+                                  'organic': {{ bundleVariantOrganicLogo[forloop.index0] }},
+                                  'demeter': {{ bundleVariantDemeterLogo[forloop.index0] }}
+                              },
+                            {% assign productIDs = bundleVariantProductIDs[forloop.index0] | split: '§' %}
+                            {%- assign productTitles = bundleVariantProductTitles[forloop.index0] | split: '§' -%}
+                            {%- assign productPrices = bundleVariantProductPrices[forloop.index0] | split: '§' -%}
+                            {%- assign productDiscountedPrices = bundleVariantProductDiscountedPrices[forloop.index0] | split: '§' -%}
+                            {%- assign productAvailability = bundleVariantProductAvailability[forloop.index0] | split: '§' -%}
+                            {%- assign productURLs = bundleVariantProductURLs[forloop.index0] | split: '§' -%}
+                              'products': [ {%- for productID in productIDs -%}
+                                  {
+                                      'id': {{ productID | plus: 0 }},
+                                      'name': "{{ productTitles[forloop.index0] | escape }}",
+                                      'price': {{ productPrices[forloop.index0] }},
+                                      'discountedPrice': {{ productDiscountedPrices[forloop.index0] }},
+                                      'available': {{ productAvailability[forloop.index0] }}
+                                  },
+                                {%- endfor -%} ]
+                          },
+                        {%- endfor -%} }
+              </script>
+
+              <div
+                  data-product-id="{{ product.id }}"
+                  data-product-title="{{ product.title }}"
+                  class="hide js-bundle-data"
+                  aria-hidden="true" >
+                {%- for name in bundleVariantNames -%}
+                  <div data-variant-id="{{ bundleVariantIDs[forloop.index0] }}"
+                       data-variant-name="{{ name }}"
+                       data-variant-price="{{ bundleVariantPrices[forloop.index0] }}"
+                       data-variant-discounted-price="{{ bundleVariantDiscountedPrices[forloop.index0] }}"
+                       data-variant-quantity="{{ bundleVariantMinInventoryQuantities[forloop.index0] }}"
+                       data-variant-available="{{ bundleVariantAvailability[forloop.index0] }}"
+                       data-variant-organic="{{ bundleVariantOrganicLogo[forloop.index0] }}"
+                       data-variant-demeter="{{ bundleVariantDemeterLogo[forloop.index0] }}"
+                       class="hide js-bundle-variant-data"
+                       aria-hidden="true" >
+                    {% assign productIDs = bundleVariantProductIDs[forloop.index0] | split: '§' %}
+                    {% assign productTitles = bundleVariantProductTitles[forloop.index0] | split: '§' %}
+                    {% assign productPrices = bundleVariantProductPrices[forloop.index0] | split: '§' %}
+                    {% assign productDiscountedPrices = bundleVariantProductDiscountedPrices[forloop.index0] | split: '§' %}
+                    {% assign productAvailability = bundleVariantProductAvailability[forloop.index0] | split: '§' %}
+                    {% assign productURLs = bundleVariantProductURLs[forloop.index0] | split: '§' %}
+                    {%- for productID in productIDs -%}
+                      <div data-bundle-product-id="{{ productID }}"
+                           data-bundle-product-title="{{ productTitles[forloop.index0] | escape }}"
+                           data-bundle-product-price="{{ productPrices[forloop.index0] }}"
+                           data-bundle-product-discounted-price="{{ productDiscountedPrices[forloop.index0] }}"
+                           data-bundle-product-available="{{ productAvailability[forloop.index0] }}"
+                           class="hide js-bundle-product-data"
+                           aria-hidden="true" >
+                      </div>
+                    {%- endfor -%}
+                  </div>
+                {%- endfor -%}
+              </div>
+
               {%- capture form_id -%}AddToCartForm-{{ section_id }}-{{ product.id }}{%- endcapture -%}
               {%- for block in blocks -%}
                 {%- case block.type -%}
@@ -414,6 +444,15 @@
                       -%}
                     </div>
                   {%- when 'price' -%}
+                    {%- for name in bundleVariantNames -%}
+                      {% if current_variant.title == name %}
+                        {%- render 'quality-logos',
+                            organic: bundleVariantOrganicLogo[forloop.index0],
+                            demeter: bundleVariantDemeterLogo[forloop.index0]
+                        -%}
+                      {%- endif %}
+                    {%- endfor -%}
+
                     <div class="product-block product-block--price" {{ block.shopify_attributes }}>
                       <label class="variant__label" for="ProductPrice-{{ section_id }}">
                         {{ 'cart.label.price' | t }}
@@ -432,7 +471,7 @@
                             <span data-a11y-price class="visually-hidden" aria-hidden="{{ hide_sale_price }}">
                             {{ 'products.general.regular_price' | t }}
                         </span>
-                            <span data-product-price-wrap class="{% if hide_sale_price %} hide{% endif %}">
+                        <span data-product-price-wrap class="{% if hide_sale_price %} hide{% endif %}">
                           <span data-compare-price class="product__price product__price--compare">
                             {%- render 'price' with bundleVariantPrices[forloop.index0] -%}
                           </span>
