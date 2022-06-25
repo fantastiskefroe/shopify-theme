@@ -80,23 +80,6 @@
       </h1>
     {%- endif -%}
 
-    {%- liquid
-      assign organic = false
-      assign demeter = false
-
-      if current_variant.sku contains '-Ø-'
-        assign organic = true
-      endif
-      if current_variant.sku contains '-D-'
-        assign organic = true
-        assign demeter = true
-      endif
-    -%}
-    {%- render 'quality-logos',
-        organic: organic,
-        demeter: demeter
-    -%}
-
     {%- if settings.vendor_enable or sku_enable -%}
       <div class="product-single__vendor-sku">
         {%- if settings.vendor_enable -%}
@@ -186,6 +169,22 @@
                       {%- render 'product-description', id: id, description: product.description, is_tab: block.settings.is_tab -%}
                     </div>
                   {%- when 'price' -%}
+                    {%- liquid
+                      assign organic = false
+                      assign demeter = false
+
+                      if current_variant.sku contains '-Ø-'
+                        assign organic = true
+                      endif
+                      if current_variant.sku contains '-D-'
+                        assign organic = true
+                        assign demeter = true
+                      endif
+                    -%}
+                    {%- render 'quality-logos',
+                        organic: organic,
+                        demeter: demeter
+                    -%}
                     <div class="product-block product-block--price" {{ block.shopify_attributes }}>
                       <label class="variant__label" for="ProductPrice-{{ section_id }}">
                         {{ 'cart.label.price' | t }}
@@ -362,6 +361,7 @@
 
                       {%- if block.settings.surface_pickup_enable -%}
                         <div
+                          class="store-availability-holder"
                           data-store-availability-holder
                           data-product-name="{{ product.title | escape }}"
                           data-base-url="{{ shop.url }}{{ routes.root_url }}"

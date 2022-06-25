@@ -2830,6 +2830,12 @@
         "quick_add_enable": {
           "label": "Enable quick add"
         },
+        "quick_add_show_dynamic_checkout" : {
+          "label": "Show dynamic checkout button on quick add"
+        },
+        "quick_add_surface_pickup_enable": {
+          "label": "Enable pickup availability on quick add"
+        },
         "product_grid_image_size": {
           "label": "Force image size",
           "options": {

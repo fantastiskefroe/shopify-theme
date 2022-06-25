@@ -5094,8 +5094,7 @@ lazySizesConfig.expFactor = 4;
         var quickAddForms = this.container.querySelectorAll(selectors.quickAddForm);
   
         if (quickAddForms.length) {
-          this.quickAddHolder = document.querySelector(
-            selectors.quickAddHolder);
+          this.quickAddHolder = document.querySelector(selectors.quickAddHolder);
           if (!modalInitailized) {
             modal = new theme.Modals('QuickAddModal', 'quick-add');
             modalInitailized = true;
@@ -5126,7 +5125,35 @@ lazySizesConfig.expFactor = 4;
           'quantity': 1
           }]
         };
-  
+
+        const bundleData = window.bundleData;
+        if (bundleData) {
+          const bundleID = parseInt(formData.id);
+          const bundleProducts = window.bundleData[bundleID].products;
+          const bundleTitle = window.bundleData[bundleID].title;
+
+          const items = [{
+            id,
+            quantity: 1,
+            properties: {
+              _bundle: true
+            }
+          }];
+
+          for (const bundleProduct of bundleProducts) {
+            items.unshift({
+              id: bundleProduct.id,
+              quantity: 1,
+              properties: {
+                _partOf: bundleID,
+                _bundleTitle: bundleTitle
+              }
+            })
+          }
+
+          data = {items};
+        }
+
         fetch(theme.routes.cartAdd, {
           method: 'POST',
           body: JSON.stringify(data),
@@ -5171,12 +5198,20 @@ lazySizesConfig.expFactor = 4;
           var parser = new DOMParser();
           var doc = parser.parseFromString(html, 'text/html');
           var div = doc.querySelector('.product-section[data-product-handle="'+handle+'"]');
-  
+
+          if (!theme.settings.quick_add_show_dynamic_checkout) {
+            div.querySelector('.shopify-payment-button').remove();
+          }
+
+          if (!theme.settings.quick_add_surface_pickup_enable) {
+            div.querySelector('.store-availability-holder').remove();
+          }
+
           this.quickAddHolder.append(div);
   
           // Register product template inside modal
           theme.sections.register('product', theme.Product, this.quickAddHolder);
-  
+
           if (Shopify && Shopify.PaymentButton) {
             Shopify.PaymentButton.init();
           }
@@ -8335,7 +8370,7 @@ lazySizesConfig.expFactor = 4;
   
             this.formSetup();
             this.updateModalProductInventory();
-  
+
             if (Shopify && Shopify.PaymentButton) {
               Shopify.PaymentButton.init();
             }
@@ -8410,7 +8445,7 @@ lazySizesConfig.expFactor = 4;
   
       initQuickAddForm: function() {
         this.updateModalProductInventory();
-  
+
         if (Shopify && Shopify.PaymentButton) {
           Shopify.PaymentButton.init();
         }
