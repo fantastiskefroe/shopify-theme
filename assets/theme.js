@@ -1720,7 +1720,7 @@ lazySizesConfig.expFactor = 4;
       reInit: function() {
         this.initQtySelectors();
       },
-  
+
       onSubmit: function(evt) {
         this.submitBtn.classList.add(classes.btnLoading);
   
@@ -5118,41 +5118,13 @@ lazySizesConfig.expFactor = 4;
         var visibleBtn = btn.querySelector('.btn');
         visibleBtn.classList.add('btn--loading');
         var id = btn.dataset.id;
-  
+
         var data = {
          'items': [{
           'id': id,
           'quantity': 1
           }]
         };
-
-        // const bundleData = window.bundleData;
-        // if (bundleData) {
-        //   const bundleID = parseInt(formData.id);
-        //   const bundleProducts = window.bundleData[bundleID].products;
-        //   const bundleTitle = window.bundleData[bundleID].title;
-        //
-        //   const items = [{
-        //     id,
-        //     quantity: 1,
-        //     properties: {
-        //       _bundle: true
-        //     }
-        //   }];
-        //
-        //   for (const bundleProduct of bundleProducts) {
-        //     items.unshift({
-        //       id: bundleProduct.id,
-        //       quantity: 1,
-        //       properties: {
-        //         _partOf: bundleID,
-        //         _bundleTitle: bundleTitle
-        //       }
-        //     })
-        //   }
-        //
-        //   data = {items};
-        // }
 
         fetch(theme.routes.cartAdd, {
           method: 'POST',
@@ -5186,9 +5158,16 @@ lazySizesConfig.expFactor = 4;
         var gridItem = evt.currentTarget.closest('.grid-product');
         var handle = gridItem.getAttribute('data-product-handle');
         var prodId = gridItem.getAttribute('data-product-id');
-  
-        var url = theme.routes.home + '/products/' + handle + '?view=form';
-  
+
+        let url = theme.routes.home + '/products/' + handle;
+
+        const isBundle = gridItem.getAttribute('data-product-is-bundle') === 'true';
+        if (!isBundle) {
+          url = url + '?view=form';
+        } else {
+          url = url + '?view=bundle-form';
+        }
+
         // remove double `/` in case shop might have /en or language in URL
         url = url.replace('//', '/');
   
@@ -5200,11 +5179,17 @@ lazySizesConfig.expFactor = 4;
           var div = doc.querySelector('.product-section[data-product-handle="'+handle+'"]');
 
           if (!theme.settings.quick_add_show_dynamic_checkout) {
-            div.querySelector('.shopify-payment-button').remove();
+            const element = div.querySelector('.shopify-payment-button');
+            if (element) {
+              element.remove();
+            }
           }
 
           if (!theme.settings.quick_add_surface_pickup_enable) {
-            div.querySelector('.store-availability-holder').remove();
+            const element = div.querySelector('.store-availability-holder');
+            if (element) {
+              element.remove();
+            }
           }
 
           this.quickAddHolder.append(div);
@@ -5215,7 +5200,12 @@ lazySizesConfig.expFactor = 4;
           if (Shopify && Shopify.PaymentButton) {
             Shopify.PaymentButton.init();
           }
-  
+
+          this.updateModalProductInventory(div);
+          if (isBundle) {
+            this.updateModalBundleData(div);
+          }
+
           window.dispatchEvent(new CustomEvent('quickadd:loaded:' + prodId));
   
           document.dispatchEvent(new CustomEvent('quickadd:loaded', {
@@ -5227,6 +5217,61 @@ lazySizesConfig.expFactor = 4;
   
           modal.open();
         }.bind(this));
+      },
+
+      updateModalProductInventory: function(container) {
+        window.inventories = window.inventories || {};
+        container.querySelectorAll('.js-product-inventory-data').forEach(el => {
+          const productId = el.dataset.productId;
+          window.inventories[productId] = {};
+
+          el.querySelectorAll('.js-variant-inventory-data').forEach(el => {
+            window.inventories[productId][el.dataset.id] = {
+              'quantity': el.dataset.quantity,
+              'policy': el.dataset.policy,
+              'incoming': el.dataset.incoming,
+              'next_incoming_date': el.dataset.date
+            }
+          });
+        });
+      },
+
+      updateModalBundleData: function(container) {
+        console.log(container);
+        window.bundleData = window.bundleData || {};
+        container.querySelectorAll('.js-bundle-data').forEach(el => {
+          const productId = el.dataset.productId;
+          const productTitle = el.dataset.productTitle;
+          window.bundleData[productId] = {};
+
+          el.querySelectorAll('.js-bundle-variant-data').forEach(el => {
+            const variantId = el.dataset.variantId;
+            window.bundleData[productId][variantId] = {
+              title: productTitle,
+              name: el.dataset.variantName,
+              id: parseInt(variantId),
+              price: parseInt(el.dataset.variantPrice),
+              discountedPrice: parseInt(el.dataset.variantDiscountedPrice),
+              quantity: parseInt(el.dataset.variantQuantity),
+              available: el.dataset.variantAvailable === 'true',
+              quality: {
+                organic: el.dataset.variantOrganic === 'true',
+                demeter: el.dataset.variantDemeter === 'true',
+              },
+              products: []
+            };
+
+            el.querySelectorAll('.js-bundle-product-data').forEach(el => {
+              window.bundleData[productId][variantId]['products'].push({
+                id: parseInt(el.dataset.bundleProductId),
+                title: el.dataset.bundleProductTitle,
+                price: parseInt(el.dataset.bundleProductPrice),
+                discounted_price: parseInt(el.dataset.bundleProductDiscountedPrice),
+                available: el.dataset.bundleProductAvailable === 'true',
+              });
+            });
+          });
+        });
       }
     });
   
@@ -7444,7 +7489,7 @@ lazySizesConfig.expFactor = 4;
   
       this.init();
     }
-  
+
     Product.prototype = Object.assign({}, Product.prototype, {
       init: function() {
         if (this.inModal) {

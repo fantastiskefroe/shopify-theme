@@ -91,7 +91,7 @@
 -%}
 
 
-<div class="grid-item grid-product {{ classes }}" data-product-handle="{{ product.handle }}" data-product-id="{{ product.id }}">
+<div class="grid-item grid-product {{ classes }}" data-product-handle="{{ product.handle }}" data-product-id="{{ product.id }}" data-product-is-bundle="{{ isBundle }}">
   <div class="grid-item__content">
 
     {%- unless no_actions -%}

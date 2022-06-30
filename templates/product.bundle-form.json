@@ -2,7 +2,7 @@
   "layout": false,
   "sections": {
     "main": {
-      "type": "main-product",
+      "type": "main-product-bundle",
       "blocks": {
         "buy_buttons": {
           "type": "buy_buttons",

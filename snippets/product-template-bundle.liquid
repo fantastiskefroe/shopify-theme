@@ -217,7 +217,6 @@
   data-section-id="{{ section_id }}"
   data-section-type="product"
   data-product-id="{{ product.id }}"
-  data-fisk="{{ product.id }}"
   data-product-handle="{{ product.handle }}"
   data-product-title="{{ product.title | escape }}"
   data-history="{{ enableHistory }}"
@@ -614,6 +613,7 @@
 
                       {%- if block.settings.surface_pickup_enable -%}
                         <div
+                          class="store-availability-holder"
                           data-store-availability-holder
                           data-product-name="{{ product.title | escape }}"
                           data-base-url="{{ shop.url }}{{ routes.root_url }}"
