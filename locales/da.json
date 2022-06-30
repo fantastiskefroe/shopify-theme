@@ -113,6 +113,7 @@
       "moderated": "Din kommentar afventer godkendelse.",
       "success_moderated": "Din kommentar er nu sendt og afventer godkendelse.",
       "success": "Tak for din kommentar!",
+      "without_count": "Komentarer",
       "with_count": {
         "one": "{{ count }} kommentar",
         "other": "{{ count }} kommentarer"

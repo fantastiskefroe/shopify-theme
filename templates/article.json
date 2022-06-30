@@ -59,7 +59,7 @@
       "type": "blog-posts",
       "settings": {
         "title": "Seneste opslag",
-        "blog": "news",
+        "blog": "artikler",
         "blog_show_tags": true,
         "blog_show_date": true,
         "blog_show_comments": false,

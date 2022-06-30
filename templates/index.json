@@ -169,7 +169,7 @@
         "title_size": 70,
         "subheading": "Hjælp os med at give bedre betingelser for vores bier, sommerfugle og andre små hjælpere, ved at en gratis blomsterblanding i et hjørne af din have. Den første pose 'BiBuffet' du ligger i kurven er gratis.",
         "link_text": "Ja tak!",
-        "link": "shopify:\/\/products\/bibuffet",
+        "link": "shopify:\/\/products\/blomsterblanding-bibuffet",
         "color_accent": "#ffffff",
         "text_align": "vertical-center horizontal-center",
         "video_url": "https:\/\/youtu.be\/9GzHHMntSxY",
@@ -321,7 +321,7 @@
       "type": "blog-posts",
       "settings": {
         "title": "From the journal",
-        "blog": "news",
+        "blog": "artikler",
         "blog_show_tags": true,
         "blog_show_date": false,
         "blog_show_comments": false,

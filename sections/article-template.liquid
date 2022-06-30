@@ -41,97 +41,122 @@
 </div>
 
 {%- if blog.comments_enabled? -%}
-  {%- if number_of_comments > 0 -%}
-    <hr class="hr--large">
-    <h3>{{ 'blogs.comments.with_count' | t: count: number_of_comments }}</h3>
-    <hr class="hr--small hr--clear">
-  {%- endif -%}
+  <hr class="hr--large">
+  <h3>{{ 'blogs.comments.without_count' | t }}</h3>
+  <hr class="hr--small hr--clear">
 
-  {%- paginate article.comments by 5 -%}
-    <div id="comments">
-      {%- if comment and comment.errors == blank -%}
-        <hr class="hr--small hr--clear">
-        <p class="note note--success">
-          {%- if blog.moderated? -%}
-            {{ 'blogs.comments.success_moderated' | t }}
-          {%- else -%}
-            {{ 'blogs.comments.success' | t }}
-          {%- endif -%}
-        </p>
-      {%- endif -%}
+  <div id="disqus_thread"></div>
+  <script>
+      /**
+       *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+       *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+      const disqus_config = function () {
+          this.page.url = '{{ canonical_url }}';
+          this.page.identifier = '{{ article.id }}';
+      };
+      (function() {
+          var d = document, s = d.createElement('script');
+          s.src = 'https://fantastiskefro.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+      })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
-      {%- if number_of_comments > 0 -%}
-        <ul class="no-bullets">
-          {%- if comment.status == 'pending' -%}
-            <li id="Comment-{{ comment.id }}" class="article__comment">
-              {%- render 'comment', comment: comment -%}
-            </li>
-          {%- endif -%}
+  {%- if false -%}
+    {%- if number_of_comments > 0 -%}
+      <hr class="hr--large">
+      <h3>{{ 'blogs.comments.with_count' | t: count: number_of_comments }}</h3>
+      <hr class="hr--small hr--clear">
+    {%- endif -%}
 
-          {%- for comment in article.comments -%}
-            <li id="Comment-{{ comment.id }}" class="article__comment">
-              {%- render 'comment', comment: comment -%}
-            </li>
-
-            {%- unless forloop.last -%}
-              <li><hr class="hr--clear"></li>
-            {%- endunless -%}
-          {%- endfor -%}
-        </ul>
-
-        {%- if paginate.pages > 1 -%}
-          {%- render 'pagination', paginate: paginate, hash: '#comments' -%}
+    {%- paginate article.comments by 5 -%}
+      <div id="comments">
+        {%- if comment and comment.errors == blank -%}
+          <hr class="hr--small hr--clear">
+          <p class="note note--success">
+            {%- if blog.moderated? -%}
+              {{ 'blogs.comments.success_moderated' | t }}
+            {%- else -%}
+              {{ 'blogs.comments.success' | t }}
+            {%- endif -%}
+          </p>
         {%- endif -%}
 
-      {%- endif -%}
+        {%- if number_of_comments > 0 -%}
+          <ul class="no-bullets">
+            {%- if comment.status == 'pending' -%}
+              <li id="Comment-{{ comment.id }}" class="article__comment">
+                {%- render 'comment', comment: comment -%}
+              </li>
+            {%- endif -%}
 
-      <hr class="hr--large">
+            {%- for comment in article.comments -%}
+              <li id="Comment-{{ comment.id }}" class="article__comment">
+                {%- render 'comment', comment: comment -%}
+              </li>
 
-      <header class="section-header">
-        <h3 class="section-header__title">{{ 'blogs.comments.title' | t }}</h3>
-      </header>
+              {%- unless forloop.last -%}
+                <li><hr class="hr--clear"></li>
+              {%- endunless -%}
+            {%- endfor -%}
+          </ul>
 
-      <div class="form-vertical">
-        {%- form 'new_comment', article -%}
-
-          {{ form.errors | default_errors }}
-
-          <div class="grid grid--small">
-            <div class="grid__item medium-up--one-half">
-              <label for="CommentAuthor">{{ 'blogs.comments.name' | t }}</label>
-              <input class="input-full{% if form.errors contains 'author' %} error{% endif %}" type="text" name="comment[author]" id="CommentAuthor" value="{{ form.author }}" autocapitalize="words">
-            </div>
-            <div class="grid__item medium-up--one-half">
-              <label for="CommentEmail">{{ 'blogs.comments.email' | t }}</label>
-              <input class="input-full{% if form.errors contains 'email' %} error{% endif %}" type="email" name="comment[email]" id="CommentEmail" value="{{ form.email }}" autocorrect="off" autocapitalize="off">
-            </div>
-          </div>
-
-          <label for="CommentBody">{{ 'blogs.comments.message' | t }}</label>
-          <textarea class="input-full{% if form.errors contains 'body' %} error{% endif %}" name="comment[body]" id="CommentBody">{{ form.body }}</textarea>
-
-          {%- if blog.moderated? -%}
-            <p><small>{{ 'blogs.comments.moderated' | t }}</small></p>
+          {%- if paginate.pages > 1 -%}
+            {%- render 'pagination', paginate: paginate, hash: '#comments' -%}
           {%- endif -%}
 
-          <button type="submit" class="btn btn--secondary">
-            {{ 'blogs.comments.post' | t }}
-          </button>
+        {%- endif -%}
 
-          {% comment %}
-            Remove the following three lines of code to remove the note
-            about being protected by Google's reCAPTCHA service.
-            By removing it, the small reCAPTCHA widget will appear in the
-            bottom right corner of the page.
-          {% endcomment %}
-          {{ 'shopify.online_store.spam_detection.disclaimer_html' | t }}
+        <hr class="hr--large">
 
-        {%- endform -%}
+        <header class="section-header">
+          <h3 class="section-header__title">{{ 'blogs.comments.title' | t }}</h3>
+        </header>
+
+        <div class="form-vertical">
+          {%- form 'new_comment', article -%}
+
+            {{ form.errors | default_errors }}
+
+            <div class="grid grid--small">
+              <div class="grid__item medium-up--one-half">
+                <label for="CommentAuthor">{{ 'blogs.comments.name' | t }}</label>
+                <input class="input-full{% if form.errors contains 'author' %} error{% endif %}" type="text" name="comment[author]" id="CommentAuthor" value="{{ form.author }}" autocapitalize="words">
+              </div>
+              <div class="grid__item medium-up--one-half">
+                <label for="CommentEmail">{{ 'blogs.comments.email' | t }}</label>
+                <input class="input-full{% if form.errors contains 'email' %} error{% endif %}" type="email" name="comment[email]" id="CommentEmail" value="{{ form.email }}" autocorrect="off" autocapitalize="off">
+              </div>
+            </div>
+
+            <label for="CommentBody">{{ 'blogs.comments.message' | t }}</label>
+            <textarea class="input-full{% if form.errors contains 'body' %} error{% endif %}" name="comment[body]" id="CommentBody">{{ form.body }}</textarea>
+
+            {%- if blog.moderated? -%}
+              <p><small>{{ 'blogs.comments.moderated' | t }}</small></p>
+            {%- endif -%}
+
+            <button type="submit" class="btn btn--secondary">
+              {{ 'blogs.comments.post' | t }}
+            </button>
+
+            {% comment %}
+              Remove the following three lines of code to remove the note
+              about being protected by Google's reCAPTCHA service.
+              By removing it, the small reCAPTCHA widget will appear in the
+              bottom right corner of the page.
+            {% endcomment %}
+            {{ 'shopify.online_store.spam_detection.disclaimer_html' | t }}
+
+          {%- endform -%}
+        </div>
+
       </div>
-
-    </div>
-  {%- endpaginate -%}
+    {%- endpaginate -%}
+  {%- endif -%}
 {%- endif -%}
+
 
 <hr class="hr--large">
 
