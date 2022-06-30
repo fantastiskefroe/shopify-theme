@@ -346,7 +346,21 @@
       "will_be_in_stock_after": "Forventes tilbage på lager d. {{ date }}",
       "waiting_for_stock": "Flere på vej!",
       "view_in_space": "View in your space",
-      "view_in_space_label": "View in your space, loads item in augmented reality window"
+      "view_in_space_label": "View in your space, loads item in augmented reality window",
+      "plant_attributes": {
+        "height": "Højde: {{ text }}",
+        "distance": "Såafstand: {{ text }}",
+        "shu_1": "mild (0-10K SHU)",
+        "shu_2": "medium (10K-300K SHU)",
+        "shu_3": "stærk (300K+ SHU)",
+        "germination_light": "skal have lys for at spire",
+        "suited_for_pots": "velegnet til krukker",
+        "needs_support": "bør have støtte\/opbindes",
+        "edible_flowers": "spiselige blomster",
+        "good_for_pollinators": "god til insekter",
+        "aromatic": "velduftende blomster",
+        "resident": "hjemhørende art"
+      }
     }
   },
   "store_availability": {

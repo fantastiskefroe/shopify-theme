@@ -345,7 +345,21 @@
       "will_be_in_stock_after": "Back in stock {{ date }}",
       "waiting_for_stock": "Inventory on the way",
       "view_in_space": "View in your space",
-      "view_in_space_label": "View in your space, loads item in augmented reality window"
+      "view_in_space_label": "View in your space, loads item in augmented reality window",
+      "plant_attributes": {
+        "height": "Height: {{ text }}",
+        "distance": "Planting distance: {{ text }}",
+        "shu_1": "mild (0-10K SHU)",
+        "shu_2": "medium (10K-300K SHU)",
+        "shu_3": "hot (300K+ SHU)",
+        "germination_light": "needs light to germinate",
+        "suited_for_pots": "suited for pots",
+        "needs_support": "needs support",
+        "edible_flowers": "edible flowers",
+        "good_for_pollinators": "good for pollinators",
+        "aromatic": "aromatic flowers",
+        "resident": "resident"
+      }
     }
   },
   "store_availability": {

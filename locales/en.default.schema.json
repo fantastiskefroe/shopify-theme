@@ -3528,6 +3528,9 @@
         }
       }
     },
+    "plant_attributes": {
+      "name": "Plant attributes"
+    },
     "buy_buttons": {
       "name": "Buy buttons",
       "settings": {

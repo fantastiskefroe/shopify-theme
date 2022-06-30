@@ -96,20 +96,6 @@
     },
     "sub": {
       "type": "product-full-width",
-      "blocks": {
-        "7dcadc2b-8675-402b-b7a2-7a72a79bebfe": {
-          "type": "tab",
-          "disabled": true,
-          "settings": {
-            "title": "{{ product.metafields.custom.kom_godt_i_gang_med_titel.value }}",
-            "content": "",
-            "page": "{{ product.metafields.custom.kom_godt_i_gang_med_side.value }}"
-          }
-        }
-      },
-      "block_order": [
-        "7dcadc2b-8675-402b-b7a2-7a72a79bebfe"
-      ],
       "settings": {
         "max_width": true
       }

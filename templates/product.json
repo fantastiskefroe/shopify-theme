@@ -53,12 +53,16 @@
             "is_tab": false
           }
         },
+        "b743976d-40ec-4ab9-899c-626b9892402e": {
+          "type": "plant_attributes",
+          "settings": {}
+        },
         "12605096-96ab-48de-b935-341275ddf13a": {
           "type": "tab",
           "settings": {
-            "title": "{{ product.metafields.custom.kom_godt_i_gang_med_titel.value }}",
-            "content": "<p>{{ product.metafields.theme.label.value }}<\/p>",
-            "page": ""
+            "title": "{{ product.metafields.custom.komgodtigangmed_titel.value }}",
+            "content": "",
+            "page": "{{ product.metafields.custom.komgodtigangmed_indhold.value }}"
           }
         },
         "012f6ef9-d2b0-4bd2-accb-7f23e8df8fa8": {
@@ -79,6 +83,7 @@
         "sales_point3",
         "a8824787-b769-4a6a-bfd2-9387c80b2939",
         "c4aaa963-76e5-4135-9023-726c4f23fbec",
+        "b743976d-40ec-4ab9-899c-626b9892402e",
         "12605096-96ab-48de-b935-341275ddf13a",
         "012f6ef9-d2b0-4bd2-accb-7f23e8df8fa8"
       ],
