@@ -20,7 +20,7 @@
     "color_footer_border": "#e8e8e1",
     "color_footer_text": "#242430",
     "color_scheme_1_bg": "#fff",
-    "color_scheme_1_text": "#000000",
+    "color_scheme_1_text": "#455f48",
     "color_scheme_1_texture": "paper.jpg",
     "color_scheme_2_bg": "#455f48",
     "color_scheme_2_text": "#ffffff",
@@ -133,9 +133,8 @@
         "blocks": {
           "reminder-block": {
             "type": "header",
-            "disabled": true,
             "settings": {
-              "reminder_label": "Get 10% off"
+              "reminder_label": "Spar 10% på alle frø"
             }
           }
         },
@@ -143,17 +142,18 @@
           "reminder-block"
         ],
         "settings": {
-          "mode": false,
-          "disable_for_account_holders": true,
+          "mode": true,
+          "disable_for_account_holders": false,
           "popup_seconds": 5,
           "popup_days": 30,
-          "popup_title": "Save 10% off your first purchase",
-          "popup_text": "<p>Sign up today and we&#x27;ll send you a 10% discount code towards your first purchase.<\/p>",
+          "popup_title": "Spar 10% på alle frø",
+          "popup_text": "<p>Tilmeld dig vores nyhedsbrev, så sender vi en mail med en rabatkode til 10% på alle frø. <\/p><p>Vi sender max. 1 mail om måneden.<\/p>",
+          "popup_image": "shopify:\/\/shop_images\/BP5A0322-3.jpg",
           "image_position": "left",
-          "color_scheme": "3",
-          "show_social_icons": false,
+          "color_scheme": "1",
+          "show_social_icons": true,
           "enable_newsletter": true,
-          "button_label": "Optional button",
+          "button_label": "",
           "button_link": ""
         }
       },
@@ -174,7 +174,7 @@
               "enable_image": true,
               "image": "shopify:\/\/shop_images\/BP5A1012.png",
               "title": "Startpakker",
-              "text": "<p>Vi har lavet startpakker der gør det let at komme i gang med f.eks. mikrogrønt, hjemmelavet urtete eller den selvforsynende have. De indeholder alt hvad du skal bruge + en vejledning med mine bedste tips.<\/p>",
+              "text": "<p>Vi har lavet en håndfuld startpakker, der gør det let at komme i gang med f.eks. mikrogrønt eller hjemmelavet urtete. De indeholder alt hvad du skal bruge + en vejledning med mine bedste tips, og kommer i en smuk grøn gaveæske.<\/p>",
               "button_label": "Se alle startpakker",
               "button_link": "shopify:\/\/collections\/frosamlinger",
               "color_scheme": "1"

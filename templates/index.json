@@ -9,7 +9,7 @@
             "top_subheading": "",
             "title": "100% Økologi\n110% Haveglæde",
             "title_size": 46,
-            "subheading": "Velkommen til FantastiskeFrø!\nI vores lille frøbutik finder du fantastiske frø og havetilbehør med fokus på bæredygtighed og haveglæde. Alle vores frø er økologiske, og håndpakket af os i midtjylland.",
+            "subheading": "Velkommen til FantastiskeFrø!\n\nI vores lille frøbutik finder du fantastiske frø og havetilbehør med fokus på bæredygtighed og haveglæde. \n\nAlle vores frø er økologiske, og håndpakket af os her i midtjylland.",
             "link": "shopify:\/\/collections\/fro",
             "link_text": "Se vores frø",
             "link_2": "shopify:\/\/collections\/tilbehor",
@@ -51,6 +51,55 @@
         "style": "arrows",
         "autoplay": true,
         "autoplay_speed": 7
+      }
+    },
+    "promo-grid": {
+      "type": "promo-grid",
+      "disabled": true,
+      "blocks": {
+        "8f25e776-a270-43dd-92f5-474c72493a3e": {
+          "type": "product",
+          "settings": {
+            "product": "julekalender-fro-pakkekalender",
+            "subheading": "",
+            "heading": "Frø-Julekalender",
+            "textarea": "Årest julekalender indeholder 24 frøposer, hvoraf 12 af dem er helt nye sorter, der ellers først kommer i butikken d. 1. januar 2023. Derufover har vi i år en helt specielt gave i pakke nr. 24 - glæd dig!",
+            "link_label": "Køb din julekalender 2022",
+            "label": "",
+            "enable_price": false,
+            "width": "100",
+            "color_scheme": "2"
+          }
+        },
+        "0a783647-d2b1-4ca0-869f-731002fbf7a4": {
+          "type": "advanced",
+          "settings": {
+            "subheading": "",
+            "heading": "Spar 50 på frø",
+            "textarea": "Vi har lavet spiretest af de frø vi har tilbage for vores 21\/22 sæson, og der er stadig spireglade frø på hylderne - men de skal væk før de nye frø kommer hjem, så hvis du gerne vil billigt fra start til næste år, kan du lave årets frø-kup her.",
+            "cta_text1": "Se frø på tilbud",
+            "cta_link1": "",
+            "cta_text2": "",
+            "cta_link2": "",
+            "image": "shopify:\/\/shop_images\/BP5A0322-3.jpg",
+            "video_url": "",
+            "width": "100",
+            "height": 500,
+            "text_align": "vertical-center horizontal-center",
+            "focal_point": "center",
+            "color_accent": "#ffffff"
+          }
+        }
+      },
+      "block_order": [
+        "8f25e776-a270-43dd-92f5-474c72493a3e",
+        "0a783647-d2b1-4ca0-869f-731002fbf7a4"
+      ],
+      "settings": {
+        "full_width": true,
+        "gutter_size": 20,
+        "space_above": true,
+        "space_below": false
       }
     },
     "featured-collections": {
@@ -112,44 +161,6 @@
         "divider": false
       }
     },
-    "promo-grid": {
-      "type": "promo-grid",
-      "disabled": true,
-      "blocks": {
-        "promo-grid-1": {
-          "type": "sale_collection",
-          "settings": {
-            "sale_collection": "",
-            "top_text": "Up to",
-            "middle_text": "50% off",
-            "bottom_text": "Select products",
-            "width": "50",
-            "color_scheme": "3"
-          }
-        },
-        "promo-grid-2": {
-          "type": "sale_collection",
-          "settings": {
-            "sale_collection": "",
-            "top_text": "Up to",
-            "middle_text": "50% off",
-            "bottom_text": "Select products",
-            "width": "50",
-            "color_scheme": "3"
-          }
-        }
-      },
-      "block_order": [
-        "promo-grid-1",
-        "promo-grid-2"
-      ],
-      "settings": {
-        "full_width": false,
-        "gutter_size": 20,
-        "space_above": false,
-        "space_below": false
-      }
-    },
     "featured-collection": {
       "type": "featured-collection",
       "settings": {
@@ -184,7 +195,7 @@
         "title": "Nyt i butikken",
         "home_featured_products": "nyt-i-butikken",
         "count": 5,
-        "mobile_scrollable": false,
+        "mobile_scrollable": true,
         "view_all": true,
         "divider": false
       }
@@ -203,9 +214,9 @@
         "1655297228ab5bd4e7-1": {
           "type": "text_block",
           "settings": {
-            "icon": "store",
-            "title": "Lokal afhentning",
-            "text": "<p>Du har altid mulighed for at spare leveringsgebyr ved at afhente din ordre hos os. Vi ligger til Nårup, på hovedvejen mellem Århus og Viborg.<\/p>"
+            "icon": "charity",
+            "title": "Væredygtig arbejdsplads",
+            "text": "<p>Hos FantastiskeFrø er der plads til at være menneske. Tak til alle jer der støtter, og gør det muligt, at tilbyde tiltrængte arbejdspladser i rolige omgivelser.<\/p>"
           }
         },
         "1655297228ab5bd4e7-2": {
@@ -320,14 +331,57 @@
     "blog-posts": {
       "type": "blog-posts",
       "settings": {
-        "title": "From the journal",
+        "title": "Artikler",
         "blog": "artikler",
         "blog_show_tags": true,
-        "blog_show_date": false,
+        "blog_show_date": true,
         "blog_show_comments": false,
-        "blog_show_author": false,
+        "blog_show_author": true,
         "blog_image_size": "wide",
         "divider": false
+      }
+    },
+    "16571962057f81495c": {
+      "type": "testimonials",
+      "blocks": {
+        "16571962051a50ff8f-3": {
+          "type": "testimonial",
+          "settings": {
+            "icon": "5-stars",
+            "testimonial": "<p><a href=\"https:\/\/dk.trustpilot.com\/reviews\/5e9ae5ce086b64095439f340\" target=\"_blank\"><strong>Hurtig levering, økologiske frø og god spireprocent<\/strong><\/a><\/p><p>To gange har jeg bestilt herfra - først blomster til mit lille frimærke af en have, og sidenhen grøntsager til en nyerhvervet nyttehave. Begge gange gik det lynhurtigt med leveringen og indtil videre kører det bare for spireprocenten - både på blomster og grøntsager. Dejligt at alt er øko og kommer i ordentlig indpakning ❤️ Jeg er så tilfreds.<\/p><p><a href=\"https:\/\/dk.trustpilot.com\/reviews\/5e9ae5ce086b64095439f340\" target=\"_blank\" title=\"https:\/\/dk.trustpilot.com\/reviews\/5e9ae5ce086b64095439f340\">Se anmeldelsen på TrustPilot<\/a><\/p>",
+            "author": "- Sarah",
+            "author_info": "18. apr. 2020"
+          }
+        },
+        "16571962051a50ff8f-2": {
+          "type": "testimonial",
+          "settings": {
+            "icon": "5-stars",
+            "testimonial": "<p><a href=\"https:\/\/dk.trustpilot.com\/reviews\/6081841ff9f487093ccb85aa\" target=\"_blank\"><strong>Fantastisk webshop<\/strong><\/a><\/p><p>Bestilte om eftermiddagen, og allerede næste formiddag kunne jeg hente mine frø i pakkeshoppen, har aldrig prøvet noget så hurtigt. Flot og overskuelig hjemmeside og dejlig bæredygtig forsendelse!<\/p><p><a href=\"https:\/\/dk.trustpilot.com\/reviews\/6081841ff9f487093ccb85aa\" target=\"_blank\" title=\"https:\/\/dk.trustpilot.com\/reviews\/6081841ff9f487093ccb85aa\">Se anmeldelsen på TrustPilot<\/a><\/p>",
+            "author": "- Anja",
+            "author_info": "22. apr. 2021"
+          }
+        },
+        "16571962051a50ff8f-0": {
+          "type": "testimonial",
+          "settings": {
+            "icon": "5-stars",
+            "testimonial": "<p><a href=\"https:\/\/dk.trustpilot.com\/reviews\/62a1d8ad6d54f9210710c619\" target=\"_blank\"><strong>Min go-to frøpusher<\/strong><\/a><\/p><p>Min go-to frøpusher, hvor jeg har handlet en håndfuld gange. Godt udvalg i frø, fine illustrationer og informationer, sympatisk indehaver og hjælpsomme poser med angivelse af, hvordan man bedst sår - det er dejligt praktisk, når man står ude i haven. Mine varmeste anbefalinger.<\/p><p><a href=\"https:\/\/dk.trustpilot.com\/reviews\/62a1d8ad6d54f9210710c619\" target=\"_blank\" title=\"https:\/\/dk.trustpilot.com\/reviews\/62a1d8ad6d54f9210710c619\">Se anmeldelse på TrustPilot<\/a><\/p>",
+            "author": "- Danni",
+            "author_info": "9. jun. 2022"
+          }
+        }
+      },
+      "block_order": [
+        "16571962051a50ff8f-3",
+        "16571962051a50ff8f-2",
+        "16571962051a50ff8f-0"
+      ],
+      "settings": {
+        "title": "Fra vores fantastiske kunder",
+        "align_text": "center",
+        "round_images": true,
+        "color_scheme": "2"
       }
     },
     "slideshow-split2": {
@@ -367,8 +421,8 @@
   },
   "order": [
     "slideshow-split",
-    "featured-collections",
     "promo-grid",
+    "featured-collections",
     "featured-collection",
     "16552958096976c2a9",
     "featured-collection2",
@@ -376,6 +430,7 @@
     "promo-grid2",
     "newsletter",
     "blog-posts",
+    "16571962057f81495c",
     "slideshow-split2"
   ]
 }
