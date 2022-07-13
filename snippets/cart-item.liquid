@@ -52,13 +52,12 @@
       <div>
         <div class="js-qty__wrapper">
           <label for="cart_updates_{{ product.key }}" class="hidden-label">{{ 'cart.label.quantity' | t }}</label>
-          <input type="text"
+          <input type="number"
             id="cart_updates_{{ product.key }}"
             name="updates[]"
-            class="js-qty__num"
+            class="js-qty__num input-number-no-arrow"
             value="{{ product.quantity }}"
             min="0"
-            pattern="[0-9]*"
             data-id="{{ product.key }}">
           <button type="button"
             class="js-qty__adjust js-qty__adjust--minus"
@@ -76,7 +75,7 @@
 
         <div class="cart__remove">
           <a href="{{ routes.cart_change_url }}?id={{ product.key }}&amp;quantity=0" class="text-link">
-            {{ 'cart.general.remove' | t }}
+            {{ 'cart.general.remove' | t }} &#10005;
           </a>
         </div>
       </div>

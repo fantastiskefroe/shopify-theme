@@ -13,7 +13,57 @@
 <div class="cart__items"
   data-count="{{ cart.item_count }}"
   data-cart-subtotal="{{ cart.total_price }}">
+  {% assign currentBundleMetaData = "" -%}
   {% for item in cart.items %}
+    {%- assign isBundle = false -%}
+    {%- assign isBundleProduct = false -%}
+
+    {% for p in item.properties %}
+      {% if p.first == "_bundle" %}
+        {%- assign isBundle = true -%}
+        {%- liquid
+          assign bundleVariantName = item.options_with_values.first.value
+          assign bundleData_bundleVariants = item.product.metafields.bundle.bundleData | split: ','
+          for bundleVariant_i in bundleData_bundleVariants
+            assign bundleVariant_i_Name = bundleVariant_i | split: '=' | first
+            if bundleVariantName == bundleVariant_i_Name
+              assign currentBundleMetaData = bundleVariant_i | split: '=' | last | split: ':'
+              break
+            endif
+          endfor
+        -%}
+        {% break %}
+      {% endif %}
+      {% if p.first == "_partOf" %}
+        {%- assign isBundleProduct = true -%}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+
+    {% if isBundle %}
+      {%- render 'cart-item-bundle', product: item -%}
+      {%- continue -%}
+    {% endif %}
+
+    {% if isBundleProduct %}
+      {%- liquid
+        assign discountCoef = 0
+        for bundleItem in currentBundleMetaData
+          assign parts = bundleItem | split: '/'
+          assign productName = parts[0]
+          assign productVariantID = parts[1] | plus: 0
+          assign productVariantDiscount = parts[2] | plus: 0
+
+          if item.product.handle == productName and item.id == productVariantID
+            assign discountCoef = 100.0 | minus: productVariantDiscount | divided_by: 100.0
+            break
+          endif
+        endfor
+      -%}
+      {%- render 'cart-item-bundle-product', product: item, discountCoef: discountCoef -%}
+      {%- continue -%}
+    {% endif %}
+
     {%- render 'cart-item', product: item -%}
   {% endfor %}
 </div>

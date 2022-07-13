@@ -11736,7 +11736,7 @@ html[dir=rtl] .product-single__meta .rte{
 }
 
 .plant-attributes td img {
-    height: 50px;
+    height: 72px;
     padding: 0;
 }
   
@@ -11863,6 +11863,11 @@ html[dir=rtl] .product-single__meta .rte{
 }
 
 /* Cart */
+.cart__item-details {
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
 .cart__price-bundle-product-original {
     display: block;
     width: auto;
@@ -11871,6 +11876,8 @@ html[dir=rtl] .product-single__meta .rte{
 
 .cart__item.cart__item-bundle {
     border-bottom: none !important;
+    margin-bottom: 0;
+    padding-bottom: 0;
 }
 
 .cart__item.cart__item-bundle .js-qty__wrapper,
@@ -11885,9 +11892,27 @@ html[dir=rtl] .product-single__meta .rte{
     padding: 5px 0;
 }
 
+.input-number-no-arrow::-webkit-outer-spin-button,
+.input-number-no-arrow::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number].input-number-no-arrow {
+    -moz-appearance: textfield;
+}
+
 .cart__item.cart__item-bundle-product {
     margin-left: 30px;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
 }
+
+.cart__item.cart__item-bundle-product:last-of-type {
+    border-bottom: 1px solid;
+}
+
 
 .cart__item.cart__item-bundle-product .cart__image {
     flex: 0 0 84px !important;
