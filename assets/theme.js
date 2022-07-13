@@ -7915,7 +7915,7 @@ lazySizesConfig.expFactor = 4;
         let variantInventoryObject;
         let quantity = 0;
 
-        if (window.inventories && window.inventories[this.productId]) {
+        if (variant && window.inventories && window.inventories[this.productId]) {
           variantInventoryObject = window.inventories[this.productId][variant.id];
           quantity = variantInventoryObject.quantity;
         }
