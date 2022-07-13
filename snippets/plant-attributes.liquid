@@ -1,114 +1,178 @@
 <div class="plant-attributes">
+  <div class="attributes--custom">
+    {% if product.metafields.custom.custom1_titel != blank and product.metafields.custom.custom1_content %}
+      <div>
+        <p>
+          <b>
+            {{ product.metafields.custom.custom1_titel }}:
+          </b>
+          {{ product.metafields.custom.custom1_content }}
+        </p>
+      </div>
+    {% endif %}
+
+    {% if product.metafields.custom.custom2_titel != blank and product.metafields.custom.custom2_content %}
+      <div>
+        <p>
+          <b>
+            {{ product.metafields.custom.custom2_titel }}:
+          </b>
+          {{ product.metafields.custom.custom2_content }}
+        </p>
+      </div>
+    {% endif %}
+  </div>
+
   <div class="name-and-family">
     {{ product.metafields.custom.nomenklatur }} - {{ product.metafields.custom.familie }}
   </div>
 
   <table>
     <tbody>
-    <tr>
-      <td>
-        <img src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/Ikoner_Opsaetning-03.png?v=1654781123"
-             alt="Højde">
-        <p>{{ 'products.product.plant_attributes.height' | t: text: product.metafields.custom.hojde }}</p>
-      </td>
-      <td>
-        <img src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/Ikoner_Opsaetning-04.png?v=1654781235"
-             alt="Såafstand">
-        <p>{{ 'products.product.plant_attributes.distance' | t: text: product.metafields.custom.afstand }}</p>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        {% if product.metafields.custom.placering contains "friland" %}
-          <img src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/Ikoner_Opsaetning-05.png?v=1654867805"
-               alt="Friland">
-        {% endif %}
-        {% if product.metafields.custom.placering contains "drivhus" %}
-          <img src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/Ikoner_Opsaetning-06.png?v=1654867819"
-               alt="Drivhus">
-        {% endif %}
-        <p>
-          <span>{{ product.metafields.custom.placering }}</span>
-        </p>
-      </td>
-      <td>
-        {% if product.metafields.custom.sol contains "sol" %}
-          <img src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/Ikoner_Opsaetning-07.png?v=1654867834"
-               alt="Fuld sol">
-        {% endif %}
-        {% if product.metafields.custom.sol contains "halvskygge" %}
-          <img src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/Ikoner_Opsaetning-08.png?v=1654867847"
-               alt="Halvskygge">
-        {% endif %}
-        <p>
-          <span>{{ product.metafields.custom.sol }}</span>
-        </p>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2">
-        {%- assign attributeString = "" -%}
-        {%- if product.metafields.custom.chili_shu == "0-10K" -%}
-          {%- assign string = 'products.product.plant_attributes.shu_1' | t -%}
-          {%- assign attributeString = attributeString | append: string | append: '¤' -%}
-          <img src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/Ikoner_Opsaetning-16.png?v=1655116965"
-               alt="{{ string }}">
-        {%- endif -%}
-        {%- if product.metafields.custom.chili_shu == "10K-300K" -%}
-          {%- assign string = 'products.product.plant_attributes.shu_2' | t -%}
-          {%- assign attributeString = attributeString | append: string | append: '¤' -%}
-          <img src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/Ikoner_Opsaetning-17.png?v=1655116980"
-               alt="{{ string }}">
-        {%- endif -%}
-        {%- if product.metafields.custom.chili_shu == "300K+" -%}
-          {%- assign string = 'products.product.plant_attributes.shu_3' | t -%}
-          {%- assign attributeString = attributeString | append: string | append: '¤' -%}
-          <img src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/Ikoner_Opsaetning-18.png?v=1655117000"
-               alt="{{ string }}">
-        {%- endif -%}
-        {%- if product.metafields.custom.kr_ver_lys_for_at_spire -%}
-          {%- assign string = 'products.product.plant_attributes.germination_light' | t -%}
-          {%- assign attributeString = attributeString | append: string | append: '¤' -%}
-          <img src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/Ikoner_Opsaetning-10.png?v=1655116910"
-               alt="{{ string }}">
-        {%- endif -%}
-        {%- if product.metafields.custom.velegnet_til_krukker -%}
-          {%- assign string = 'products.product.plant_attributes.suited_for_pots' | t -%}
-          {%- assign attributeString = attributeString | append: string | append: '¤' -%}
-          <img src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/Ikoner_Opsaetning-09.png?v=1655116931"
-               alt="{{ string }}">
-        {%- endif -%}
-        {%- if product.metafields.custom.kraever_stotte -%}
-          {%- assign string = 'products.product.plant_attributes.needs_support' | t -%}
-          {%- assign attributeString = attributeString | append: string | append: '¤' -%}
-          <img src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/Ikoner_Opsaetning-11.png?v=1655116872"
-               alt="{{ string }}">
-        {%- endif -%}
-        {%- if product.metafields.custom.spiselige_blomster -%}
-          {%- assign string = 'products.product.plant_attributes.edible_flowers' | t -%}
-          {%- assign attributeString = attributeString | append: string | append: '¤' -%}
-          <img src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/Ikoner_Opsaetning-12.png?v=1655116894"
-               alt="{{ string }}">
-        {%- endif -%}
-        {%- if product.metafields.custom.insektvenlig -%}
-          {%- assign string = 'products.product.plant_attributes.good_for_pollinators' | t -%}
-          {%- assign attributeString = attributeString | append: string | append: '¤' -%}
-          <img src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/Ikoner_Opsaetning-14.png?v=1654867890"
-               alt="{{ string }}">
-        {%- endif -%}
-        {%- if product.metafields.custom.velduftende_blomster -%}
-          {%- assign string = 'products.product.plant_attributes.aromatic' | t -%}
-          {%- assign attributeString = attributeString | append: string | append: '¤' -%}
-          <img src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/Ikoner_Opsaetning-13.png?v=1654867910"
-               alt="{{ string }}">
-        {%- endif -%}
-        {%- if product.metafields.custom.hjemhorende -%}
-          {%- assign string = 'products.product.plant_attributes.resident' | t -%}
-          {%- assign attributeString = attributeString | append: string | append: '¤' -%}
-          <img src="https://cdn.shopify.com/s/files/1/0276/3902/1652/files/Ikoner_Opsaetning-15.png?v=1654867928"
-               alt="{{ string }}">
-        {%- endif -%}
-        <p>
+      <tr>
+        <td>
+          <img src="{{ 'attribute_hoejde.svg' | asset_url }}"
+               alt="Højde">
+          <p>{{ 'products.product.plant_attributes.height' | t: text: product.metafields.custom.hojde }}</p>
+        </td>
+        <td>
+          <img src="{{ 'attribute_saaafstand.svg' | asset_url }}"
+               alt="Såafstand">
+          <p>{{ 'products.product.plant_attributes.distance' | t: text: product.metafields.custom.afstand }}</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          {% if product.metafields.custom.placering contains "friland" %}
+            <img src="{{ 'attribute_friland.svg' | asset_url }}"
+                 alt="Friland">
+          {% endif %}
+          {% if product.metafields.custom.placering contains "drivhus" %}
+            <img src="{{ 'attribute_drivhus.svg' | asset_url }}"
+                 alt="Drivhus">
+          {% endif %}
+          <p>
+            <span>{{ product.metafields.custom.placering }}</span>
+          </p>
+        </td>
+        <td>
+          {% if product.metafields.custom.sol contains "sol" %}
+            <img src="{{ 'attribute_fuld_sol.svg' | asset_url }}"
+                 alt="Fuld sol">
+          {% endif %}
+          {% if product.metafields.custom.sol contains "halvskygge" %}
+            <img src="{{ 'attribute_halvskygge.svg' | asset_url }}"
+                 alt="Halvskygge">
+          {% endif %}
+          <p>
+            <span>{{ product.metafields.custom.sol }}</span>
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          {%- assign attributeString = "" -%}
+          {%- if product.metafields.custom.temperaturkrav == "Varmekrævende" -%}
+            {%- assign string = 'products.product.plant_attributes.temperature_requirements_heat' | t -%}
+            {%- assign attributeString = attributeString | append: string | append: '¤' -%}
+            <img src="{{ 'attribute_temperatur_krav_varme.svg' | asset_url }}"
+                 alt="{{ string }}">
+          {%- endif -%}
+          {%- if product.metafields.custom.temperaturkrav == "Kuldehårdfør" -%}
+            {%- assign string = 'products.product.plant_attributes.temperature_requirements_cold' | t -%}
+            {%- assign attributeString = attributeString | append: string | append: '¤' -%}
+            <img src="{{ 'attribute_temperatur_krav_kulde.svg' | asset_url }}"
+                 alt="{{ string }}">
+          {%- endif -%}
+
+          {%- if product.metafields.custom.chili_shu == "0-10K" -%}
+            {%- assign string = 'products.product.plant_attributes.shu_1' | t -%}
+            {%- assign attributeString = attributeString | append: string | append: '¤' -%}
+            <img src="{{ 'attribute_shu_1.svg' | asset_url }}"
+                 alt="{{ string }}">
+          {%- endif -%}
+          {%- if product.metafields.custom.chili_shu == "0-10K" -%}
+            {%- assign string = 'products.product.plant_attributes.shu_1' | t -%}
+            {%- assign attributeString = attributeString | append: string | append: '¤' -%}
+            <img src="{{ 'attribute_shu_1.svg' | asset_url }}"
+                 alt="{{ string }}">
+          {%- endif -%}
+          {%- if product.metafields.custom.chili_shu == "10K-300K" -%}
+            {%- assign string = 'products.product.plant_attributes.shu_2' | t -%}
+            {%- assign attributeString = attributeString | append: string | append: '¤' -%}
+            <img src="{{ 'attribute_shu_2.svg' | asset_url }}"
+                 alt="{{ string }}">
+          {%- endif -%}
+          {%- if product.metafields.custom.chili_shu == "300K+" -%}
+            {%- assign string = 'products.product.plant_attributes.shu_3' | t -%}
+            {%- assign attributeString = attributeString | append: string | append: '¤' -%}
+            <img src="{{ 'attribute_shu_3.svg' | asset_url }}"
+                 alt="{{ string }}">
+          {%- endif -%}
+
+          {%- if product.metafields.custom.varme_for_at_spire -%}
+            {%- assign string = 'products.product.plant_attributes.germination_heat' | t -%}
+            {%- assign attributeString = attributeString | append: string | append: '¤' -%}
+            <img src="{{ 'attribute_kraever_varme_for_at_spire.svg' | asset_url }}"
+                 alt="{{ string }}">
+          {%- endif -%}
+
+          {%- if product.metafields.custom.vindueskarm -%}
+            {%- assign string = 'products.product.plant_attributes.suited_for_window_sill' | t -%}
+            {%- assign attributeString = attributeString | append: string | append: '¤' -%}
+            <img src="{{ 'attribute_vindueskarm.svg' | asset_url }}"
+                 alt="{{ string }}">
+          {%- endif -%}
+
+          {%- if product.metafields.custom.kr_ver_lys_for_at_spire -%}
+            {%- assign string = 'products.product.plant_attributes.germination_light' | t -%}
+            {%- assign attributeString = attributeString | append: string | append: '¤' -%}
+            <img src="{{ 'attribute_kraever_lys_for_at_spire.svg' | asset_url }}"
+                 alt="{{ string }}">
+          {%- endif -%}
+
+          {%- if product.metafields.custom.velegnet_til_krukker -%}
+            {%- assign string = 'products.product.plant_attributes.suited_for_pots' | t -%}
+            {%- assign attributeString = attributeString | append: string | append: '¤' -%}
+            <img src="{{ 'attribute_krukker.svg' | asset_url }}"
+                 alt="{{ string }}">
+          {%- endif -%}
+
+          {%- if product.metafields.custom.kraever_stotte -%}
+            {%- assign string = 'products.product.plant_attributes.needs_support' | t -%}
+            {%- assign attributeString = attributeString | append: string | append: '¤' -%}
+            <img src="{{ 'attribute_kreaver_opbinding.svg' | asset_url }}"
+                 alt="{{ string }}">
+          {%- endif -%}
+
+          {%- if product.metafields.custom.spiselige_blomster -%}
+            {%- assign string = 'products.product.plant_attributes.edible_flowers' | t -%}
+            {%- assign attributeString = attributeString | append: string | append: '¤' -%}
+            <img src="{{ 'attribute_spiselige_blomster.svg' | asset_url }}"
+                 alt="{{ string }}">
+          {%- endif -%}
+
+          {%- if product.metafields.custom.insektvenlig -%}
+            {%- assign string = 'products.product.plant_attributes.good_for_pollinators' | t -%}
+            {%- assign attributeString = attributeString | append: string | append: '¤' -%}
+            <img src="{{ 'attribute_insektvenlig.svg' | asset_url }}"
+                 alt="{{ string }}">
+          {%- endif -%}
+
+          {%- if product.metafields.custom.velduftende_blomster -%}
+            {%- assign string = 'products.product.plant_attributes.aromatic' | t -%}
+            {%- assign attributeString = attributeString | append: string | append: '¤' -%}
+            <img src="{{ 'attribute_velduftende_blomster.svg' | asset_url }}"
+                 alt="{{ string }}">
+          {%- endif -%}
+
+          {%- if product.metafields.custom.hjemhorende -%}
+            {%- assign string = 'products.product.plant_attributes.resident' | t -%}
+            {%- assign attributeString = attributeString | append: string | append: '¤' -%}
+            <img src="{{ 'attribute_hjemhoerende.svg' | asset_url }}"
+                 alt="{{ string }}">
+          {%- endif -%}
+          <p>
           <span class="attribute-string">
             {% liquid
               assign words = attributeString | split: ' '
@@ -135,11 +199,11 @@
                 endfor
               endcapture
             -%}
-            {{ finalAttributeString}}
+            {{ finalAttributeString }}
           </span>
-        </p>
-      </td>
-    </tr>
+          </p>
+        </td>
+      </tr>
     </tbody>
   </table>
 

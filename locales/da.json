@@ -350,9 +350,13 @@
       "plant_attributes": {
         "height": "Højde: {{ text }}",
         "distance": "Såafstand: {{ text }}",
+        "temperature_requirements_heat": "Varmekrævende",
+        "temperature_requirements_cold": "Kuldehårdfør",
         "shu_1": "mild (0-10K SHU)",
         "shu_2": "medium (10K-300K SHU)",
         "shu_3": "stærk (300K+ SHU)",
+        "germination_heat": "kræver varme for at spire",
+        "suited_for_window_sill": "kan dyrkes i vindueskarm",
         "germination_light": "skal have lys for at spire",
         "suited_for_pots": "velegnet til krukker",
         "needs_support": "bør have støtte\/opbindes",
