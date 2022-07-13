@@ -11,12 +11,15 @@
         "heading": {
           "type": "heading",
           "settings": {
-            "title": "Get in touch"
+            "title": "Kontakt"
           }
         },
         "text": {
           "type": "text",
-          "settings": {}
+          "settings": {
+            "enlarge_text": true,
+            "text": "<p>Du kan få fat på mig på tlf. 50 69 07 40 indenfor vores åbningstider (hverdage mellem 12:00 - 16:00), eller ved at skrive en mail til kontakt@fantastiskefroe.dk eller benytte kontaktformularen herunder.<\/p><p>Henvendelser på Instagram <a href=\"https:\/\/www.instagram.com\/fantastiskefroe.dk\/\" title=\"FantastiskeFrø's instagram profil\">@fantastiskefroe.dk<\/a> eller via <a href=\"https:\/\/www.facebook.com\/fantastiskefroe.dk\/\" target=\"_blank\" title=\"messenger chat på vores Facebookside\">messenger chat på facebook<\/a> bliver nogle gange væk i mængden, så skriv gerne en mail i stedet.<\/p>"
+          }
         }
       },
       "block_order": [
@@ -24,12 +27,21 @@
         "text"
       ],
       "settings": {
-        "color_scheme": "none"
+        "align_text": "center",
+        "narrow_column": true,
+        "color_scheme": "none",
+        "divider": false
       }
     },
     "form": {
       "type": "contact-form",
-      "settings": {}
+      "settings": {
+        "title": "",
+        "text": "",
+        "show_phone": false,
+        "narrow_column": true,
+        "color_scheme": "1"
+      }
     }
   },
   "order": [
