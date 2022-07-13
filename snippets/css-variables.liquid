@@ -1,6 +1,7 @@
 {%- style -%}
   :root {
-    --typeHeaderPrimary: {{ settings.type_header_font_family.family }};
+    {% comment %}--typeHeaderPrimary: {{ settings.type_header_font_family.family }};{% endcomment %}
+    --typeHeaderPrimary: 'Courgette';
     --typeHeaderFallback: {{ settings.type_header_font_family.fallback_families }};
     --typeHeaderSize: {{ settings.type_header_base_size | default: '32' | append: 'px' }};
     --typeHeaderWeight: {{ settings.type_header_font_family.weight }};
