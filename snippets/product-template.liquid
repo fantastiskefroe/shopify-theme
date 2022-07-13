@@ -152,11 +152,16 @@
                   {%- when 'tab' -%}
                     <div class="product-block product-block--tab" {{ block.shopify_attributes }}>
                       {% assign tab_id = block.id | append: product.id %}
+                      {% assign tab_title = block.settings.title %}
+                      {% if tab_title == blank %}
+                        {% assign tab_title = block.settings.page.title %}
+                      {% endif %}
+                      {% assign tab_id = block.id | append: product.id %}
                       {% capture tab_content %}
                         {{ block.settings.content }}
                         {{ block.settings.page.content }}
                       {% endcapture %}
-                      {%- render 'tab', id: tab_id, title: block.settings.title, content: tab_content -%}
+                      {%- render 'tab', id: tab_id, title: tab_title, content: tab_content -%}
                     </div>
                   {%- when 'contact' -%}
                     <div class="product-block product-block--tab" {{ block.shopify_attributes }}>
