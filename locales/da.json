@@ -123,7 +123,7 @@
   "cart": {
     "general": {
       "title": "Kurv",
-      "remove": "Fjern",
+      "remove": "Slet",
       "note": "Tilføj kommentar til ordren",
       "subtotal": "Subtotal",
       "discounts": "Rabat",

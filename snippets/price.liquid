@@ -9,5 +9,5 @@
   {%- endif -%}
 {%- endunless -%}
 
-<span aria-hidden="true">{{ formatted_price }}</span>
-<span class="visually-hidden">{{ price | money }}</span>
+<span aria-hidden="true">{{ formatted_price | replace: ' ','&nbsp;' }}</span>
+<span class="visually-hidden">{{ price | money | replace: ' ','&nbsp;' }}</span>

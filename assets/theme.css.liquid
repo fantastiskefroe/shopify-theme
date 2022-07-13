@@ -11777,41 +11777,51 @@ html[dir=rtl] .product-single__meta .rte{
     flex: 0 0 108px !important;
 }
 
-.cart__item--variants {
-    display: inline-block;
+.cart__item .cart__item-details {
+    display: flex;
+    flex-direction: column;
 }
 
-.cart__item-price-col {
-    display: inline-block;
-    float: right;
+.cart__item .cart__item-details .cart__item--title {
 }
 
-.cart__price {
-    width: 7em;
-    display: inline-block;
+.cart__item .cart__item-details .cart__item--variants {
 }
 
-.cart__remove a {
-    padding-left: 8px;
-    margin-top: 4px
+.cart__item .cart__item-details .cart__item--controls {
+    display: flex;
 }
 
-.cart__remove .cross {
-    position: relative;
-    top: 0px;
-    left: 8px;
-    line-height: 0.5;
+.cart__item .cart__item-details .cart__item--controls .js-qty__wrapper {
+    min-width: 100px;
 }
 
-@media only screen and (max-width: 768px) {
-    .js-qty__wrapper {
-        min-width: 105px;
-    }
+.cart__item .cart__item-details .cart__item--controls .js-qty__num {
+    padding: 2px 0;
+}
+
+.cart__item .cart__item-details .cart__item--controls .js-qty__adjust {
+    padding: 0 12px;
+}
+
+.cart__item .cart__item-details .cart__item--controls .cart__remove {
+    margin-left: 16px;
+    background-color: #eaeaea;
+}
+
+.cart__item .cart__item-details .cart__item--controls .cart__remove a {
+    margin: 0;
+    padding: 0 12px;
+    line-height: 30px;
 }
 
 .cart__item-sub .discount-code-notice {
     font-size: 0.9em;
     color: grey;
+}
+
+.cart__page-col:last-of-type {
+    min-width: 300px;
 }
 
 .cart__terms label {
