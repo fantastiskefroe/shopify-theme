@@ -1,56 +1,69 @@
 <div class="cart__item cart__item-bundle" data-key="{{ product.key }}">
-  {%- assign img_url = product | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+
   <div class="cart__image">
+    {%- assign img_url = product | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
     <a href="{{ product.url }}" class="image-wrap">
       <img class="lazyload"
-          data-src="{{ img_url }}"
-          data-widths="[180, 360, 540]"
-          data-aspectratio="{{ product.aspect_ratio }}"
-          data-sizes="auto"
-          alt="{{ product.product.title | escape }}">
+           data-src="{{ img_url }}"
+           data-widths="[180, 360, 540]"
+           data-aspectratio="{{ product.aspect_ratio }}"
+           data-sizes="auto"
+           alt="{{ product.product.title | escape }}">
       <noscript>
         <img class="lazyloaded" src="{{ product | img_url: '400x' }}" alt="{{ product.product.title | escape }}">
       </noscript>
     </a>
   </div>
+
   <div class="cart__item-details">
-    <div class="cart__item-title">
-      <a href="{{ product.url }}" class="cart__item-name">
-        {{ product.product.title }}
-      </a>
+
+    <div class="cart__item--name">
+      <div class="cart__item--title">
+        <a href="{{ product.url }}" class="cart__item-name">
+          {{ product.product.title }}
+        </a>
+      </div>
+
       <div class="cart__item--variants">
         {%- unless product.product.has_only_default_variant -%}
-          {%- for option in product.options_with_values -%}
-            <div>{{ option.value }}</div>
-          {%- endfor -%}
+          <div>
+            {%- for option in product.options_with_values -%}
+              {{ option.value }}{% unless forloop.last %} & {% endunless %}
+            {%- endfor -%}
+          </div>
         {%- endunless -%}
-        <div> {{ product.quantity }} stk.</div>
       </div>
-      {%- if product.selling_plan_allocation != empty -%}
-        <div class="cart__item--variants">
-          {{ product.selling_plan_allocation.selling_plan.name }}
-        </div>
-      {%- endif -%}
-      {%- assign property_size = product.properties | size -%}
-      {% if property_size > 0 %}
-        {% for p in product.properties %}
-          {%- assign first_character_in_key = p.first | truncate: 1, '' -%}
-          {% unless p.last == blank or first_character_in_key == '_' %}
-            <div>
-              {{ p.first }}:
-              {% if p.last contains '/uploads/' %}
-                <a href="{{ p.last }}">{{ p.last | split: '/' | last }}</a>
-              {% else %}
-                {{ p.last }}
-              {% endif %}
-            </div>
-          {% endunless %}
-        {% endfor %}
-      {% endif %}
-
     </div>
-    <div class="cart__item-sub">
-      <div>
+
+    <div class="cart__item--controls">
+      <div class="js-qty__wrapper">
+        <label for="cart_updates_{{ product.key }}" class="hidden-label">{{ 'cart.label.quantity' | t }}</label>
+        <input type="number"
+               id="cart_updates_{{ product.key }}"
+               name="updates[]"
+               class="js-qty__num input-number-no-arrow"
+               value="{{ product.quantity }}"
+               min="0"
+               data-id="{{ product.key }}">
+        <button type="button"
+                class="js-qty__adjust js-qty__adjust--minus"
+                aria-label="{{ 'cart.general.reduce_quantity' | t }}">
+          <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-minus" viewBox="0 0 64 64">
+            <path class="cls-1" d="M55 32H9"/>
+          </svg>
+          <span class="icon__fallback-text" aria-hidden="true">&minus;</span>
+        </button>
+        <button type="button"
+                class="js-qty__adjust js-qty__adjust--plus"
+                aria-label="{{ 'cart.general.increase_quantity' | t }}">
+          <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-plus" viewBox="0 0 64 64">
+            <path class="cls-1" d="M32 9v46m23-23H9"/>
+          </svg>
+          <span class="icon__fallback-text" aria-hidden="true">+</span>
+        </button>
+      </div>
+
+      <div class="cart__remove">
         {%- capture updateURL -%}
           cart/update?
           {%- for subproduct in cart.items -%}
@@ -66,14 +79,10 @@
           updates[{{ product.key }}]=0&
         {%- endcapture -%}
 
-        <div class="cart__remove">
-          <a href="{{ updateURL }}?id={{ product.key }}&amp;quantity=0" class="text-link">
-            {{ 'cart.general.remove' | t }}
-          </a>
-        </div>
+        <a href="{{ updateURL }}?id={{ product.key }}&amp;quantity=0" class="text-link">
+          &#10005; {{ 'cart.general.remove' | t }}
+        </a>
       </div>
-
-
     </div>
   </div>
 </div>

@@ -11773,47 +11773,81 @@ html[dir=rtl] .product-single__meta .rte{
 }
 
 /* Cart */
-.cart__image {
-    flex: 0 0 108px !important;
+.cart__item {
+    align-items: normal;
 }
 
-.cart__item .cart__item-details {
+
+.cart__image {
+    flex: unset;
+}
+
+.cart__image a {
+    width: 100px;
+}
+
+
+.cart__item-details {
     display: flex;
     flex-direction: column;
+    justify-content: space-around;
 }
 
-.cart__item .cart__item-details .cart__item--title {
+.cart__item-details .cart__item--title .cart__item-name {
+    margin-bottom: 0;
 }
 
-.cart__item .cart__item-details .cart__item--variants {
-}
 
-.cart__item .cart__item-details .cart__item--controls {
+.cart__item--controls {
     display: flex;
+    flex-wrap: wrap;
 }
 
-.cart__item .cart__item-details .cart__item--controls .js-qty__wrapper {
+.cart__item--controls .js-qty__wrapper {
+    margin-right: 16px;
     min-width: 100px;
 }
 
-.cart__item .cart__item-details .cart__item--controls .js-qty__num {
+.cart__item--controls .js-qty__num {
     padding: 2px 0;
 }
 
-.cart__item .cart__item-details .cart__item--controls .js-qty__adjust {
+.cart__item--controls .js-qty__adjust {
     padding: 0 12px;
 }
 
-.cart__item .cart__item-details .cart__item--controls .cart__remove {
-    margin-left: 16px;
+.input-number-no-arrow::-webkit-outer-spin-button,
+.input-number-no-arrow::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number].input-number-no-arrow {
+    -moz-appearance: textfield;
+}
+
+.cart__item--controls .cart__remove {
     background-color: #eaeaea;
 }
 
-.cart__item .cart__item-details .cart__item--controls .cart__remove a {
+.cart__item--controls .cart__remove a {
     margin: 0;
     padding: 0 12px;
     line-height: 30px;
 }
+
+
+.cart__item--price {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.cart__item--price .cart__discount {
+    color: var(--colorTextBody);
+}
+
 
 .cart__item-sub .discount-code-notice {
     font-size: 0.9em;
@@ -11873,76 +11907,37 @@ html[dir=rtl] .product-single__meta .rte{
 }
 
 /* Cart */
-.cart__item-details {
-    flex-direction: row;
-    flex-wrap: nowrap;
-}
-
-.cart__price-bundle-product-original {
-    display: block;
-    width: auto;
-    font-size: inherit;
-}
-
-.cart__item.cart__item-bundle {
-    border-bottom: none !important;
-    margin-bottom: 0;
+.cart__item-bundle {
+    border-bottom: none;
+    margin-bottom: 10px;
     padding-bottom: 0;
 }
 
-.cart__item.cart__item-bundle .js-qty__wrapper,
-.cart__item.cart__item-bundle-product .js-qty__wrapper,
-.cart__item.cart__item-limited .js-qty__wrapper {
-    min-width: initial;
-}
 
-.cart__item.cart__item-bundle .js-qty__num,
-.cart__item.cart__item-bundle-product .js-qty__num,
-.cart__item.cart__item-limited .js-qty__num {
-    padding: 5px 0;
-}
-
-.input-number-no-arrow::-webkit-outer-spin-button,
-.input-number-no-arrow::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-input[type=number].input-number-no-arrow {
-    -moz-appearance: textfield;
-}
-
-.cart__item.cart__item-bundle-product {
-    margin-left: 30px;
-    margin-bottom: 0;
+.cart__item-bundle-product {
+    margin: 0 0 10px 10px;
     padding-bottom: 0;
     border-bottom: none;
 }
 
-.cart__item.cart__item-bundle-product:last-of-type {
-    border-bottom: 1px solid;
+.cart__item-bundle-product .cart__image a {
+    width: 75px;
+    height: 75px;
 }
 
-
-.cart__item.cart__item-bundle-product .cart__image {
-    flex: 0 0 84px !important;
+.cart__item-bundle-product .cart__item--variants {
+    margin-bottom: 0;
 }
 
-.cart__item-row {
-    margin-bottom: 0 !important;
+.cart__item-bundle-product .cart__item-details {
+    justify-content: flex-start;
 }
 
-.cart__item-sub>div:first-child {
-    margin-right: 0 !important;
-}
-
-.cart__item-row.cart__item-subtotal,
-.stkbl-values-container {
-    margin-bottom: 16px !important;
-}
-
-.stkbl-tags-container {
-    display: none !important;
+.cart__item-bundle-product + .cart__item-normal {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid;
+    border-color: var(--colorBorder);
 }
 
 

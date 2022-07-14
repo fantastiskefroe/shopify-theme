@@ -1,4 +1,4 @@
-<div class="cart__item" data-key="{{ product.key }}">
+<div class="cart__item cart__item-normal" data-key="{{ product.key }}">
 
   <div class="cart__image">
     {%- assign img_url = product | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
@@ -17,18 +17,22 @@
 
   <div class="cart__item-details">
 
-    <div class="cart__item--title">
-      <a href="{{ product.url }}" class="cart__item-name">
-        {{ product.product.title }}
-      </a>
-    </div>
+    <div class="cart__item--name">
+      <div class="cart__item--title">
+        <a href="{{ product.url }}" class="cart__item-name">
+          {{ product.product.title }}
+        </a>
+      </div>
 
-    <div class="cart__item--variants">
-      {%- unless product.product.has_only_default_variant -%}
-        {%- for option in product.options_with_values -%}
-          <div><span>{{ option.name }}:</span> {{ option.value }}</div>
-        {%- endfor -%}
-      {%- endunless -%}
+      <div class="cart__item--variants">
+        {%- unless product.product.has_only_default_variant -%}
+          <div>
+            {%- for option in product.options_with_values -%}
+              {{ option.value }}{% unless forloop.last %} & {% endunless %}
+            {%- endfor -%}
+          </div>
+        {%- endunless -%}
+      </div>
     </div>
 
     <div class="cart__item--controls">
@@ -71,7 +75,7 @@
 
   </div>
 
-  <div class="cart__item-price-col text-right">
+  <div class="cart__item--price">
     {% if product.original_price != product.final_price %}
       <span class="visually-hidden">{{ 'products.general.regular_price' | t }}</span>
       <small class="cart__price cart__price--strikethrough">
@@ -79,12 +83,12 @@
       </small>
       <span class="visually-hidden">{{ 'products.general.sale_price' | t }}</span>
       <span class="cart__price cart__discount">
-            {%- render 'price' with product.final_price -%}
-          </span>
+        {%- render 'price' with product.final_price -%}
+      </span>
     {% else %}
       <span class="cart__price">
-            {%- render 'price' with product.original_price -%}
-          </span>
+        {%- render 'price' with product.original_price -%}
+      </span>
     {% endif %}
 
     {%- if product.unit_price_measurement != blank -%}

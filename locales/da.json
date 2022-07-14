@@ -128,7 +128,7 @@
       "subtotal": "Subtotal",
       "discounts": "Rabat",
       "savings_html": "Du sparede {{ saved_amount }}",
-      "shipping_at_checkout": "Fragt, moms og rabatter beregnes ved checkout.",
+      "shipping_at_checkout": "Fragt beregnes ved checkout.",
       "update": "Opdater kurv",
       "checkout": "Check ud",
       "empty": "Din kurv er tom.",
